@@ -9,7 +9,7 @@
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
     
-    <title>Couple App (Neon Hearts & Kisses)</title>
+    <title>Couple App (Complete Timeline)</title>
     <style>
         /* --- КОРНЕВЫЕ ПЕРЕМЕННЫЕ --- */
         :root {
@@ -35,15 +35,16 @@
             background-color: var(--primary-bg);
             color: var(--neon-pink-light);
             padding-top: 20px;
-            padding-bottom: 80px;
+            padding-bottom: 90px;
             overflow-x: hidden;
             position: relative;
             min-height: 100vh;
             -webkit-font-smoothing: antialiased;
+            user-select: none;
         }
 
-        /* --- АНИМИРОВАННЫЙ ФОН С СЕРДЕЧКАМИ --- */
-        .bg-hearts {
+        /* --- АНИМИРОВАННЫЙ ФОН --- */
+        .bg-elements {
             position: fixed;
             top: 0;
             left: 0;
@@ -54,11 +55,11 @@
             overflow: hidden;
         }
 
-        .bg-heart {
+        .bg-item {
             position: absolute;
             color: var(--neon-pink-bright);
-            opacity: 0.15;
-            font-size: 20px;
+            opacity: 0.2;
+            font-size: 18px;
             animation: floatUp 8s infinite linear;
             text-shadow: 0 0 8px var(--neon-pink-glow);
         }
@@ -68,25 +69,32 @@
                 transform: translateY(100vh) scale(0.5) rotate(0deg);
                 opacity: 0;
             }
-            20% {
-                opacity: 0.25;
-            }
-            80% {
-                opacity: 0.25;
-            }
+            20% { opacity: 0.3; }
+            80% { opacity: 0.3; }
             100% {
-                transform: translateY(-10vh) scale(1.2) rotate(360deg);
+                transform: translateY(-10vh) scale(1.3) rotate(360deg);
                 opacity: 0;
             }
         }
 
-        /* --- ОСНОВНОЙ КОНТЕНТ --- */
+        /* --- CANVAS САЛЮТА --- */
+        #fireworks-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 999;
+        }
+
+        /* --- КОНТЕНТ --- */
         .content {
             position: relative;
             z-index: 1;
         }
 
-        /* --- БЛОК ПРОФИЛЕЙ И СЕРДЦА --- */
+        /* --- БЛОК ПРОФИЛЕЙ --- */
         .profiles-container {
             padding: 24px 16px;
             display: flex;
@@ -101,7 +109,6 @@
             align-items: center;
             text-align: center;
             width: 100px;
-            position: relative;
         }
 
         .avatar-wrapper {
@@ -144,7 +151,6 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            position: relative;
         }
 
         .heart-icon {
@@ -173,10 +179,9 @@
             font-size: 14px;
             margin-top: 2px;
             opacity: 0.9;
-            filter: drop-shadow(0 0 4px var(--neon-pink-bright));
         }
 
-        /* --- ПРОГРЕСС-БАР И ЗНАЧОК --- */
+        /* --- ПРОГРЕСС-БАР --- */
         .progress-section {
             padding: 0 16px;
             margin-top: 16px;
@@ -190,7 +195,6 @@
             color: var(--neon-pink-light);
             font-weight: 600;
             margin-bottom: 6px;
-            text-shadow: 0 0 5px var(--neon-pink-soft-glow);
         }
 
         .progress-label-right {
@@ -204,7 +208,6 @@
             border: 1px solid var(--border-color);
             border-radius: 7px;
             position: relative;
-            overflow: visible;
         }
 
         .progress-bar-fill {
@@ -242,7 +245,7 @@
             border-color: var(--neon-pink-bright) transparent transparent transparent;
         }
 
-        /* --- ЦЕНТРАЛЬНЫЙ СЧЕТЧИК --- */
+        /* --- ГЛАВНЫЙ СЧЕТЧИК --- */
         .main-counter {
             padding: 28px 16px;
             text-align: center;
@@ -252,11 +255,6 @@
             font-size: 16px;
             color: var(--neon-pink-light);
             margin-bottom: 6px;
-            text-shadow: 0 0 6px var(--neon-pink-soft-glow);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 6px;
         }
 
         .counter-value {
@@ -273,7 +271,6 @@
             border-top: 1px solid var(--border-color);
             border-bottom: 1px solid var(--border-color);
             box-shadow: 0 0 18px var(--neon-pink-soft-glow);
-            position: relative;
         }
 
         .couple-photo {
@@ -282,7 +279,7 @@
             display: block;
         }
 
-        /* --- СПИСОК СОБЫТИЙ --- */
+        /* --- ПОЛНЫЙ СПИСОК СОБЫТИЙ --- */
         .event-list {
             padding: 0 16px;
             margin-top: 24px;
@@ -292,28 +289,31 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 16px 0;
+            padding: 14px 0;
             border-top: 1px solid var(--border-color);
         }
 
-        .event-title, .event-sub-title {
-            font-size: 16px;
+        .event-title {
+            font-size: 15px;
             color: var(--neon-pink-light);
             font-weight: 500;
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 10px;
+        }
+
+        .event-title .icon {
+            font-size: 18px;
         }
 
         .event-details {
             text-align: right;
-            color: var(--neon-pink-light);
         }
 
         .event-date {
             font-size: 12px;
-            margin-bottom: 4px;
-            opacity: 0.8;
+            color: rgba(255, 102, 178, 0.7);
+            margin-bottom: 2px;
         }
 
         .event-days {
@@ -323,7 +323,13 @@
             text-shadow: 0 0 6px var(--neon-pink-glow);
         }
 
-        /* --- ПЛАВАЮЩАЯ КНОПКА ПОЦЕЛУЯ (FAB) --- */
+        /* ПАМЯТНЫЕ ПРАЗДНИКИ (ВЫДЕЛЕНИЕ) */
+        .event-item.holiday .event-title {
+            color: #ffffff;
+            text-shadow: 0 0 8px var(--neon-pink-bright);
+        }
+
+        /* --- КНОПКА ФЛОАТИРОВАНИЯ --- */
         .fab {
             position: fixed;
             bottom: 24px;
@@ -348,25 +354,25 @@
             0%, 100% { box-shadow: 0 0 15px var(--neon-pink-glow); }
             50% { box-shadow: 0 0 28px var(--neon-pink-bright); }
         }
-
-        .icon {
-            font-style: normal;
-        }
     </style>
 </head>
 <body>
 
-    <!-- ФОНОВЫЕ ПЛАВАЮЩИЕ СЕРДЕЧКИ -->
-    <div class="bg-hearts">
-        <div class="bg-heart" style="left: 10%; animation-delay: 0s;">♥</div>
-        <div class="bg-heart" style="left: 25%; animation-delay: 2s;">💖</div>
-        <div class="bg-heart" style="left: 45%; animation-delay: 5s;">♥</div>
-        <div class="bg-heart" style="left: 65%; animation-delay: 1s;">💕</div>
-        <div class="bg-heart" style="left: 85%; animation-delay: 3.5s;">♥</div>
+    <!-- ФОНОВЫЕ ИСКОРКИ -->
+    <div class="bg-elements">
+        <div class="bg-item" style="left: 10%; animation-delay: 0s;">✨</div>
+        <div class="bg-item" style="left: 25%; animation-delay: 2s;">💖</div>
+        <div class="bg-item" style="left: 40%; animation-delay: 4.5s;">🌟</div>
+        <div class="bg-item" style="left: 60%; animation-delay: 1s;">💕</div>
+        <div class="bg-item" style="left: 75%; animation-delay: 3.5s;">💫</div>
+        <div class="bg-item" style="left: 90%; animation-delay: 5s;">✨</div>
     </div>
 
+    <!-- CANVAS САЛЮТА -->
+    <canvas id="fireworks-canvas"></canvas>
+
     <div class="content">
-        <!-- Блок профилей -->
+        <!-- БЛОК ПРОФИЛЕЙ -->
         <div class="profiles-container">
             <div class="profile-item">
                 <div class="avatar-wrapper">
@@ -379,7 +385,7 @@
             <div class="heart-counter">
                 <div class="heart-icon">♥</div>
                 <div class="heart-days" id="total-days-heart">--дней</div>
-                <div class="center-kiss">💋💋💋</div>
+                <div class="center-kiss">✨💋✨</div>
             </div>
 
             <div class="profile-item">
@@ -391,11 +397,11 @@
             </div>
         </div>
 
-        <!-- Прогресс-бар -->
+        <!-- ПРОГРЕСС-БАР -->
         <div class="progress-section">
             <div class="progress-labels">
                 <div class="progress-label-left">💖 50дней</div>
-                <div class="progress-label-right" id="days-to-goal">X--</div>
+                <div class="progress-label-right" id="days-to-goal">--</div>
             </div>
             <div class="progress-bar-container">
                 <div class="progress-bar-fill" id="progress-fill">
@@ -404,73 +410,181 @@
             </div>
         </div>
 
-        <!-- Большой счетчик -->
+        <!-- СЧЕТЧИК -->
         <div class="main-counter">
             <div class="counter-name">✨ рома пёс ✨</div>
             <div class="counter-value" id="main-counter-value">--месяцев --дней</div>
         </div>
 
-        <!-- Главное фото -->
+        <!-- ФОТО -->
         <div class="photo-section">
             <img src="https://i.postimg.cc/9rLj97mm/couple-photo.jpg" alt="пара" class="couple-photo">
         </div>
 
-        <!-- Список событий -->
-        <div class="event-list">
-            <div class="event-item">
-                <div class="event-title"><span>💋</span> Дата начала</div>
-                <div class="event-details">
-                    <div class="event-date">24.06.2026</div>
-                    <div class="event-days" id="start-date-x">X+--</div>
-                </div>
-            </div>
-            <div class="event-item">
-                <div class="event-sub-title"><span>💖</span> 10дней</div>
-                <div class="event-details">
-                    <div class="event-date">04.07.2026</div>
-                    <div class="event-days">X+36</div>
-                </div>
-            </div>
+        <!-- СПИСОК ВСЕХ ДАТ И СОБЫТИЙ -->
+        <div class="event-list" id="events-container">
+            <!-- Динамически заполняется из JS -->
         </div>
 
-        <!-- Плавающая кнопка-поцелуй -->
-        <button class="fab" title="Поцелуй">
-            <span class="icon">💋</span>
-        </button>
+        <!-- КНОПКА-ПОЦЕЛУЙ -->
+        <button class="fab" id="fab-kiss" title="Поцелуй">💋</button>
     </div>
 
     <script>
         // === ПРИНУДИТЕЛЬНАЯ ОЧИСТКА ВНУТРЕННЕГО КЭША ===
         if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.getRegistrations().then(function(registrations) {
-                for (let registration of registrations) {
-                    registration.unregister();
-                }
-            });
+            navigator.serviceWorker.getRegistrations().then(r => r.forEach(reg => reg.unregister()));
         }
         if ('caches' in window) {
-            caches.keys().then(function(names) {
-                for (let name of names) caches.delete(name);
-            });
+            caches.keys().then(names => names.forEach(name => caches.delete(name)));
         }
 
-        // Дата начала: 24 июня 2026 года
-        const startDate = new Date(2026, 5, 24);
+        const startDate = new Date(2026, 5, 24); // 24.06.2026
         const targetGoalDays = 50;
+
+        // СПИСОК ВСЕХ СОБЫТИЙ СО СКРИНШОТОВ
+        const eventsData = [
+            { title: "Дата начала", date: "24.06.2026", icon: "💋" },
+            { title: "10дней", date: "04.07.2026", icon: "💖" },
+            { title: "30дней", date: "24.07.2026", icon: "💖" },
+            { title: "50дней", date: "13.08.2026", icon: "💖" },
+            { title: "100дней", date: "02.10.2026", icon: "💖" },
+            { title: "Новогодняя ночь", date: "31.12.2026", icon: "🎄", isHoliday: true },
+            { title: "Рождество", date: "07.01.2027", icon: "🏠", isHoliday: true },
+            { title: "200дней", date: "10.01.2027", icon: "💖" },
+            { title: "День Валентина", date: "14.02.2027", icon: "🛍️", isHoliday: true },
+            { title: "Мужской день", date: "23.02.2027", icon: "⭐", isHoliday: true },
+            { title: "Женский день", date: "08.03.2027", icon: "💐", isHoliday: true },
+            { title: "300дней", date: "20.04.2027", icon: "💖" },
+            { title: "День защиты детей", date: "01.06.2027", icon: "🚗", isHoliday: true },
+            { title: "1год", date: "24.06.2027", icon: "🎉", isHoliday: true },
+            { title: "400дней", date: "29.07.2027", icon: "💖" },
+            { title: "500дней", date: "06.11.2027", icon: "💖" },
+            { title: "600дней", date: "14.02.2028", icon: "💖" },
+            { title: "700дней", date: "24.05.2028", icon: "💖" },
+            { title: "2года", date: "24.06.2028", icon: "🎉", isHoliday: true },
+            { title: "900дней", date: "10.12.2028", icon: "💖" },
+            { title: "1000дней", date: "20.03.2029", icon: "✨" },
+            { title: "3года", date: "24.06.2029", icon: "🎉", isHoliday: true },
+            { title: "1100дней", date: "28.06.2029", icon: "💖" },
+            { title: "1200дней", date: "06.10.2029", icon: "💖" },
+            { title: "1300дней", date: "14.01.2030", icon: "💖" },
+            { title: "1400дней", date: "24.04.2030", icon: "💖" },
+            { title: "4года", date: "24.06.2030", icon: "🎉", isHoliday: true },
+            { title: "1500дней", date: "02.08.2030", icon: "💖" },
+            { title: "1600дней", date: "10.11.2030", icon: "💖" },
+            { title: "1700дней", date: "18.02.2031", icon: "💖" },
+            { title: "1800дней", date: "29.05.2031", icon: "💖" },
+            { title: "5лет", date: "24.06.2031", icon: "👑", isHoliday: true },
+            { title: "1900дней", date: "06.09.2031", icon: "💖" },
+            { title: "2000дней", date: "15.12.2031", icon: "✨" },
+            { title: "2100дней", date: "24.03.2032", icon: "💖" },
+            { title: "6лет", date: "24.06.2032", icon: "🎉", isHoliday: true },
+            { title: "2200дней", date: "02.07.2032", icon: "💖" },
+            { title: "2300дней", date: "10.10.2032", icon: "💖" },
+            { title: "2400дней", date: "18.01.2033", icon: "💖" },
+            { title: "2500дней", date: "28.04.2033", icon: "💖" },
+            { title: "7лет", date: "24.06.2033", icon: "🎉", isHoliday: true },
+            { title: "2600дней", date: "06.08.2033", icon: "💖" },
+            { title: "2700дней", date: "14.11.2033", icon: "💖" },
+            { title: "2800дней", date: "22.02.2034", icon: "💖" },
+            { title: "2900дней", date: "02.06.2034", icon: "💖" },
+            { title: "8лет", date: "24.06.2034", icon: "🎉", isHoliday: true },
+            { title: "3000дней", date: "10.09.2034", icon: "✨" },
+            { title: "3100дней", date: "19.12.2034", icon: "💖" },
+            { title: "3200дней", date: "29.03.2035", icon: "💖" },
+            { title: "9лет", date: "24.06.2035", icon: "🎉", isHoliday: true },
+            { title: "3300дней", date: "07.07.2035", icon: "💖" },
+            { title: "3400дней", date: "15.10.2035", icon: "💖" },
+            { title: "3500дней", date: "23.01.2036", icon: "💖" },
+            { title: "3600дней", date: "02.05.2036", icon: "💖" },
+            { title: "10лет", date: "24.06.2036", icon: "💎", isHoliday: true },
+            { title: "3700дней", date: "10.08.2036", icon: "💖" },
+            { title: "3800дней", date: "18.11.2036", icon: "💖" },
+            { title: "3900дней", date: "26.02.2037", icon: "💖" },
+            { title: "4000дней", date: "06.06.2037", icon: "✨" },
+            { title: "11лет", date: "24.06.2037", icon: "🎉", isHoliday: true },
+            { title: "12лет", date: "24.06.2038", icon: "🎉", isHoliday: true },
+            { title: "13лет", date: "24.06.2039", icon: "🎉", isHoliday: true },
+            { title: "5000дней", date: "02.03.2040", icon: "✨" },
+            { title: "14лет", date: "24.06.2040", icon: "🎉", isHoliday: true },
+            { title: "15лет", date: "24.06.2041", icon: "🌟", isHoliday: true },
+            { title: "16лет", date: "24.06.2042", icon: "🎉", isHoliday: true },
+            { title: "6000дней", date: "27.11.2042", icon: "✨" },
+            { title: "17лет", date: "24.06.2043", icon: "🎉", isHoliday: true },
+            { title: "18лет", date: "24.06.2044", icon: "🥂", isHoliday: true },
+            { title: "19лет", date: "24.06.2045", icon: "🎉", isHoliday: true },
+            { title: "7000дней", date: "23.08.2045", icon: "✨" },
+            { title: "20лет", date: "24.06.2046", icon: "💍", isHoliday: true },
+            { title: "21год", date: "24.06.2047", icon: "🎉", isHoliday: true },
+            { title: "8000дней", date: "19.05.2048", icon: "✨" },
+            { title: "22года", date: "24.06.2048", icon: "🎉", isHoliday: true },
+            { title: "23года", date: "24.06.2049", icon: "🎉", isHoliday: true },
+            { title: "24года", date: "24.06.2050", icon: "🎉", isHoliday: true },
+            { title: "9000дней", date: "13.02.2051", icon: "✨" },
+            { title: "25лет", date: "24.06.2051", icon: "🏆", isHoliday: true },
+            { title: "26лет", date: "24.06.2052", icon: "🎉", isHoliday: true },
+            { title: "27лет", date: "24.06.2053", icon: "🎉", isHoliday: true },
+            { title: "10000дней", date: "09.11.2053", icon: "🌟", isHoliday: true },
+            { title: "28лет", date: "24.06.2054", icon: "🎉", isHoliday: true },
+            { title: "29лет", date: "24.06.2055", icon: "🎉", isHoliday: true },
+            { title: "30лет", date: "24.06.2056", icon: "👑", isHoliday: true },
+            { title: "11000дней", date: "05.08.2056", icon: "✨" },
+            { title: "31год", date: "24.06.2057", icon: "🎉", isHoliday: true },
+            { title: "32года", date: "24.06.2058", icon: "🎉", isHoliday: true },
+            { title: "12000дней", date: "02.05.2059", icon: "✨" },
+            { title: "33года", date: "24.06.2059", icon: "🎉", isHoliday: true },
+            { title: "34года", date: "24.06.2060", icon: "🎉", isHoliday: true }
+        ];
+
+        function parseDate(dateStr) {
+            const parts = dateStr.split('.');
+            return new Date(parts[2], parts[1] - 1, parts[0]);
+        }
+
+        function renderEvents() {
+            const container = document.getElementById('events-container');
+            container.innerHTML = '';
+            const now = new Date();
+
+            eventsData.forEach(item => {
+                const itemDate = parseDate(item.date);
+                const diffTime = itemDate - now;
+                const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+                
+                let daysLabel = "";
+                if (diffDays > 0) {
+                    daysLabel = `X-${diffDays}`;
+                } else if (diffDays === 0) {
+                    daysLabel = `Сегодня! 🎉`;
+                } else {
+                    daysLabel = `X+${Math.abs(diffDays)}`;
+                }
+
+                const eventEl = document.createElement('div');
+                eventEl.className = `event-item ${item.isHoliday ? 'holiday' : ''}`;
+                eventEl.innerHTML = `
+                    <div class="event-title">
+                        <span class="icon">${item.icon}</span> ${item.title}
+                    </div>
+                    <div class="event-details">
+                        <div class="event-date">${item.date}</div>
+                        <div class="event-days">${daysLabel}</div>
+                    </div>
+                `;
+                container.appendChild(eventEl);
+            });
+        }
 
         function updateCounters() {
             const now = new Date();
-
             const diffInMs = now - startDate;
             if (diffInMs < 0) return;
             
             const diffInDays = Math.floor(diffInMs / (1000 * 60 * 60 * 24));
 
-            // Общее количество дней
             document.getElementById('total-days-heart').textContent = `${diffInDays}дней`;
-            document.getElementById('start-date-x').textContent = `X+${diffInDays}`;
 
-            // Месяцы и дни
             let yearsDiff = now.getFullYear() - startDate.getFullYear();
             let monthsDiff = now.getMonth() - startDate.getMonth();
             let daysDiff = now.getDate() - startDate.getDate();
@@ -491,7 +605,6 @@
             mainCounterStr += `${daysDiff}дней`;
             document.getElementById('main-counter-value').textContent = mainCounterStr;
 
-            // Прогресс-бар
             let progressDays = diffInDays >= targetGoalDays ? targetGoalDays : diffInDays;
             const percent = Math.floor((progressDays / targetGoalDays) * 100);
             
@@ -506,8 +619,88 @@
             }
         }
 
+        renderEvents();
         updateCounters();
         setInterval(updateCounters, 60000);
+
+        // --- ИНТЕРАКТИВНЫЙ САЛЮТ ---
+        const canvas = document.getElementById('fireworks-canvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        class Particle {
+            constructor(x, y) {
+                this.x = x;
+                this.y = y;
+                this.size = Math.random() * 4 + 2;
+                this.speedX = (Math.random() - 0.5) * 8;
+                this.speedY = (Math.random() - 0.5) * 8;
+                this.color = ['#ff007f', '#ff66b2', '#ffffff', '#ffb3d9', '#ff3399'][Math.floor(Math.random() * 5)];
+                this.life = 1;
+                this.decay = Math.random() * 0.02 + 0.015;
+                this.symbol = Math.random() > 0.6 ? (Math.random() > 0.5 ? '✨' : '💖') : null;
+            }
+
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+                this.speedY += 0.08;
+                this.life -= this.decay;
+            }
+
+            draw() {
+                ctx.save();
+                ctx.globalAlpha = this.life;
+                if (this.symbol) {
+                    ctx.font = `${this.size * 3}px sans-serif`;
+                    ctx.fillText(this.symbol, this.x, this.y);
+                } else {
+                    ctx.fillStyle = this.color;
+                    ctx.shadowColor = this.color;
+                    ctx.shadowBlur = 10;
+                    ctx.beginPath();
+                    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+                ctx.restore();
+            }
+        }
+
+        function createFirework(x, y) {
+            for (let i = 0; i < 35; i++) {
+                particles.push(new Particle(x, y));
+            }
+        }
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            for (let i = particles.length - 1; i >= 0; i--) {
+                particles[i].update();
+                particles[i].draw();
+                if (particles[i].life <= 0) particles.splice(i, 1);
+            }
+            requestAnimationFrame(animate);
+        }
+        animate();
+
+        window.addEventListener('pointerdown', (e) => createFirework(e.clientX, e.clientY));
+
+        document.getElementById('fab-kiss').addEventListener('click', (e) => {
+            e.stopPropagation();
+            const rect = e.target.getBoundingClientRect();
+            createFirework(rect.left + rect.width / 2, rect.top + rect.height / 2);
+        });
+
+        setTimeout(() => {
+            createFirework(window.innerWidth / 2, window.innerHeight / 3);
+        }, 500);
     </script>
 </body>
 </html>
