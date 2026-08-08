@@ -4,26 +4,26 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     
-    <!-- === ЗАПРЕТ КЭШИРОВАНИЯ БРАУЗЕРОМ И TELEGRAM === -->
+    <!-- === ЗАПРЕТ КЭШИРОВАНИЯ === -->
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
     
-    <title>Couple App Interface (Full Neon Pink)</title>
+    <title>Couple App (Neon Hearts & Kisses)</title>
     <style>
-        /* --- КОРНЕВЫЕ ПЕРЕМЕННЫЕ (НЕОНОВО-РОЗОВАЯ ТЕМА) --- */
+        /* --- КОРНЕВЫЕ ПЕРЕМЕННЫЕ --- */
         :root {
             --primary-bg: #0a0508;
             --card-bg: #140810;
             --neon-pink-bright: #ff007f;
             --neon-pink-light: #ff66b2;
-            --neon-pink-glow: rgba(255, 0, 127, 0.5);
-            --neon-pink-soft-glow: rgba(255, 0, 127, 0.2);
+            --neon-pink-glow: rgba(255, 0, 127, 0.6);
+            --neon-pink-soft-glow: rgba(255, 0, 127, 0.25);
             --progress-bg: #2a0c1d;
             --border-color: #4a1031;
         }
 
-        /* --- ОБЩИЕ СТИЛИ СБРОСА --- */
+        /* --- СБРОС СТИЛЕЙ --- */
         * {
             margin: 0;
             padding: 0;
@@ -37,7 +37,53 @@
             padding-top: 20px;
             padding-bottom: 80px;
             overflow-x: hidden;
+            position: relative;
+            min-height: 100vh;
             -webkit-font-smoothing: antialiased;
+        }
+
+        /* --- АНИМИРОВАННЫЙ ФОН С СЕРДЕЧКАМИ --- */
+        .bg-hearts {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .bg-heart {
+            position: absolute;
+            color: var(--neon-pink-bright);
+            opacity: 0.15;
+            font-size: 20px;
+            animation: floatUp 8s infinite linear;
+            text-shadow: 0 0 8px var(--neon-pink-glow);
+        }
+
+        @keyframes floatUp {
+            0% {
+                transform: translateY(100vh) scale(0.5) rotate(0deg);
+                opacity: 0;
+            }
+            20% {
+                opacity: 0.25;
+            }
+            80% {
+                opacity: 0.25;
+            }
+            100% {
+                transform: translateY(-10vh) scale(1.2) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        /* --- ОСНОВНОЙ КОНТЕНТ --- */
+        .content {
+            position: relative;
+            z-index: 1;
         }
 
         /* --- БЛОК ПРОФИЛЕЙ И СЕРДЦА --- */
@@ -55,6 +101,11 @@
             align-items: center;
             text-align: center;
             width: 100px;
+            position: relative;
+        }
+
+        .avatar-wrapper {
+            position: relative;
         }
 
         .avatar {
@@ -63,7 +114,21 @@
             border-radius: 50%;
             object-fit: cover;
             border: 2px solid var(--neon-pink-bright);
-            box-shadow: 0 0 12px var(--neon-pink-glow);
+            box-shadow: 0 0 14px var(--neon-pink-glow);
+        }
+
+        .avatar-kiss {
+            position: absolute;
+            bottom: -2px;
+            right: -2px;
+            font-size: 18px;
+            filter: drop-shadow(0 0 6px var(--neon-pink-bright));
+            animation: pulseKiss 2s infinite ease-in-out;
+        }
+
+        @keyframes pulseKiss {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.25); }
         }
 
         .profile-name {
@@ -79,20 +144,36 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
+            position: relative;
         }
 
         .heart-icon {
-            font-size: 32px;
+            font-size: 36px;
             color: var(--neon-pink-bright);
-            text-shadow: 0 0 14px var(--neon-pink-glow);
+            text-shadow: 0 0 16px var(--neon-pink-glow);
+            animation: heartBeat 1.5s infinite ease-in-out;
+        }
+
+        @keyframes heartBeat {
+            0%, 100% { transform: scale(1); }
+            15% { transform: scale(1.15); }
+            30% { transform: scale(1); }
+            45% { transform: scale(1.1); }
         }
 
         .heart-days {
-            margin-top: 4px;
+            margin-top: 2px;
             font-size: 16px;
             font-weight: 700;
             color: var(--neon-pink-bright);
             text-shadow: 0 0 8px var(--neon-pink-glow);
+        }
+
+        .center-kiss {
+            font-size: 14px;
+            margin-top: 2px;
+            opacity: 0.9;
+            filter: drop-shadow(0 0 4px var(--neon-pink-bright));
         }
 
         /* --- ПРОГРЕСС-БАР И ЗНАЧОК --- */
@@ -118,10 +199,10 @@
         }
 
         .progress-bar-container {
-            height: 12px;
+            height: 14px;
             background-color: var(--progress-bg);
             border: 1px solid var(--border-color);
-            border-radius: 6px;
+            border-radius: 7px;
             position: relative;
             overflow: visible;
         }
@@ -129,9 +210,9 @@
         .progress-bar-fill {
             height: 100%;
             width: 0%;
-            background-color: var(--neon-pink-bright);
+            background: linear-gradient(90deg, #ff007f, #ff66b2);
             box-shadow: 0 0 12px var(--neon-pink-glow);
-            border-radius: 6px;
+            border-radius: 7px;
             position: relative;
             transition: width 0.5s ease-out;
         }
@@ -139,7 +220,7 @@
         .progress-badge {
             position: absolute;
             right: -20px;
-            top: -26px;
+            top: -28px;
             background-color: var(--neon-pink-bright);
             color: #ffffff;
             font-size: 11px;
@@ -163,15 +244,19 @@
 
         /* --- ЦЕНТРАЛЬНЫЙ СЧЕТЧИК --- */
         .main-counter {
-            padding: 32px 16px;
+            padding: 28px 16px;
             text-align: center;
         }
 
         .counter-name {
             font-size: 16px;
             color: var(--neon-pink-light);
-            margin-bottom: 8px;
+            margin-bottom: 6px;
             text-shadow: 0 0 6px var(--neon-pink-soft-glow);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
         }
 
         .counter-value {
@@ -187,7 +272,8 @@
             overflow: hidden;
             border-top: 1px solid var(--border-color);
             border-bottom: 1px solid var(--border-color);
-            box-shadow: 0 0 15px var(--neon-pink-soft-glow);
+            box-shadow: 0 0 18px var(--neon-pink-soft-glow);
+            position: relative;
         }
 
         .couple-photo {
@@ -205,7 +291,7 @@
         .event-item {
             display: flex;
             justify-content: space-between;
-            align-items: flex-start;
+            align-items: center;
             padding: 16px 0;
             border-top: 1px solid var(--border-color);
         }
@@ -214,6 +300,9 @@
             font-size: 16px;
             color: var(--neon-pink-light);
             font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
 
         .event-details {
@@ -234,24 +323,30 @@
             text-shadow: 0 0 6px var(--neon-pink-glow);
         }
 
-        /* --- ПЛАВАЮЩАЯ КНОПКА (FAB) --- */
+        /* --- ПЛАВАЮЩАЯ КНОПКА ПОЦЕЛУЯ (FAB) --- */
         .fab {
             position: fixed;
             bottom: 24px;
             right: 24px;
-            width: 56px;
-            height: 56px;
-            background-color: var(--neon-pink-bright);
+            width: 58px;
+            height: 58px;
+            background: linear-gradient(135deg, #ff007f, #ff3399);
             border-radius: 50%;
-            box-shadow: 0 0 18px var(--neon-pink-glow);
+            box-shadow: 0 0 20px var(--neon-pink-glow);
             display: flex;
             justify-content: center;
             align-items: center;
             color: #ffffff;
-            font-size: 24px;
+            font-size: 26px;
             border: none;
             cursor: pointer;
             z-index: 1000;
+            animation: fabPulse 2s infinite ease-in-out;
+        }
+
+        @keyframes fabPulse {
+            0%, 100% { box-shadow: 0 0 15px var(--neon-pink-glow); }
+            50% { box-shadow: 0 0 28px var(--neon-pink-bright); }
         }
 
         .icon {
@@ -261,71 +356,91 @@
 </head>
 <body>
 
-    <!-- Блок профилей -->
-    <div class="profiles-container">
-        <div class="profile-item">
-            <img src="https://i.postimg.cc/phMNvQZB/maryasha-avatar.png" alt="Марьяша" class="avatar">
-            <div class="profile-name">марьяша</div>
-        </div>
-        <div class="heart-counter">
-            <div class="heart-icon">♥</div>
-            <div class="heart-days" id="total-days-heart">--дней</div>
-        </div>
-        <div class="profile-item">
-            <img src="https://i.postimg.cc/CZWPDFnS/roma-avatar.png" alt="Рома" class="avatar">
-            <div class="profile-name">рома</div>
-        </div>
+    <!-- ФОНОВЫЕ ПЛАВАЮЩИЕ СЕРДЕЧКИ -->
+    <div class="bg-hearts">
+        <div class="bg-heart" style="left: 10%; animation-delay: 0s;">♥</div>
+        <div class="bg-heart" style="left: 25%; animation-delay: 2s;">💖</div>
+        <div class="bg-heart" style="left: 45%; animation-delay: 5s;">♥</div>
+        <div class="bg-heart" style="left: 65%; animation-delay: 1s;">💕</div>
+        <div class="bg-heart" style="left: 85%; animation-delay: 3.5s;">♥</div>
     </div>
 
-    <!-- Прогресс-бар -->
-    <div class="progress-section">
-        <div class="progress-labels">
-            <div class="progress-label-left">50дней</div>
-            <div class="progress-label-right" id="days-to-goal">X--</div>
-        </div>
-        <div class="progress-bar-container">
-            <div class="progress-bar-fill" id="progress-fill">
-                <div class="progress-badge" id="progress-percent">--%</div>
+    <div class="content">
+        <!-- Блок профилей -->
+        <div class="profiles-container">
+            <div class="profile-item">
+                <div class="avatar-wrapper">
+                    <img src="https://i.postimg.cc/phMNvQZB/maryasha-avatar.png" alt="Марьяша" class="avatar">
+                    <div class="avatar-kiss">💋</div>
+                </div>
+                <div class="profile-name">марьяша</div>
+            </div>
+            
+            <div class="heart-counter">
+                <div class="heart-icon">♥</div>
+                <div class="heart-days" id="total-days-heart">--дней</div>
+                <div class="center-kiss">💋💋💋</div>
+            </div>
+
+            <div class="profile-item">
+                <div class="avatar-wrapper">
+                    <img src="https://i.postimg.cc/CZWPDFnS/roma-avatar.png" alt="Рома" class="avatar">
+                    <div class="avatar-kiss">💋</div>
+                </div>
+                <div class="profile-name">рома</div>
             </div>
         </div>
-    </div>
 
-    <!-- Большой счетчик -->
-    <div class="main-counter">
-        <div class="counter-name">рома пёс</div>
-        <div class="counter-value" id="main-counter-value">--месяцев --дней</div>
-    </div>
-
-    <!-- Главное фото -->
-    <div class="photo-section">
-        <img src="https://i.postimg.cc/9rLj97mm/couple-photo.jpg" alt="пара" class="couple-photo">
-    </div>
-
-    <!-- Список событий -->
-    <div class="event-list">
-        <div class="event-item">
-            <div class="event-title">Дата начала</div>
-            <div class="event-details">
-                <div class="event-date">24.06.2026</div>
-                <div class="event-days" id="start-date-x">X+--</div>
+        <!-- Прогресс-бар -->
+        <div class="progress-section">
+            <div class="progress-labels">
+                <div class="progress-label-left">💖 50дней</div>
+                <div class="progress-label-right" id="days-to-goal">X--</div>
+            </div>
+            <div class="progress-bar-container">
+                <div class="progress-bar-fill" id="progress-fill">
+                    <div class="progress-badge" id="progress-percent">--%</div>
+                </div>
             </div>
         </div>
-        <div class="event-item">
-            <div class="event-sub-title">10дней</div>
-            <div class="event-details">
-                <div class="event-date">04.07.2026</div>
-                <div class="event-days">X+36</div>
+
+        <!-- Большой счетчик -->
+        <div class="main-counter">
+            <div class="counter-name">✨ рома пёс ✨</div>
+            <div class="counter-value" id="main-counter-value">--месяцев --дней</div>
+        </div>
+
+        <!-- Главное фото -->
+        <div class="photo-section">
+            <img src="https://i.postimg.cc/9rLj97mm/couple-photo.jpg" alt="пара" class="couple-photo">
+        </div>
+
+        <!-- Список событий -->
+        <div class="event-list">
+            <div class="event-item">
+                <div class="event-title"><span>💋</span> Дата начала</div>
+                <div class="event-details">
+                    <div class="event-date">24.06.2026</div>
+                    <div class="event-days" id="start-date-x">X+--</div>
+                </div>
+            </div>
+            <div class="event-item">
+                <div class="event-sub-title"><span>💖</span> 10дней</div>
+                <div class="event-details">
+                    <div class="event-date">04.07.2026</div>
+                    <div class="event-days">X+36</div>
+                </div>
             </div>
         </div>
-    </div>
 
-    <!-- Плавающая кнопка -->
-    <button class="fab">
-        <span class="icon">✏️</span>
-    </button>
+        <!-- Плавающая кнопка-поцелуй -->
+        <button class="fab" title="Поцелуй">
+            <span class="icon">💋</span>
+        </button>
+    </div>
 
     <script>
-        // === ПРИНУДИТЕЛЬНАЯ ОЧИСТКА ВНУТРЕННЕГО КЭША ПРИ ЗАГРУЗКЕ ===
+        // === ПРИНУДИТЕЛЬНАЯ ОЧИСТКА ВНУТРЕННЕГО КЭША ===
         if ('serviceWorker' in navigator) {
             navigator.serviceWorker.getRegistrations().then(function(registrations) {
                 for (let registration of registrations) {
@@ -387,7 +502,7 @@
             if (daysLeft > 0) {
                 document.getElementById('days-to-goal').textContent = `X-${daysLeft}`;
             } else {
-                document.getElementById('days-to-goal').textContent = `Достигнуто!`;
+                document.getElementById('days-to-goal').textContent = `Достигнуто! 🎉`;
             }
         }
 
