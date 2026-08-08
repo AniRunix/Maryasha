@@ -3,6 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    
+    <!-- === ЗАПРЕТ КЭШИРОВАНИЯ БРАУЗЕРОМ И TELEGRAM === -->
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    
     <title>Couple App Interface (Full Neon Pink)</title>
     <style>
         /* --- КОРНЕВЫЕ ПЕРЕМЕННЫЕ (НЕОНОВО-РОЗОВАЯ ТЕМА) --- */
@@ -319,6 +325,20 @@
     </button>
 
     <script>
+        // === ПРИНУДИТЕЛЬНАЯ ОЧИСТКА ВНУТРЕННЕГО КЭША ПРИ ЗАГРУЗКЕ ===
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.getRegistrations().then(function(registrations) {
+                for (let registration of registrations) {
+                    registration.unregister();
+                }
+            });
+        }
+        if ('caches' in window) {
+            caches.keys().then(function(names) {
+                for (let name of names) caches.delete(name);
+            });
+        }
+
         // Дата начала: 24 июня 2026 года
         const startDate = new Date(2026, 5, 24);
         const targetGoalDays = 50;
