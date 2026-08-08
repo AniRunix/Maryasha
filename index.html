@@ -3,15 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>Couple App Interface (Active)</title>
+    <title>Couple App Interface (Full Neon Pink)</title>
     <style>
-        /* --- КОРНЕВЫЕ ПЕРЕМЕННЫЕ (ЦВЕТА) --- */
+        /* --- КОРНЕВЫЕ ПЕРЕМЕННЫЕ (НЕОНОВО-РОЗОВАЯ ТЕМА) --- */
         :root {
-            --primary-bg: #FFFFFF;
-            --text-color: #000000;
-            --muted-text: #8E8E93;
-            --teal-accent: #3EC5CC;
-            --progress-bg: #EAEAEF;
+            --primary-bg: #0a0508;
+            --card-bg: #140810;
+            --neon-pink-bright: #ff007f;
+            --neon-pink-light: #ff66b2;
+            --neon-pink-glow: rgba(255, 0, 127, 0.5);
+            --neon-pink-soft-glow: rgba(255, 0, 127, 0.2);
+            --progress-bg: #2a0c1d;
+            --border-color: #4a1031;
         }
 
         /* --- ОБЩИЕ СТИЛИ СБРОСА --- */
@@ -24,54 +27,11 @@
 
         body {
             background-color: var(--primary-bg);
-            color: var(--text-color);
+            color: var(--neon-pink-light);
+            padding-top: 20px;
             padding-bottom: 80px;
             overflow-x: hidden;
             -webkit-font-smoothing: antialiased;
-        }
-
-        /* --- СТАТУС-БАР --- */
-        .status-bar {
-            height: 44px;
-            padding: 0 16px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-size: 15px;
-            font-weight: 600;
-            background-color: var(--primary-bg);
-            position: fixed;
-            top: 0;
-            width: 100%;
-            z-index: 1000;
-        }
-
-        .status-bar-icons {
-            display: flex;
-            gap: 5px;
-            align-items: center;
-        }
-
-        /* --- НАВИГАЦИОННАЯ ПАНЕЛЬ --- */
-        .nav-bar {
-            margin-top: 44px;
-            height: 56px;
-            padding: 0 16px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 1px solid #F2F2F7;
-        }
-
-        .nav-bar-left, .nav-bar-right {
-            display: flex;
-            gap: 20px;
-            align-items: center;
-            font-size: 24px;
-        }
-
-        .nav-bar-right {
-            font-size: 20px;
         }
 
         /* --- БЛОК ПРОФИЛЕЙ И СЕРДЦА --- */
@@ -96,13 +56,16 @@
             height: 80px;
             border-radius: 50%;
             object-fit: cover;
-            border: 2px solid #F2F2F7;
+            border: 2px solid var(--neon-pink-bright);
+            box-shadow: 0 0 12px var(--neon-pink-glow);
         }
 
         .profile-name {
             margin-top: 8px;
             font-size: 14px;
-            color: var(--text-color);
+            color: var(--neon-pink-light);
+            font-weight: 600;
+            text-shadow: 0 0 6px var(--neon-pink-soft-glow);
         }
 
         .heart-counter {
@@ -114,13 +77,16 @@
 
         .heart-icon {
             font-size: 32px;
-            color: var(--teal-accent);
+            color: var(--neon-pink-bright);
+            text-shadow: 0 0 14px var(--neon-pink-glow);
         }
 
         .heart-days {
             margin-top: 4px;
             font-size: 16px;
-            font-weight: 600;
+            font-weight: 700;
+            color: var(--neon-pink-bright);
+            text-shadow: 0 0 8px var(--neon-pink-glow);
         }
 
         /* --- ПРОГРЕСС-БАР И ЗНАЧОК --- */
@@ -134,17 +100,21 @@
             display: flex;
             justify-content: space-between;
             font-size: 12px;
-            color: var(--text-color);
-            margin-bottom: 4px;
+            color: var(--neon-pink-light);
+            font-weight: 600;
+            margin-bottom: 6px;
+            text-shadow: 0 0 5px var(--neon-pink-soft-glow);
         }
 
         .progress-label-right {
-            color: var(--teal-accent);
+            color: var(--neon-pink-bright);
+            font-weight: 700;
         }
 
         .progress-bar-container {
             height: 12px;
             background-color: var(--progress-bg);
+            border: 1px solid var(--border-color);
             border-radius: 6px;
             position: relative;
             overflow: visible;
@@ -153,7 +123,8 @@
         .progress-bar-fill {
             height: 100%;
             width: 0%;
-            background-color: var(--teal-accent);
+            background-color: var(--neon-pink-bright);
+            box-shadow: 0 0 12px var(--neon-pink-glow);
             border-radius: 6px;
             position: relative;
             transition: width 0.5s ease-out;
@@ -162,14 +133,15 @@
         .progress-badge {
             position: absolute;
             right: -20px;
-            top: -24px;
-            background-color: var(--teal-accent);
-            color: #FFFFFF;
+            top: -26px;
+            background-color: var(--neon-pink-bright);
+            color: #ffffff;
             font-size: 11px;
             font-weight: 700;
             padding: 4px 6px;
             border-radius: 4px;
             white-space: nowrap;
+            box-shadow: 0 0 10px var(--neon-pink-glow);
         }
 
         .progress-badge::after {
@@ -180,7 +152,7 @@
             transform: translateX(-50%);
             border-width: 5px 5px 0 5px;
             border-style: solid;
-            border-color: var(--teal-accent) transparent transparent transparent;
+            border-color: var(--neon-pink-bright) transparent transparent transparent;
         }
 
         /* --- ЦЕНТРАЛЬНЫЙ СЧЕТЧИК --- */
@@ -191,20 +163,25 @@
 
         .counter-name {
             font-size: 16px;
-            color: var(--text-color);
+            color: var(--neon-pink-light);
             margin-bottom: 8px;
+            text-shadow: 0 0 6px var(--neon-pink-soft-glow);
         }
 
         .counter-value {
-            font-size: 22px;
-            font-weight: 700;
-            color: var(--text-color);
+            font-size: 24px;
+            font-weight: 800;
+            color: var(--neon-pink-bright);
+            text-shadow: 0 0 14px var(--neon-pink-glow);
         }
 
         /* --- ФОТОГРАФИЯ --- */
         .photo-section {
             width: 100%;
             overflow: hidden;
+            border-top: 1px solid var(--border-color);
+            border-bottom: 1px solid var(--border-color);
+            box-shadow: 0 0 15px var(--neon-pink-soft-glow);
         }
 
         .couple-photo {
@@ -224,26 +201,31 @@
             justify-content: space-between;
             align-items: flex-start;
             padding: 16px 0;
-            border-top: 1px solid #F2F2F7;
+            border-top: 1px solid var(--border-color);
         }
 
         .event-title, .event-sub-title {
             font-size: 16px;
-            color: var(--muted-text);
+            color: var(--neon-pink-light);
+            font-weight: 500;
         }
 
         .event-details {
             text-align: right;
-            color: var(--muted-text);
+            color: var(--neon-pink-light);
         }
 
         .event-date {
             font-size: 12px;
             margin-bottom: 4px;
+            opacity: 0.8;
         }
 
         .event-days {
-            font-size: 12px;
+            font-size: 13px;
+            color: var(--neon-pink-bright);
+            font-weight: 700;
+            text-shadow: 0 0 6px var(--neon-pink-glow);
         }
 
         /* --- ПЛАВАЮЩАЯ КНОПКА (FAB) --- */
@@ -253,13 +235,13 @@
             right: 24px;
             width: 56px;
             height: 56px;
-            background-color: var(--teal-accent);
+            background-color: var(--neon-pink-bright);
             border-radius: 50%;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            box-shadow: 0 0 18px var(--neon-pink-glow);
             display: flex;
             justify-content: center;
             align-items: center;
-            color: #FFFFFF;
+            color: #ffffff;
             font-size: 24px;
             border: none;
             cursor: pointer;
@@ -272,29 +254,6 @@
     </style>
 </head>
 <body>
-
-    <!-- Стилизованный статус-бар -->
-    <div class="status-bar">
-        <div class="status-bar-time" id="current-time">00:09</div>
-        <div class="status-bar-icons">
-            <span class="icon">📶</span>
-            <span class="icon">LTE</span>
-            <span class="icon">🔋 80%</span>
-        </div>
-    </div>
-
-    <!-- Навигационная панель -->
-    <div class="nav-bar">
-        <div class="nav-bar-left">
-            <span class="icon">☰</span>
-            <span class="icon">➕</span>
-        </div>
-        <div class="nav-bar-right">
-            <span class="icon">📅</span>
-            <span class="icon">🏠</span>
-            <span class="icon">🛍️</span>
-        </div>
-    </div>
 
     <!-- Блок профилей -->
     <div class="profiles-container">
@@ -367,11 +326,6 @@
         function updateCounters() {
             const now = new Date();
 
-            // Время в статус-баре
-            const hours = now.getHours().toString().padStart(2, '0');
-            const minutes = now.getMinutes().toString().padStart(2, '0');
-            document.getElementById('current-time').textContent = `${hours}:${minutes}`;
-
             const diffInMs = now - startDate;
             if (diffInMs < 0) return;
             
@@ -414,7 +368,6 @@
                 document.getElementById('days-to-goal').textContent = `X-${daysLeft}`;
             } else {
                 document.getElementById('days-to-goal').textContent = `Достигнуто!`;
-                document.getElementById('days-to-goal').style.color = 'gray';
             }
         }
 
