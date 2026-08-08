@@ -25,12 +25,12 @@
         body {
             background-color: var(--primary-bg);
             color: var(--text-color);
-            padding-bottom: 80px; /* Отступ для плавающей кнопки */
+            padding-bottom: 80px;
             overflow-x: hidden;
-            -webkit-font-smoothing: antialiased; /* Улучшение шрифтов на iOS */
+            -webkit-font-smoothing: antialiased;
         }
 
-        /* --- СТАТУС-БАР (Имитация iOS) --- */
+        /* --- СТАТУС-БАР --- */
         .status-bar {
             height: 44px;
             padding: 0 16px;
@@ -52,9 +52,9 @@
             align-items: center;
         }
 
-        /* --- НАВИГАЦИОННАЯ ПАНЕЛЬ (Верхний ряд иконок) --- */
+        /* --- НАВИГАЦИОННАЯ ПАНЕЛЬ --- */
         .nav-bar {
-            margin-top: 44px; /* Отступ под статус-бар */
+            margin-top: 44px;
             height: 56px;
             padding: 0 16px;
             display: flex;
@@ -147,21 +147,21 @@
             background-color: var(--progress-bg);
             border-radius: 6px;
             position: relative;
-            overflow: visible; /* Чтобы значок не обрезался */
+            overflow: visible;
         }
 
         .progress-bar-fill {
             height: 100%;
-            width: 0%; /* JS изменит это */
+            width: 0%;
             background-color: var(--teal-accent);
             border-radius: 6px;
             position: relative;
-            transition: width 0.5s ease-out; /* Плавная анимация при загрузке */
+            transition: width 0.5s ease-out;
         }
 
         .progress-badge {
             position: absolute;
-            right: -20px; /* Смещение вправо, чтобы хвостик был над концом заливки */
+            right: -20px;
             top: -24px;
             background-color: var(--teal-accent);
             color: #FFFFFF;
@@ -172,7 +172,6 @@
             white-space: nowrap;
         }
 
-        /* Хвостик значка процента */
         .progress-badge::after {
             content: '';
             position: absolute;
@@ -184,7 +183,7 @@
             border-color: var(--teal-accent) transparent transparent transparent;
         }
 
-        /* --- ЦЕНТРАЛЬНЫЙ БОЛЬШОЙ СЧЕТЧИК --- */
+        /* --- ЦЕНТРАЛЬНЫЙ СЧЕТЧИК --- */
         .main-counter {
             padding: 32px 16px;
             text-align: center;
@@ -267,7 +266,6 @@
             z-index: 1000;
         }
 
-        /* Вспомогательный класс для иконок */
         .icon {
             font-style: normal;
         }
@@ -301,7 +299,7 @@
     <!-- Блок профилей -->
     <div class="profiles-container">
         <div class="profile-item">
-            <img src="maryasha_avatar.png" alt="Марьяша" class="avatar">
+            <img src="https://i.postimg.cc/phMNvQZB/maryasha-avatar.png" alt="Марьяша" class="avatar">
             <div class="profile-name">марьяша</div>
         </div>
         <div class="heart-counter">
@@ -309,7 +307,7 @@
             <div class="heart-days" id="total-days-heart">--дней</div>
         </div>
         <div class="profile-item">
-            <img src="roma_avatar.png" alt="Рома" class="avatar">
+            <img src="https://i.postimg.cc/CZWPDFnS/roma-avatar.png" alt="Рома" class="avatar">
             <div class="profile-name">рома</div>
         </div>
     </div>
@@ -335,7 +333,7 @@
 
     <!-- Главное фото -->
     <div class="photo-section">
-        <img src="couple_photo.jpg" alt="пара" class="couple-photo">
+        <img src="https://i.postimg.cc/9rLj97mm/couple-photo.jpg" alt="пара" class="couple-photo">
     </div>
 
     <!-- Список событий -->
@@ -362,32 +360,28 @@
     </button>
 
     <script>
-        // --- КОНФИГУРАЦИЯ ---
-        // Установите вашу дату начала здесь (Год, Месяц(0-11), День)
-        // ВАЖНО: Месяцы в JS начинаются с 0 (Январь=0, Июнь=5, Декабрь=11)
-        const startDate = new Date(2026, 5, 24); // Пример: 24 июня 2026 года
-        const targetGoalDays = 50; // Следующая цель в днях
+        // Дата начала: 24 июня 2026 года
+        const startDate = new Date(2026, 5, 24);
+        const targetGoalDays = 50;
 
         function updateCounters() {
             const now = new Date();
 
-            // 1. Обновление времени в статус-баре
+            // Время в статус-баре
             const hours = now.getHours().toString().padStart(2, '0');
             const minutes = now.getMinutes().toString().padStart(2, '0');
             document.getElementById('current-time').textContent = `${hours}:${minutes}`;
 
-            // Вычисление разницы во времени
             const diffInMs = now - startDate;
-            if (diffInMs < 0) {
-                return;
-            }
+            if (diffInMs < 0) return;
+            
             const diffInDays = Math.floor(diffInMs / (1000 * 60 * 60 * 24));
 
-            // 2. Общее количество дней (под сердцем)
+            // Общее количество дней
             document.getElementById('total-days-heart').textContent = `${diffInDays}дней`;
             document.getElementById('start-date-x').textContent = `X+${diffInDays}`;
 
-            // 3. Вычисление месяцев и дней (главный счетчик)
+            // Месяцы и дни
             let yearsDiff = now.getFullYear() - startDate.getFullYear();
             let monthsDiff = now.getMonth() - startDate.getMonth();
             let daysDiff = now.getDate() - startDate.getDate();
@@ -408,12 +402,8 @@
             mainCounterStr += `${daysDiff}дней`;
             document.getElementById('main-counter-value').textContent = mainCounterStr;
 
-            // 4. Прогресс-бар
-            let progressDays = diffInDays;
-            if (diffInDays >= targetGoalDays) {
-                progressDays = targetGoalDays;
-            }
-
+            // Прогресс-бар
+            let progressDays = diffInDays >= targetGoalDays ? targetGoalDays : diffInDays;
             const percent = Math.floor((progressDays / targetGoalDays) * 100);
             
             document.getElementById('progress-fill').style.width = `${percent}%`;
@@ -429,7 +419,7 @@
         }
 
         updateCounters();
-        setInterval(updateCounters, 60000); 
+        setInterval(updateCounters, 60000);
     </script>
 </body>
 </html>
