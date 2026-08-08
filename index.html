@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Couple App Interface (Active)</title>
+    <style>
+        /* --- КОРНЕВЫЕ ПЕРЕМЕННЫЕ (ЦВЕТА) --- */
+        :root {
+            --primary-bg: #FFFFFF;
+            --text-color: #000000;
+            --muted-text: #8E8E93;
+            --teal-accent: #3EC5CC;
+            --progress-bg: #EAEAEF;
+        }
+
+        /* --- ОБЩИЕ СТИЛИ СБРОСА --- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+        }
+
+        body {
+            background-color: var(--primary-bg);
+            color: var(--text-color);
+            padding-bottom: 80px; /* Отступ для плавающей кнопки */
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased; /* Улучшение шрифтов на iOS */
+        }
+
+        /* --- СТАТУС-БАР (Имитация iOS) --- */
+        .status-bar {
+            height: 44px;
+            padding: 0 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 15px;
+            font-weight: 600;
+            background-color: var(--primary-bg);
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+        }
+
+        .status-bar-icons {
+            display: flex;
+            gap: 5px;
+            align-items: center;
+        }
+
+        /* --- НАВИГАЦИОННАЯ ПАНЕЛЬ (Верхний ряд иконок) --- */
+        .nav-bar {
+            margin-top: 44px; /* Отступ под статус-бар */
+            height: 56px;
+            padding: 0 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #F2F2F7;
+        }
+
+        .nav-bar-left, .nav-bar-right {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            font-size: 24px;
+        }
+
+        .nav-bar-right {
+            font-size: 20px;
+        }
+
+        /* --- БЛОК ПРОФИЛЕЙ И СЕРДЦА --- */
+        .profiles-container {
+            padding: 24px 16px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .profile-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            width: 100px;
+        }
+
+        .avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid #F2F2F7;
+        }
+
+        .profile-name {
+            margin-top: 8px;
+            font-size: 14px;
+            color: var(--text-color);
+        }
+
+        .heart-counter {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .heart-icon {
+            font-size: 32px;
+            color: var(--teal-accent);
+        }
+
+        .heart-days {
+            margin-top: 4px;
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        /* --- ПРОГРЕСС-БАР И ЗНАЧОК --- */
+        .progress-section {
+            padding: 0 16px;
+            margin-top: 16px;
+            position: relative;
+        }
+
+        .progress-labels {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            color: var(--text-color);
+            margin-bottom: 4px;
+        }
+
+        .progress-label-right {
+            color: var(--teal-accent);
+        }
+
+        .progress-bar-container {
+            height: 12px;
+            background-color: var(--progress-bg);
+            border-radius: 6px;
+            position: relative;
+            overflow: visible; /* Чтобы значок не обрезался */
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            width: 0%; /* JS изменит это */
+            background-color: var(--teal-accent);
+            border-radius: 6px;
+            position: relative;
+            transition: width 0.5s ease-out; /* Плавная анимация при загрузке */
+        }
+
+        .progress-badge {
+            position: absolute;
+            right: -20px; /* Смещение вправо, чтобы хвостик был над концом заливки */
+            top: -24px;
+            background-color: var(--teal-accent);
+            color: #FFFFFF;
+            font-size: 11px;
+            font-weight: 700;
+            padding: 4px 6px;
+            border-radius: 4px;
+            white-space: nowrap;
+        }
+
+        /* Хвостик значка процента */
+        .progress-badge::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 50%;
+            transform: translateX(-50%);
+            border-width: 5px 5px 0 5px;
+            border-style: solid;
+            border-color: var(--teal-accent) transparent transparent transparent;
+        }
+
+        /* --- ЦЕНТРАЛЬНЫЙ БОЛЬШОЙ СЧЕТЧИК --- */
+        .main-counter {
+            padding: 32px 16px;
+            text-align: center;
+        }
+
+        .counter-name {
+            font-size: 16px;
+            color: var(--text-color);
+            margin-bottom: 8px;
+        }
+
+        .counter-value {
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--text-color);
+        }
+
+        /* --- ФОТОГРАФИЯ --- */
+        .photo-section {
+            width: 100%;
+            overflow: hidden;
+        }
+
+        .couple-photo {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        /* --- СПИСОК СОБЫТИЙ --- */
+        .event-list {
+            padding: 0 16px;
+            margin-top: 24px;
+        }
+
+        .event-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            padding: 16px 0;
+            border-top: 1px solid #F2F2F7;
+        }
+
+        .event-title, .event-sub-title {
+            font-size: 16px;
+            color: var(--muted-text);
+        }
+
+        .event-details {
+            text-align: right;
+            color: var(--muted-text);
+        }
+
+        .event-date {
+            font-size: 12px;
+            margin-bottom: 4px;
+        }
+
+        .event-days {
+            font-size: 12px;
+        }
+
+        /* --- ПЛАВАЮЩАЯ КНОПКА (FAB) --- */
+        .fab {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            width: 56px;
+            height: 56px;
+            background-color: var(--teal-accent);
+            border-radius: 50%;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #FFFFFF;
+            font-size: 24px;
+            border: none;
+            cursor: pointer;
+            z-index: 1000;
+        }
+
+        /* Вспомогательный класс для иконок */
+        .icon {
+            font-style: normal;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Стилизованный статус-бар -->
+    <div class="status-bar">
+        <div class="status-bar-time" id="current-time">00:09</div>
+        <div class="status-bar-icons">
+            <span class="icon">📶</span>
+            <span class="icon">LTE</span>
+            <span class="icon">🔋 80%</span>
+        </div>
+    </div>
+
+    <!-- Навигационная панель -->
+    <div class="nav-bar">
+        <div class="nav-bar-left">
+            <span class="icon">☰</span>
+            <span class="icon">➕</span>
+        </div>
+        <div class="nav-bar-right">
+            <span class="icon">📅</span>
+            <span class="icon">🏠</span>
+            <span class="icon">🛍️</span>
+        </div>
+    </div>
+
+    <!-- Блок профилей -->
+    <div class="profiles-container">
+        <div class="profile-item">
+            <img src="maryasha_avatar.png" alt="Марьяша" class="avatar">
+            <div class="profile-name">марьяша</div>
+        </div>
+        <div class="heart-counter">
+            <div class="heart-icon">♥</div>
+            <div class="heart-days" id="total-days-heart">--дней</div>
+        </div>
+        <div class="profile-item">
+            <img src="roma_avatar.png" alt="Рома" class="avatar">
+            <div class="profile-name">рома</div>
+        </div>
+    </div>
+
+    <!-- Прогресс-бар -->
+    <div class="progress-section">
+        <div class="progress-labels">
+            <div class="progress-label-left">50дней</div>
+            <div class="progress-label-right" id="days-to-goal">X--</div>
+        </div>
+        <div class="progress-bar-container">
+            <div class="progress-bar-fill" id="progress-fill">
+                <div class="progress-badge" id="progress-percent">--%</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Большой счетчик -->
+    <div class="main-counter">
+        <div class="counter-name">рома пёс</div>
+        <div class="counter-value" id="main-counter-value">--месяцев --дней</div>
+    </div>
+
+    <!-- Главное фото -->
+    <div class="photo-section">
+        <img src="couple_photo.jpg" alt="пара" class="couple-photo">
+    </div>
+
+    <!-- Список событий -->
+    <div class="event-list">
+        <div class="event-item">
+            <div class="event-title">Дата начала</div>
+            <div class="event-details">
+                <div class="event-date">24.06.2026</div>
+                <div class="event-days" id="start-date-x">X+--</div>
+            </div>
+        </div>
+        <div class="event-item">
+            <div class="event-sub-title">10дней</div>
+            <div class="event-details">
+                <div class="event-date">04.07.2026</div>
+                <div class="event-days">X+36</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Плавающая кнопка -->
+    <button class="fab">
+        <span class="icon">✏️</span>
+    </button>
+
+    <script>
+        // --- КОНФИГУРАЦИЯ ---
+        // Установите вашу дату начала здесь (Год, Месяц(0-11), День)
+        // ВАЖНО: Месяцы в JS начинаются с 0 (Январь=0, Июнь=5, Декабрь=11)
+        const startDate = new Date(2026, 5, 24); // Пример: 24 июня 2026 года
+        const targetGoalDays = 50; // Следующая цель в днях
+
+        function updateCounters() {
+            const now = new Date();
+
+            // 1. Обновление времени в статус-баре
+            const hours = now.getHours().toString().padStart(2, '0');
+            const minutes = now.getMinutes().toString().padStart(2, '0');
+            document.getElementById('current-time').textContent = `${hours}:${minutes}`;
+
+            // Вычисление разницы во времени
+            const diffInMs = now - startDate;
+            if (diffInMs < 0) {
+                return;
+            }
+            const diffInDays = Math.floor(diffInMs / (1000 * 60 * 60 * 24));
+
+            // 2. Общее количество дней (под сердцем)
+            document.getElementById('total-days-heart').textContent = `${diffInDays}дней`;
+            document.getElementById('start-date-x').textContent = `X+${diffInDays}`;
+
+            // 3. Вычисление месяцев и дней (главный счетчик)
+            let yearsDiff = now.getFullYear() - startDate.getFullYear();
+            let monthsDiff = now.getMonth() - startDate.getMonth();
+            let daysDiff = now.getDate() - startDate.getDate();
+
+            if (daysDiff < 0) {
+                monthsDiff--;
+                const prevMonth = new Date(now.getFullYear(), now.getMonth(), 0);
+                daysDiff += prevMonth.getDate();
+            }
+            if (monthsDiff < 0) {
+                yearsDiff--;
+                monthsDiff += 12;
+            }
+
+            let mainCounterStr = "";
+            if (yearsDiff > 0) mainCounterStr += `${yearsDiff}г `;
+            if (monthsDiff > 0) mainCounterStr += `${monthsDiff}месяц `;
+            mainCounterStr += `${daysDiff}дней`;
+            document.getElementById('main-counter-value').textContent = mainCounterStr;
+
+            // 4. Прогресс-бар
+            let progressDays = diffInDays;
+            if (diffInDays >= targetGoalDays) {
+                progressDays = targetGoalDays;
+            }
+
+            const percent = Math.floor((progressDays / targetGoalDays) * 100);
+            
+            document.getElementById('progress-fill').style.width = `${percent}%`;
+            document.getElementById('progress-percent').textContent = `${percent}%`;
+
+            const daysLeft = targetGoalDays - diffInDays;
+            if (daysLeft > 0) {
+                document.getElementById('days-to-goal').textContent = `X-${daysLeft}`;
+            } else {
+                document.getElementById('days-to-goal').textContent = `Достигнуто!`;
+                document.getElementById('days-to-goal').style.color = 'gray';
+            }
+        }
+
+        updateCounters();
+        setInterval(updateCounters, 60000); 
+    </script>
+</body>
+</html>
