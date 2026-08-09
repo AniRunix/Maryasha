@@ -9,62 +9,40 @@
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
     
-    <title>Couple App — Unique Cyber-Romance</title>
+    <title>LOVE_OS // Cyber-Console</title>
     <style>
         :root {
-            --bg-grad-1: #07030a;
-            --bg-grad-2: #160318;
-            --glass-bg: rgba(255, 0, 127, 0.05);
-            --glass-card: rgba(26, 10, 24, 0.55);
-            --glass-border: rgba(255, 0, 127, 0.25);
-            --neon-pink: #ff007f;
-            --neon-glow: #ff007faa;
-            --neon-accent: #ff66cc;
-            --text-main: #fbeaff;
-            --text-sub: #b388bf;
+            --bg-dark: #050308;
+            --cyber-pink: #ff0055;
+            --cyber-pink-glow: rgba(255, 0, 85, 0.4);
+            --cyber-cyan: #00f0ff;
+            --cyber-cyan-glow: rgba(0, 240, 255, 0.3);
+            --panel-bg: rgba(18, 10, 26, 0.75);
+            --panel-border: rgba(255, 0, 85, 0.3);
+            --text-main: #e0f7fc;
+            --text-dim: #8a7a99;
         }
 
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, system-ui, sans-serif;
+            font-family: "Courier New", Courier, monospace, system-ui, sans-serif;
         }
 
         body {
-            background: linear-gradient(135deg, var(--bg-grad-1), var(--bg-grad-2));
+            background-color: var(--bg-dark);
             color: var(--text-main);
-            padding-top: 24px;
-            padding-bottom: 100px;
-            overflow-x: hidden;
+            padding: 16px 12px 90px 12px;
             min-height: 100vh;
+            overflow-x: hidden;
             -webkit-font-smoothing: antialiased;
             user-select: none;
-        }
-
-        /* --- ЧАСТИЦЫ ФОНА --- */
-        .bg-elements {
-            position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            pointer-events: none;
-            z-index: 0;
-        }
-
-        .bg-item {
-            position: absolute;
-            color: var(--neon-accent);
-            opacity: 0.25;
-            font-size: 16px;
-            animation: floatUp 10s infinite ease-in-out;
-            filter: drop-shadow(0 0 8px var(--neon-pink));
-        }
-
-        @keyframes floatUp {
-            0% { transform: translateY(105vh) rotate(0deg) scale(0.8); opacity: 0; }
-            30% { opacity: 0.4; }
-            80% { opacity: 0.4; }
-            100% { transform: translateY(-10vh) rotate(360deg) scale(1.2); opacity: 0; }
+            background-image: 
+                radial-gradient(circle at 50% 0%, rgba(255, 0, 85, 0.15), transparent 70%),
+                linear-gradient(rgba(0, 240, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 240, 255, 0.03) 1px, transparent 1px);
+            background-size: 100% 100%, 20px 20px, 20px 20px;
         }
 
         #fireworks-canvas {
@@ -75,389 +53,404 @@
             z-index: 999;
         }
 
-        .content {
-            position: relative;
-            z-index: 1;
-            max-width: 480px;
+        .container {
+            max-width: 500px;
             margin: 0 auto;
-            padding: 0 16px;
         }
 
-        /* --- ПРОФИЛИ С ЭФФЕКТОМ СТЕКЛА --- */
-        .glass-panel {
-            background: var(--glass-card);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border: 1px solid var(--glass-border);
-            border-radius: 24px;
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37), 0 0 15px var(--glass-bg);
-            margin-bottom: 20px;
-            padding: 20px;
-        }
-
-        .profiles-container {
-            display: flex;
-            justify-content: space-around;
-            align-items: center;
-        }
-
-        .profile-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        .avatar-wrapper {
-            position: relative;
-            padding: 4px;
-            background: linear-gradient(45deg, var(--neon-pink), transparent, var(--neon-accent));
-            border-radius: 50%;
-            box-shadow: 0 0 15px var(--neon-glow);
-        }
-
-        .avatar {
-            width: 76px;
-            height: 76px;
-            border-radius: 50%;
-            object-fit: cover;
-            display: block;
-        }
-
-        .avatar-kiss {
-            position: absolute;
-            bottom: -4px;
-            right: -4px;
-            font-size: 20px;
-            background: rgba(10, 5, 8, 0.8);
-            border-radius: 50%;
-            padding: 2px;
-            animation: pulseKiss 2s infinite ease-in-out;
-        }
-
-        @keyframes pulseKiss {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.25); }
-        }
-
-        .profile-name {
-            margin-top: 10px;
-            font-size: 14px;
-            font-weight: 700;
-            letter-spacing: 0.5px;
-            color: var(--text-main);
-            text-transform: lowercase;
-        }
-
-        .heart-counter {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        .heart-icon {
-            font-size: 32px;
-            color: var(--neon-pink);
-            filter: drop-shadow(0 0 10px var(--neon-pink));
-            animation: heartBeat 1.4s infinite ease-in-out;
-        }
-
-        @keyframes heartBeat {
-            0%, 100% { transform: scale(1); }
-            15% { transform: scale(1.2); }
-            30% { transform: scale(1); }
-            45% { transform: scale(1.1); }
-        }
-
-        .heart-days {
-            font-size: 15px;
-            font-weight: 800;
-            color: var(--neon-accent);
-            text-shadow: 0 0 8px var(--neon-glow);
-        }
-
-        /* --- КАПСУЛА ПРОГРЕССА --- */
-        .progress-section {
-            margin-bottom: 20px;
-        }
-
-        .progress-labels {
+        /* --- HEADER HUD --- */
+        .hud-header {
             display: flex;
             justify-content: space-between;
-            font-size: 13px;
-            font-weight: 600;
-            color: var(--text-sub);
-            margin-bottom: 8px;
-        }
-
-        .progress-bar-container {
-            height: 18px;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid var(--glass-border);
-            border-radius: 20px;
-            position: relative;
-            overflow: hidden;
-            padding: 2px;
-        }
-
-        .progress-bar-fill {
-            height: 100%;
-            width: 0%;
-            background: linear-gradient(90deg, #ff007f, #ff66cc);
-            border-radius: 20px;
-            box-shadow: 0 0 12px var(--neon-pink);
-            transition: width 0.6s ease-out;
-            position: relative;
-        }
-
-        .progress-badge {
-            position: absolute;
-            right: 8px;
-            top: 50%;
-            transform: translateY(-50%);
-            font-size: 10px;
-            font-weight: 800;
-            color: #fff;
-            text-shadow: 0 0 4px #000;
-        }
-
-        /* --- ГЛАВНЫЙ ТАЙМЕР --- */
-        .main-counter {
-            text-align: center;
-            padding: 16px;
-        }
-
-        .counter-name {
-            font-size: 13px;
+            align-items: center;
+            border-bottom: 2px solid var(--cyber-pink);
+            padding-bottom: 8px;
+            margin-bottom: 16px;
             text-transform: uppercase;
             letter-spacing: 2px;
-            color: var(--text-sub);
+            font-size: 11px;
+            color: var(--cyber-cyan);
+            text-shadow: 0 0 6px var(--cyber-cyan-glow);
+        }
+
+        .hud-status {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--cyber-pink);
+            border-radius: 50%;
+            box-shadow: 0 0 8px var(--cyber-pink);
+            animation: blink 1s infinite alternate;
+        }
+
+        @keyframes blink { from { opacity: 0.3; } to { opacity: 1; } }
+
+        /* --- CYBER PANEL STYLE --- */
+        .cyber-panel {
+            background: var(--panel-bg);
+            border: 1px solid var(--panel-border);
+            clip-path: polygon(0 0, calc(100% - 12px) 0, 100% 12px, 100% 100%, 12px 100%, 0 calc(100% - 12px));
+            padding: 14px;
+            margin-bottom: 14px;
+            position: relative;
+            box-shadow: inset 0 0 15px rgba(255, 0, 85, 0.05);
+        }
+
+        .cyber-panel::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0;
+            width: 6px; height: 6px;
+            background: var(--cyber-cyan);
+        }
+
+        /* --- DASHBOARD GRID (2x2) --- */
+        .dash-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 14px;
+        }
+
+        .profile-card {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            padding: 10px 6px;
+        }
+
+        .avatar-box {
+            position: relative;
+            width: 64px;
+            height: 64px;
             margin-bottom: 6px;
         }
 
-        .counter-value {
-            font-size: 22px;
-            font-weight: 800;
-            color: #ffffff;
-            text-shadow: 0 0 12px var(--neon-pink);
-        }
-
-        /* --- ФОТО РАМКА --- */
-        .photo-card {
-            padding: 8px;
-            border-radius: 24px;
-            overflow: hidden;
-            margin-bottom: 28px;
-        }
-
-        .couple-photo {
+        .avatar-img {
             width: 100%;
-            border-radius: 18px;
+            height: 100%;
+            object-fit: cover;
+            border: 1px solid var(--cyber-cyan);
+            clip-path: polygon(15% 0, 100% 0, 100% 85%, 85% 100%, 0 100%, 0 15%);
+        }
+
+        .avatar-tag {
+            position: absolute;
+            bottom: -6px;
+            right: -6px;
+            background: var(--cyber-pink);
+            color: #fff;
+            font-size: 9px;
+            padding: 1px 4px;
+            font-weight: bold;
+        }
+
+        .profile-name {
+            font-size: 12px;
+            font-weight: bold;
+            color: var(--cyber-cyan);
+            text-transform: uppercase;
+        }
+
+        /* --- HEART CORE --- */
+        .core-widget {
+            grid-column: span 2;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            background: rgba(255, 0, 85, 0.06);
+            border: 1px dashed var(--cyber-pink);
+            padding: 10px;
+        }
+
+        .core-heart {
+            font-size: 28px;
+            color: var(--cyber-pink);
+            filter: drop-shadow(0 0 10px var(--cyber-pink));
+            animation: pulse 1.2s infinite ease-in-out;
+        }
+
+        @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.15); } }
+
+        .core-value {
+            font-size: 18px;
+            font-weight: bold;
+            color: #fff;
+            text-shadow: 0 0 8px var(--cyber-pink);
+        }
+
+        /* --- PROGRESS BAR --- */
+        .progress-box {
+            margin-bottom: 14px;
+        }
+
+        .progress-info {
+            display: flex;
+            justify-content: space-between;
+            font-size: 10px;
+            color: var(--text-dim);
+            margin-bottom: 4px;
+            text-transform: uppercase;
+        }
+
+        .bar-outer {
+            height: 12px;
+            background: rgba(0, 240, 255, 0.05);
+            border: 1px solid var(--cyber-cyan);
+            position: relative;
+            padding: 1px;
+        }
+
+        .bar-inner {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, var(--cyber-pink), var(--cyber-cyan));
+            box-shadow: 0 0 10px var(--cyber-cyan);
+            transition: width 0.5s ease;
+        }
+
+        /* --- COUNTER DISPLAY --- */
+        .main-timer {
+            text-align: center;
+            border-left: 3px solid var(--cyber-cyan);
+            padding: 10px;
+        }
+
+        .timer-label {
+            font-size: 10px;
+            color: var(--cyber-cyan);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .timer-val {
+            font-size: 18px;
+            font-weight: bold;
+            color: #fff;
+            margin-top: 4px;
+            letter-spacing: 1px;
+        }
+
+        /* --- TABS SYSTEM --- */
+        .tab-buttons {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 10px;
+        }
+
+        .tab-btn {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--panel-border);
+            color: var(--text-dim);
+            padding: 8px;
+            font-size: 11px;
+            text-transform: uppercase;
+            cursor: pointer;
+            clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
+            transition: all 0.2s;
+        }
+
+        .tab-btn.active {
+            background: var(--cyber-pink);
+            color: #fff;
+            border-color: var(--cyber-pink);
+            box-shadow: 0 0 12px var(--cyber-pink-glow);
+            font-weight: bold;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
             display: block;
         }
 
-        /* --- УНИКАЛЬНЫЙ ВЕРТИКАЛЬНЫЙ ТАЙМЛАЙН --- */
-        .timeline-title {
-            font-size: 16px;
-            font-weight: 700;
-            letter-spacing: 1px;
-            margin-bottom: 16px;
-            color: var(--neon-accent);
-            text-transform: uppercase;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .timeline {
+        /* --- PHOTO CORE --- */
+        .photo-container {
+            text-align: center;
             position: relative;
-            padding-left: 20px;
+            padding: 6px;
+            border: 1px solid var(--cyber-cyan);
         }
 
-        .timeline::before {
-            content: '';
-            position: absolute;
-            left: 6px;
-            top: 5px;
-            bottom: 5px;
-            width: 2px;
-            background: linear-gradient(180deg, var(--neon-pink), rgba(255, 0, 127, 0.1));
-            box-shadow: 0 0 8px var(--neon-pink);
+        .photo-container img {
+            width: 100%;
+            display: block;
+            filter: contrast(1.05) brightness(0.95);
         }
 
-        .event-item {
-            position: relative;
-            margin-bottom: 16px;
-            padding: 12px 16px;
-            background: var(--glass-card);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 16px;
+        /* --- TIMELINE LIST --- */
+        .events-list {
+            max-height: 380px;
+            overflow-y: auto;
+            padding-right: 4px;
+        }
+
+        .events-list::-webkit-scrollbar {
+            width: 4px;
+        }
+        .events-list::-webkit-scrollbar-thumb {
+            background: var(--cyber-pink);
+        }
+
+        .event-row {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            transition: transform 0.2s ease;
+            padding: 8px 10px;
+            margin-bottom: 6px;
+            background: rgba(255, 255, 255, 0.02);
+            border-left: 2px solid var(--text-dim);
+            font-size: 12px;
         }
 
-        .event-item::before {
-            content: '';
-            position: absolute;
-            left: -18px;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-            background: var(--bg-grad-1);
-            border: 2px solid var(--neon-pink);
-            box-shadow: 0 0 8px var(--neon-pink);
-        }
-
-        /* Выделение праздников */
-        .event-item.holiday {
-            border: 1px solid var(--glass-border);
-            background: rgba(255, 0, 127, 0.12);
-            box-shadow: 0 0 15px rgba(255, 0, 127, 0.15);
-        }
-
-        .event-item.holiday::before {
-            background: var(--neon-pink);
-            box-shadow: 0 0 12px var(--neon-pink);
+        .event-row.holiday {
+            border-left-color: var(--cyber-pink);
+            background: rgba(255, 0, 85, 0.08);
         }
 
         .event-title {
-            font-size: 14px;
-            font-weight: 600;
-            color: var(--text-main);
             display: flex;
             align-items: center;
-            gap: 8px;
-        }
-
-        .event-details {
-            text-align: right;
-        }
-
-        .event-date {
-            font-size: 11px;
-            color: var(--text-sub);
+            gap: 6px;
+            color: var(--text-main);
         }
 
         .event-days {
-            font-size: 13px;
-            font-weight: 700;
-            color: var(--neon-accent);
-            text-shadow: 0 0 6px var(--neon-glow);
+            color: var(--cyber-cyan);
+            font-weight: bold;
         }
 
-        /* --- КНОПКА ФЛОАТИРОВАНИЯ --- */
+        /* --- FAB BUTTON --- */
         .fab {
             position: fixed;
-            bottom: 24px;
-            right: 24px;
-            width: 60px;
-            height: 60px;
-            background: linear-gradient(135deg, #ff007f, #ff66cc);
-            border-radius: 50%;
-            box-shadow: 0 0 20px var(--neon-pink);
+            bottom: 20px;
+            right: 20px;
+            width: 56px;
+            height: 56px;
+            background: var(--cyber-pink);
+            border: none;
+            clip-path: polygon(30% 0%, 70% 0%, 100% 30%, 100% 70%, 70% 100%, 30% 100%, 0% 70%, 0% 30%);
+            box-shadow: 0 0 20px var(--cyber-pink);
+            color: #fff;
+            font-size: 24px;
+            cursor: pointer;
+            z-index: 1000;
             display: flex;
             justify-content: center;
             align-items: center;
-            color: #ffffff;
-            font-size: 26px;
-            border: none;
-            cursor: pointer;
-            z-index: 1000;
-            animation: fabPulse 2s infinite ease-in-out;
-        }
-
-        @keyframes fabPulse {
-            0%, 100% { transform: scale(1); box-shadow: 0 0 15px var(--neon-pink); }
-            50% { transform: scale(1.08); box-shadow: 0 0 25px var(--neon-accent); }
         }
     </style>
 </head>
 <body>
 
-    <!-- ФОНОВЫЕ ИСКОРКИ -->
-    <div class="bg-elements">
-        <div class="bg-item" style="left: 8%; animation-delay: 0s;">✨</div>
-        <div class="bg-item" style="left: 22%; animation-delay: 2s;">💖</div>
-        <div class="bg-item" style="left: 45%; animation-delay: 4.5s;">🌟</div>
-        <div class="bg-item" style="left: 68%; animation-delay: 1s;">💕</div>
-        <div class="bg-item" style="left: 85%; animation-delay: 3.5s;">💫</div>
-    </div>
-
-    <!-- CANVAS САЛЮТА -->
     <canvas id="fireworks-canvas"></canvas>
 
-    <div class="content">
-        <!-- БЛОК ПРОФИЛЕЙ -->
-        <div class="glass-panel profiles-container">
-            <div class="profile-item">
-                <div class="avatar-wrapper">
-                    <img src="https://i.postimg.cc/phMNvQZB/maryasha-avatar.png" alt="Марьяша" class="avatar">
-                    <div class="avatar-kiss">💋</div>
+    <div class="container">
+        <!-- HEADER HUD -->
+        <div class="hud-header">
+            <div class="hud-status">
+                <div class="status-dot"></div>
+                <span>LOVE_OS v3.0</span>
+            </div>
+            <div>SYS_TIME: <span id="clock">00:00</span></div>
+        </div>
+
+        <!-- PROFILE DASHBOARD GRID -->
+        <div class="dash-grid">
+            <div class="cyber-panel profile-card">
+                <div class="avatar-box">
+                    <img src="https://i.postimg.cc/phMNvQZB/maryasha-avatar.png" class="avatar-img">
+                    <div class="avatar-tag">M</div>
                 </div>
                 <div class="profile-name">марьяша</div>
             </div>
-            
-            <div class="heart-counter">
-                <div class="heart-icon">♥</div>
-                <div class="heart-days" id="total-days-heart">--дней</div>
-            </div>
 
-            <div class="profile-item">
-                <div class="avatar-wrapper">
-                    <img src="https://i.postimg.cc/CZWPDFnS/roma-avatar.png" alt="Рома" class="avatar">
-                    <div class="avatar-kiss">💋</div>
+            <div class="cyber-panel profile-card">
+                <div class="avatar-box">
+                    <img src="https://i.postimg.cc/CZWPDFnS/roma-avatar.png" class="avatar-img">
+                    <div class="avatar-tag">R</div>
                 </div>
                 <div class="profile-name">рома</div>
             </div>
-        </div>
 
-        <!-- ПРОГРЕСС-БАР -->
-        <div class="glass-panel progress-section">
-            <div class="progress-labels">
-                <span>💖 Цель: 50 дней</span>
-                <span id="days-to-goal">--</span>
-            </div>
-            <div class="progress-bar-container">
-                <div class="progress-bar-fill" id="progress-fill">
-                    <div class="progress-badge" id="progress-percent">--%</div>
+            <div class="cyber-panel core-widget">
+                <div class="core-heart">♥</div>
+                <div>
+                    <div style="font-size: 9px; color: var(--text-dim); text-transform: uppercase;">Пройдено вместе:</div>
+                    <div class="core-value" id="total-days-heart">-- дней</div>
                 </div>
             </div>
         </div>
 
-        <!-- СЧЕТЧИК -->
-        <div class="glass-panel main-counter">
-            <div class="counter-name">✨ рома пёс ✨</div>
-            <div class="counter-value" id="main-counter-value">--месяцев --дней</div>
+        <!-- PROGRESS BAR -->
+        <div class="cyber-panel progress-box">
+            <div class="progress-info">
+                <span>ПРОГРЕСС ЦЕЛИ (50 ДНЕЙ)</span>
+                <span id="days-to-goal">--</span>
+            </div>
+            <div class="bar-outer">
+                <div class="bar-inner" id="progress-fill"></div>
+            </div>
         </div>
 
-        <!-- ФОТО -->
-        <div class="glass-panel photo-card">
-            <img src="https://i.postimg.cc/9rLj97mm/couple-photo.jpg" alt="пара" class="couple-photo">
+        <!-- MAIN COUNTER -->
+        <div class="cyber-panel main-timer">
+            <div class="timer-label">✨ РОМА ПЁС // STATUS ✨</div>
+            <div class="timer-val" id="main-counter-value">-- месяцев -- дней</div>
         </div>
 
-        <!-- ВЕРТИКАЛЬНАЯ ВРЕМЕННАЯ ШКАЛА -->
-        <div class="timeline-title">
-            <span>✨ Timeline событий</span>
-        </div>
-        <div class="timeline" id="events-container">
-            <!-- Заполняется из JS -->
+        <!-- INTERACTIVE TABS -->
+        <div class="tab-buttons">
+            <button class="tab-btn active" onclick="switchTab('logs')">📡 Logs (Даты)</button>
+            <button class="tab-btn" onclick="switchTab('visual')">🖼️ Visual (Фото)</button>
         </div>
 
-        <!-- КНОПКА-ПОЦЕЛУЙ -->
-        <button class="fab" id="fab-kiss" title="Поцелуй">💋</button>
+        <!-- TAB CONTENT: LOGS -->
+        <div id="tab-logs" class="tab-content active cyber-panel">
+            <div class="events-list" id="events-container">
+                <!-- Динамический список -->
+            </div>
+        </div>
+
+        <!-- TAB CONTENT: VISUAL -->
+        <div id="tab-visual" class="tab-content cyber-panel photo-container">
+            <img src="https://i.postimg.cc/9rLj97mm/couple-photo.jpg" alt="Пара">
+        </div>
     </div>
 
+    <!-- ACTION BUTTON -->
+    <button class="fab" id="fab-kiss">💋</button>
+
     <script>
-        // Очистка кэша
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.getRegistrations().then(r => r.forEach(reg => reg.unregister()));
+        // Часы HUD
+        function updateClock() {
+            const now = new Date();
+            document.getElementById('clock').textContent = now.toTimeString().substring(0, 5);
         }
-        if ('caches' in window) {
-            caches.keys().then(names => names.forEach(name => caches.delete(name)));
+        setInterval(updateClock, 1000);
+        updateClock();
+
+        // Переключение вкладок
+        function switchTab(tabName) {
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+            
+            if (tabName === 'logs') {
+                event.target.classList.add('active');
+                document.getElementById('tab-logs').classList.add('active');
+            } else {
+                event.target.classList.add('active');
+                document.getElementById('tab-visual').classList.add('active');
+            }
         }
 
         const startDate = new Date(2026, 5, 24); // 24.06.2026
@@ -572,25 +565,13 @@
                 const diffTime = itemDate - now;
                 const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
                 
-                let daysLabel = "";
-                if (diffDays > 0) {
-                    daysLabel = `X-${diffDays}`;
-                } else if (diffDays === 0) {
-                    daysLabel = `Сегодня! 🎉`;
-                } else {
-                    daysLabel = `X+${Math.abs(diffDays)}`;
-                }
+                let daysLabel = diffDays > 0 ? `X-${diffDays}` : (diffDays === 0 ? `Сегодня!` : `X+${Math.abs(diffDays)}`);
 
                 const eventEl = document.createElement('div');
-                eventEl.className = `event-item ${item.isHoliday ? 'holiday' : ''}`;
+                eventEl.className = `event-row ${item.isHoliday ? 'holiday' : ''}`;
                 eventEl.innerHTML = `
-                    <div class="event-title">
-                        <span>${item.icon}</span> ${item.title}
-                    </div>
-                    <div class="event-details">
-                        <div class="event-date">${item.date}</div>
-                        <div class="event-days">${daysLabel}</div>
-                    </div>
+                    <div class="event-title"><span>${item.icon}</span> ${item.title}</div>
+                    <div class="event-days">${daysLabel} <span style="font-size:9px; color:var(--text-dim);">(${item.date})</span></div>
                 `;
                 container.appendChild(eventEl);
             });
@@ -602,8 +583,7 @@
             if (diffInMs < 0) return;
             
             const diffInDays = Math.floor(diffInMs / (1000 * 60 * 60 * 24));
-
-            document.getElementById('total-days-heart').textContent = `${diffInDays}дней`;
+            document.getElementById('total-days-heart').textContent = `${diffInDays} дн.`;
 
             let yearsDiff = now.getFullYear() - startDate.getFullYear();
             let monthsDiff = now.getMonth() - startDate.getMonth();
@@ -621,7 +601,7 @@
 
             let mainCounterStr = "";
             if (yearsDiff > 0) mainCounterStr += `${yearsDiff}г `;
-            if (monthsDiff > 0) mainCounterStr += `${monthsDiff}месяц `;
+            if (monthsDiff > 0) mainCounterStr += `${monthsDiff}м `;
             mainCounterStr += `${daysDiff}дней`;
             document.getElementById('main-counter-value').textContent = mainCounterStr;
 
@@ -629,21 +609,16 @@
             const percent = Math.floor((progressDays / targetGoalDays) * 100);
             
             document.getElementById('progress-fill').style.width = `${percent}%`;
-            document.getElementById('progress-percent').textContent = `${percent}%`;
 
             const daysLeft = targetGoalDays - diffInDays;
-            if (daysLeft > 0) {
-                document.getElementById('days-to-goal').textContent = `X-${daysLeft}`;
-            } else {
-                document.getElementById('days-to-goal').textContent = `Достигнуто! 🎉`;
-            }
+            document.getElementById('days-to-goal').textContent = daysLeft > 0 ? `Осталось: ${daysLeft}д` : `Цель достигнута!`;
         }
 
         renderEvents();
         updateCounters();
         setInterval(updateCounters, 60000);
 
-        // --- ИНТЕРАКТИВНЫЙ САЛЮТ ---
+        // Салюты
         const canvas = document.getElementById('fireworks-canvas');
         const ctx = canvas.getContext('2d');
         let particles = [];
@@ -657,15 +632,13 @@
 
         class Particle {
             constructor(x, y) {
-                this.x = x;
-                this.y = y;
-                this.size = Math.random() * 4 + 2;
+                this.x = x; this.y = y;
+                this.size = Math.random() * 3 + 2;
                 this.speedX = (Math.random() - 0.5) * 8;
                 this.speedY = (Math.random() - 0.5) * 8;
-                this.color = ['#ff007f', '#ff66cc', '#ffffff', '#ffb3d9'][Math.floor(Math.random() * 4)];
+                this.color = ['#ff0055', '#00f0ff', '#ffffff'][Math.floor(Math.random() * 3)];
                 this.life = 1;
                 this.decay = Math.random() * 0.02 + 0.015;
-                this.symbol = Math.random() > 0.6 ? (Math.random() > 0.5 ? '✨' : '💖') : null;
             }
 
             update() {
@@ -678,25 +651,18 @@
             draw() {
                 ctx.save();
                 ctx.globalAlpha = this.life;
-                if (this.symbol) {
-                    ctx.font = `${this.size * 3}px sans-serif`;
-                    ctx.fillText(this.symbol, this.x, this.y);
-                } else {
-                    ctx.fillStyle = this.color;
-                    ctx.shadowColor = this.color;
-                    ctx.shadowBlur = 10;
-                    ctx.beginPath();
-                    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-                    ctx.fill();
-                }
+                ctx.fillStyle = this.color;
+                ctx.shadowColor = this.color;
+                ctx.shadowBlur = 8;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
                 ctx.restore();
             }
         }
 
         function createFirework(x, y) {
-            for (let i = 0; i < 35; i++) {
-                particles.push(new Particle(x, y));
-            }
+            for (let i = 0; i < 30; i++) particles.push(new Particle(x, y));
         }
 
         function animate() {
@@ -711,16 +677,11 @@
         animate();
 
         window.addEventListener('pointerdown', (e) => createFirework(e.clientX, e.clientY));
-
         document.getElementById('fab-kiss').addEventListener('click', (e) => {
             e.stopPropagation();
             const rect = e.target.getBoundingClientRect();
             createFirework(rect.left + rect.width / 2, rect.top + rect.height / 2);
         });
-
-        setTimeout(() => {
-            createFirework(window.innerWidth / 2, window.innerHeight / 3);
-        }, 500);
     </script>
 </body>
 </html>
