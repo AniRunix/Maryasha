@@ -235,6 +235,31 @@
             font-weight: 600;
         }
 
+        /* --- КНОПКА ГАЛЕРЕИ ВОСПОМИНАНИЙ --- */
+        .gallery-btn {
+            background: var(--card-bg);
+            backdrop-filter: blur(12px);
+            border: 2px solid #ffffff;
+            border-radius: 20px;
+            padding: 14px;
+            text-align: center;
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--pink-main);
+            box-shadow: var(--shadow-soft);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .gallery-btn:active {
+            transform: scale(0.96);
+            background: #ffffff;
+        }
+
         /* --- БОЛЬШАЯ КНОПКА-СЕРДЦЕ И ОКОШКО ФРАЗЫ --- */
         .heart-button-wrapper {
             display: flex;
@@ -263,7 +288,6 @@
             transform: scale(0.88);
         }
 
-        /* Карточка с фразой под сердечком */
         .love-quote-card {
             background: var(--card-bg);
             backdrop-filter: blur(12px);
@@ -350,6 +374,109 @@
             background: #ffe6eb;
             padding: 4px 10px;
             border-radius: 12px;
+        }
+
+        /* --- МОДАЛЬНОЕ ОКНО ГАЛЕРЕИ --- */
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(108, 79, 90, 0.4);
+            backdrop-filter: blur(8px);
+            z-index: 999;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+            padding: 20px;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .modal-content {
+            background: #fff5f7;
+            border: 3px solid #ffffff;
+            border-radius: 28px;
+            width: 100%;
+            max-width: 420px;
+            max-height: 85vh;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+            overflow: hidden;
+            transform: scale(0.9);
+            transition: transform 0.3s ease;
+        }
+
+        .modal-overlay.active .modal-content {
+            transform: scale(1);
+        }
+
+        .modal-header {
+            padding: 18px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.8);
+            border-bottom: 1px solid #ffe3e8;
+        }
+
+        .modal-title {
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--pink-main);
+        }
+
+        .close-btn {
+            background: #ffe6eb;
+            border: none;
+            color: var(--pink-main);
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            font-size: 16px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        .gallery-grid {
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            overflow-y: auto;
+        }
+
+        .memory-card {
+            background: #ffffff;
+            border-radius: 20px;
+            padding: 12px;
+            box-shadow: 0 4px 15px rgba(255, 117, 140, 0.1);
+            border: 1px solid #ffeef1;
+        }
+
+        .memory-img {
+            width: 100%;
+            height: 240px;
+            object-fit: cover;
+            border-radius: 14px;
+            display: block;
+        }
+
+        .memory-desc {
+            margin-top: 10px;
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--text-dark);
+            text-align: center;
         }
 
         /* ВСПЛЫВАЮЩИЙ ТОАСТ */
@@ -445,6 +572,11 @@
             </div>
         </div>
 
+        <!-- КНОПКА ГАЛЕРЕИ ВОСПОМИНАНИЙ -->
+        <div class="gallery-btn" id="open-gallery-btn">
+            <span>📸</span> Галерея наших воспоминаний <span>💕</span>
+        </div>
+
         <!-- КНОПКА-СЕРДЦЕ + КАРТОЧКА ФРАЗЫ -->
         <div class="heart-button-wrapper">
             <div class="big-heart-btn" id="kiss-btn">💖</div>
@@ -463,7 +595,96 @@
 
     </div>
 
+    <!-- МОДАЛЬНОЕ ОКНО ГАЛЕРЕИ ВОСПОМИНАНИЙ -->
+    <div class="modal-overlay" id="gallery-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title">🖼️ Альбом воспоминаний</div>
+                <button class="close-btn" id="close-gallery-btn">✕</button>
+            </div>
+            <div class="gallery-grid" id="gallery-container">
+                <!-- Заполняется из JavaScript -->
+            </div>
+        </div>
+    </div>
+
     <script>
+        // СПИСОК ВОСПОМИНАНИЙ С ВАШИМИ ССЫЛКАМИ И НАЗВАНИЯМИ
+        const memoriesData = [
+            {
+                img: "https://i.postimg.cc/SXYXyQDP/photo.jpg",
+                desc: "Наш первый день🤭"
+            },
+            {
+                img: "https://i.postimg.cc/XXkgMxZx/photo.jpg",
+                desc: "Тут нам неделя😚"
+            },
+            {
+                img: "https://i.postimg.cc/47Tpqhsj/photo.jpg",
+                desc: "А тут нам уже 3 недели (фоток со второй нету((( )😌"
+            },
+            {
+                img: "https://i.postimg.cc/hzrQYyCS/photo.jpg",
+                desc: "Тут нам уже ровно месяц 😍😍"
+            },
+            {
+                img: "https://i.postimg.cc/nsfshbgc/photo.jpg",
+                desc: "Это поездка к родителям Алисы😛"
+            },
+            {
+                img: "https://i.postimg.cc/ZWpRgsRM/photo.jpg",
+                desc: "А тут мы с тобой делали ручки🫶🫶"
+            },
+            {
+                img: "https://i.postimg.cc/Q94x5R4m/photo.jpg",
+                desc: "Первая ночевка у тебя дома🏠"
+            },
+            {
+                img: "https://i.postimg.cc/pmbVDQZj/photo.jpg",
+                desc: "Это ты меня накрасила💅"
+            },
+            {
+                img: "https://i.postimg.cc/jDHxvW3C/photo.jpg",
+                desc: "Это мы водили никиту в движение первых🐒🐒"
+            },
+            {
+                img: "https://i.postimg.cc/VrVm5Xv9/photo.jpg",
+                desc: "А это уже наш первый раз🤪🤪🔞"
+            },
+            {
+                img: "https://i.postimg.cc/pymP4c1t/photo.jpg",
+                desc: "Ну а это концерт газана 6️⃣7️⃣"
+            }
+        ];
+
+        // РЕНДЕР ГАЛЕРЕИ
+        function renderGallery() {
+            const container = document.getElementById('gallery-container');
+            container.innerHTML = '';
+            memoriesData.forEach(item => {
+                const card = document.createElement('div');
+                card.className = 'memory-card';
+                card.innerHTML = `
+                    <img class="memory-img" src="${item.img}" alt="${item.desc}">
+                    <div class="memory-desc">${item.desc}</div>
+                `;
+                container.appendChild(card);
+            });
+        }
+        renderGallery();
+
+        // УПРАВЛЕНИЕ ОКНОМ ГАЛЕРЕИ
+        const modal = document.getElementById('gallery-modal');
+        document.getElementById('open-gallery-btn').addEventListener('click', () => {
+            modal.classList.add('active');
+        });
+        document.getElementById('close-gallery-btn').addEventListener('click', () => {
+            modal.classList.remove('active');
+        });
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) modal.classList.remove('active');
+        });
+
         // 100 ЛЮБОВНЫХ ФРАЗ
         const lovePhrases = [
             "Ты — моё самое любимое мгновение каждого дня 💖",
@@ -687,13 +908,11 @@
         function triggerLoveAction() {
             const phrase = getRandomPhrase();
             
-            // Всплывающая плашка сверху
             const t = document.getElementById('toast-pop');
             t.textContent = phrase;
             t.classList.add('show');
             setTimeout(() => t.classList.remove('show'), 2800);
 
-            // Карточка под кнопкой
             const q = document.getElementById('quote-display');
             q.style.opacity = '0.3';
             setTimeout(() => {
@@ -762,7 +981,7 @@
         });
 
         window.addEventListener('pointerdown', (e) => {
-            if (!e.target.closest('.status-pill') && !e.target.closest('.big-heart-btn')) {
+            if (!e.target.closest('.status-pill') && !e.target.closest('.big-heart-btn') && !e.target.closest('.modal-content') && !e.target.closest('.gallery-btn')) {
                 burstHearts(e.clientX, e.clientY);
             }
         });
