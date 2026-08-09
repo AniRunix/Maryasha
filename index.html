@@ -4,132 +4,133 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     
-    <!-- === ЗАПРЕТ КЭШИРОВАНИЯ === -->
+    <!-- ЗАПРЕТ КЭШИРОВАНИЯ -->
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
     
-    <title>Couple App (Complete Timeline)</title>
+    <title>Couple App — Unique Cyber-Romance</title>
     <style>
-        /* --- КОРНЕВЫЕ ПЕРЕМЕННЫЕ --- */
         :root {
-            --primary-bg: #0a0508;
-            --card-bg: #140810;
-            --neon-pink-bright: #ff007f;
-            --neon-pink-light: #ff66b2;
-            --neon-pink-glow: rgba(255, 0, 127, 0.6);
-            --neon-pink-soft-glow: rgba(255, 0, 127, 0.25);
-            --progress-bg: #2a0c1d;
-            --border-color: #4a1031;
+            --bg-grad-1: #07030a;
+            --bg-grad-2: #160318;
+            --glass-bg: rgba(255, 0, 127, 0.05);
+            --glass-card: rgba(26, 10, 24, 0.55);
+            --glass-border: rgba(255, 0, 127, 0.25);
+            --neon-pink: #ff007f;
+            --neon-glow: #ff007faa;
+            --neon-accent: #ff66cc;
+            --text-main: #fbeaff;
+            --text-sub: #b388bf;
         }
 
-        /* --- СБРОС СТИЛЕЙ --- */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, system-ui, sans-serif;
         }
 
         body {
-            background-color: var(--primary-bg);
-            color: var(--neon-pink-light);
-            padding-top: 20px;
-            padding-bottom: 90px;
+            background: linear-gradient(135deg, var(--bg-grad-1), var(--bg-grad-2));
+            color: var(--text-main);
+            padding-top: 24px;
+            padding-bottom: 100px;
             overflow-x: hidden;
-            position: relative;
             min-height: 100vh;
             -webkit-font-smoothing: antialiased;
             user-select: none;
         }
 
-        /* --- АНИМИРОВАННЫЙ ФОН --- */
+        /* --- ЧАСТИЦЫ ФОНА --- */
         .bg-elements {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
             pointer-events: none;
             z-index: 0;
-            overflow: hidden;
         }
 
         .bg-item {
             position: absolute;
-            color: var(--neon-pink-bright);
-            opacity: 0.2;
-            font-size: 18px;
-            animation: floatUp 8s infinite linear;
-            text-shadow: 0 0 8px var(--neon-pink-glow);
+            color: var(--neon-accent);
+            opacity: 0.25;
+            font-size: 16px;
+            animation: floatUp 10s infinite ease-in-out;
+            filter: drop-shadow(0 0 8px var(--neon-pink));
         }
 
         @keyframes floatUp {
-            0% {
-                transform: translateY(100vh) scale(0.5) rotate(0deg);
-                opacity: 0;
-            }
-            20% { opacity: 0.3; }
-            80% { opacity: 0.3; }
-            100% {
-                transform: translateY(-10vh) scale(1.3) rotate(360deg);
-                opacity: 0;
-            }
+            0% { transform: translateY(105vh) rotate(0deg) scale(0.8); opacity: 0; }
+            30% { opacity: 0.4; }
+            80% { opacity: 0.4; }
+            100% { transform: translateY(-10vh) rotate(360deg) scale(1.2); opacity: 0; }
         }
 
-        /* --- CANVAS САЛЮТА --- */
         #fireworks-canvas {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
             pointer-events: none;
             z-index: 999;
         }
 
-        /* --- КОНТЕНТ --- */
         .content {
             position: relative;
             z-index: 1;
+            max-width: 480px;
+            margin: 0 auto;
+            padding: 0 16px;
         }
 
-        /* --- БЛОК ПРОФИЛЕЙ --- */
+        /* --- ПРОФИЛИ С ЭФФЕКТОМ СТЕКЛА --- */
+        .glass-panel {
+            background: var(--glass-card);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37), 0 0 15px var(--glass-bg);
+            margin-bottom: 20px;
+            padding: 20px;
+        }
+
         .profiles-container {
-            padding: 24px 16px;
             display: flex;
-            justify-content: center;
+            justify-content: space-around;
             align-items: center;
-            gap: 15px;
         }
 
         .profile-item {
             display: flex;
             flex-direction: column;
             align-items: center;
-            text-align: center;
-            width: 100px;
         }
 
         .avatar-wrapper {
             position: relative;
+            padding: 4px;
+            background: linear-gradient(45deg, var(--neon-pink), transparent, var(--neon-accent));
+            border-radius: 50%;
+            box-shadow: 0 0 15px var(--neon-glow);
         }
 
         .avatar {
-            width: 80px;
-            height: 80px;
+            width: 76px;
+            height: 76px;
             border-radius: 50%;
             object-fit: cover;
-            border: 2px solid var(--neon-pink-bright);
-            box-shadow: 0 0 14px var(--neon-pink-glow);
+            display: block;
         }
 
         .avatar-kiss {
             position: absolute;
-            bottom: -2px;
-            right: -2px;
-            font-size: 18px;
-            filter: drop-shadow(0 0 6px var(--neon-pink-bright));
+            bottom: -4px;
+            right: -4px;
+            font-size: 20px;
+            background: rgba(10, 5, 8, 0.8);
+            border-radius: 50%;
+            padding: 2px;
             animation: pulseKiss 2s infinite ease-in-out;
         }
 
@@ -139,171 +140,197 @@
         }
 
         .profile-name {
-            margin-top: 8px;
+            margin-top: 10px;
             font-size: 14px;
-            color: var(--neon-pink-light);
-            font-weight: 600;
-            text-shadow: 0 0 6px var(--neon-pink-soft-glow);
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            color: var(--text-main);
+            text-transform: lowercase;
         }
 
         .heart-counter {
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
         }
 
         .heart-icon {
-            font-size: 36px;
-            color: var(--neon-pink-bright);
-            text-shadow: 0 0 16px var(--neon-pink-glow);
-            animation: heartBeat 1.5s infinite ease-in-out;
+            font-size: 32px;
+            color: var(--neon-pink);
+            filter: drop-shadow(0 0 10px var(--neon-pink));
+            animation: heartBeat 1.4s infinite ease-in-out;
         }
 
         @keyframes heartBeat {
             0%, 100% { transform: scale(1); }
-            15% { transform: scale(1.15); }
+            15% { transform: scale(1.2); }
             30% { transform: scale(1); }
             45% { transform: scale(1.1); }
         }
 
         .heart-days {
-            margin-top: 2px;
-            font-size: 16px;
-            font-weight: 700;
-            color: var(--neon-pink-bright);
-            text-shadow: 0 0 8px var(--neon-pink-glow);
+            font-size: 15px;
+            font-weight: 800;
+            color: var(--neon-accent);
+            text-shadow: 0 0 8px var(--neon-glow);
         }
 
-        .center-kiss {
-            font-size: 14px;
-            margin-top: 2px;
-            opacity: 0.9;
-        }
-
-        /* --- ПРОГРЕСС-БАР --- */
+        /* --- КАПСУЛА ПРОГРЕССА --- */
         .progress-section {
-            padding: 0 16px;
-            margin-top: 16px;
-            position: relative;
+            margin-bottom: 20px;
         }
 
         .progress-labels {
             display: flex;
             justify-content: space-between;
-            font-size: 12px;
-            color: var(--neon-pink-light);
+            font-size: 13px;
             font-weight: 600;
-            margin-bottom: 6px;
-        }
-
-        .progress-label-right {
-            color: var(--neon-pink-bright);
-            font-weight: 700;
+            color: var(--text-sub);
+            margin-bottom: 8px;
         }
 
         .progress-bar-container {
-            height: 14px;
-            background-color: var(--progress-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 7px;
+            height: 18px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
             position: relative;
+            overflow: hidden;
+            padding: 2px;
         }
 
         .progress-bar-fill {
             height: 100%;
             width: 0%;
-            background: linear-gradient(90deg, #ff007f, #ff66b2);
-            box-shadow: 0 0 12px var(--neon-pink-glow);
-            border-radius: 7px;
+            background: linear-gradient(90deg, #ff007f, #ff66cc);
+            border-radius: 20px;
+            box-shadow: 0 0 12px var(--neon-pink);
+            transition: width 0.6s ease-out;
             position: relative;
-            transition: width 0.5s ease-out;
         }
 
         .progress-badge {
             position: absolute;
-            right: -20px;
-            top: -28px;
-            background-color: var(--neon-pink-bright);
-            color: #ffffff;
-            font-size: 11px;
-            font-weight: 700;
-            padding: 4px 6px;
-            border-radius: 4px;
-            white-space: nowrap;
-            box-shadow: 0 0 10px var(--neon-pink-glow);
+            right: 8px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 10px;
+            font-weight: 800;
+            color: #fff;
+            text-shadow: 0 0 4px #000;
         }
 
-        .progress-badge::after {
-            content: '';
-            position: absolute;
-            bottom: -5px;
-            left: 50%;
-            transform: translateX(-50%);
-            border-width: 5px 5px 0 5px;
-            border-style: solid;
-            border-color: var(--neon-pink-bright) transparent transparent transparent;
-        }
-
-        /* --- ГЛАВНЫЙ СЧЕТЧИК --- */
+        /* --- ГЛАВНЫЙ ТАЙМЕР --- */
         .main-counter {
-            padding: 28px 16px;
             text-align: center;
+            padding: 16px;
         }
 
         .counter-name {
-            font-size: 16px;
-            color: var(--neon-pink-light);
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--text-sub);
             margin-bottom: 6px;
         }
 
         .counter-value {
-            font-size: 24px;
+            font-size: 22px;
             font-weight: 800;
-            color: var(--neon-pink-bright);
-            text-shadow: 0 0 14px var(--neon-pink-glow);
+            color: #ffffff;
+            text-shadow: 0 0 12px var(--neon-pink);
         }
 
-        /* --- ФОТОГРАФИЯ --- */
-        .photo-section {
-            width: 100%;
+        /* --- ФОТО РАМКА --- */
+        .photo-card {
+            padding: 8px;
+            border-radius: 24px;
             overflow: hidden;
-            border-top: 1px solid var(--border-color);
-            border-bottom: 1px solid var(--border-color);
-            box-shadow: 0 0 18px var(--neon-pink-soft-glow);
+            margin-bottom: 28px;
         }
 
         .couple-photo {
             width: 100%;
-            height: auto;
+            border-radius: 18px;
             display: block;
         }
 
-        /* --- ПОЛНЫЙ СПИСОК СОБЫТИЙ --- */
-        .event-list {
-            padding: 0 16px;
-            margin-top: 24px;
+        /* --- УНИКАЛЬНЫЙ ВЕРТИКАЛЬНЫЙ ТАЙМЛАЙН --- */
+        .timeline-title {
+            font-size: 16px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            margin-bottom: 16px;
+            color: var(--neon-accent);
+            text-transform: uppercase;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .timeline {
+            position: relative;
+            padding-left: 20px;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 6px;
+            top: 5px;
+            bottom: 5px;
+            width: 2px;
+            background: linear-gradient(180deg, var(--neon-pink), rgba(255, 0, 127, 0.1));
+            box-shadow: 0 0 8px var(--neon-pink);
         }
 
         .event-item {
+            position: relative;
+            margin-bottom: 16px;
+            padding: 12px 16px;
+            background: var(--glass-card);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 16px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 14px 0;
-            border-top: 1px solid var(--border-color);
+            transition: transform 0.2s ease;
+        }
+
+        .event-item::before {
+            content: '';
+            position: absolute;
+            left: -18px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--bg-grad-1);
+            border: 2px solid var(--neon-pink);
+            box-shadow: 0 0 8px var(--neon-pink);
+        }
+
+        /* Выделение праздников */
+        .event-item.holiday {
+            border: 1px solid var(--glass-border);
+            background: rgba(255, 0, 127, 0.12);
+            box-shadow: 0 0 15px rgba(255, 0, 127, 0.15);
+        }
+
+        .event-item.holiday::before {
+            background: var(--neon-pink);
+            box-shadow: 0 0 12px var(--neon-pink);
         }
 
         .event-title {
-            font-size: 15px;
-            color: var(--neon-pink-light);
-            font-weight: 500;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-main);
             display: flex;
             align-items: center;
-            gap: 10px;
-        }
-
-        .event-title .icon {
-            font-size: 18px;
+            gap: 8px;
         }
 
         .event-details {
@@ -311,22 +338,15 @@
         }
 
         .event-date {
-            font-size: 12px;
-            color: rgba(255, 102, 178, 0.7);
-            margin-bottom: 2px;
+            font-size: 11px;
+            color: var(--text-sub);
         }
 
         .event-days {
             font-size: 13px;
-            color: var(--neon-pink-bright);
             font-weight: 700;
-            text-shadow: 0 0 6px var(--neon-pink-glow);
-        }
-
-        /* ПАМЯТНЫЕ ПРАЗДНИКИ (ВЫДЕЛЕНИЕ) */
-        .event-item.holiday .event-title {
-            color: #ffffff;
-            text-shadow: 0 0 8px var(--neon-pink-bright);
+            color: var(--neon-accent);
+            text-shadow: 0 0 6px var(--neon-glow);
         }
 
         /* --- КНОПКА ФЛОАТИРОВАНИЯ --- */
@@ -334,11 +354,11 @@
             position: fixed;
             bottom: 24px;
             right: 24px;
-            width: 58px;
-            height: 58px;
-            background: linear-gradient(135deg, #ff007f, #ff3399);
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #ff007f, #ff66cc);
             border-radius: 50%;
-            box-shadow: 0 0 20px var(--neon-pink-glow);
+            box-shadow: 0 0 20px var(--neon-pink);
             display: flex;
             justify-content: center;
             align-items: center;
@@ -351,8 +371,8 @@
         }
 
         @keyframes fabPulse {
-            0%, 100% { box-shadow: 0 0 15px var(--neon-pink-glow); }
-            50% { box-shadow: 0 0 28px var(--neon-pink-bright); }
+            0%, 100% { transform: scale(1); box-shadow: 0 0 15px var(--neon-pink); }
+            50% { transform: scale(1.08); box-shadow: 0 0 25px var(--neon-accent); }
         }
     </style>
 </head>
@@ -360,12 +380,11 @@
 
     <!-- ФОНОВЫЕ ИСКОРКИ -->
     <div class="bg-elements">
-        <div class="bg-item" style="left: 10%; animation-delay: 0s;">✨</div>
-        <div class="bg-item" style="left: 25%; animation-delay: 2s;">💖</div>
-        <div class="bg-item" style="left: 40%; animation-delay: 4.5s;">🌟</div>
-        <div class="bg-item" style="left: 60%; animation-delay: 1s;">💕</div>
-        <div class="bg-item" style="left: 75%; animation-delay: 3.5s;">💫</div>
-        <div class="bg-item" style="left: 90%; animation-delay: 5s;">✨</div>
+        <div class="bg-item" style="left: 8%; animation-delay: 0s;">✨</div>
+        <div class="bg-item" style="left: 22%; animation-delay: 2s;">💖</div>
+        <div class="bg-item" style="left: 45%; animation-delay: 4.5s;">🌟</div>
+        <div class="bg-item" style="left: 68%; animation-delay: 1s;">💕</div>
+        <div class="bg-item" style="left: 85%; animation-delay: 3.5s;">💫</div>
     </div>
 
     <!-- CANVAS САЛЮТА -->
@@ -373,7 +392,7 @@
 
     <div class="content">
         <!-- БЛОК ПРОФИЛЕЙ -->
-        <div class="profiles-container">
+        <div class="glass-panel profiles-container">
             <div class="profile-item">
                 <div class="avatar-wrapper">
                     <img src="https://i.postimg.cc/phMNvQZB/maryasha-avatar.png" alt="Марьяша" class="avatar">
@@ -385,7 +404,6 @@
             <div class="heart-counter">
                 <div class="heart-icon">♥</div>
                 <div class="heart-days" id="total-days-heart">--дней</div>
-                <div class="center-kiss">✨💋✨</div>
             </div>
 
             <div class="profile-item">
@@ -398,10 +416,10 @@
         </div>
 
         <!-- ПРОГРЕСС-БАР -->
-        <div class="progress-section">
+        <div class="glass-panel progress-section">
             <div class="progress-labels">
-                <div class="progress-label-left">💖 50дней</div>
-                <div class="progress-label-right" id="days-to-goal">--</div>
+                <span>💖 Цель: 50 дней</span>
+                <span id="days-to-goal">--</span>
             </div>
             <div class="progress-bar-container">
                 <div class="progress-bar-fill" id="progress-fill">
@@ -411,19 +429,22 @@
         </div>
 
         <!-- СЧЕТЧИК -->
-        <div class="main-counter">
+        <div class="glass-panel main-counter">
             <div class="counter-name">✨ рома пёс ✨</div>
             <div class="counter-value" id="main-counter-value">--месяцев --дней</div>
         </div>
 
         <!-- ФОТО -->
-        <div class="photo-section">
+        <div class="glass-panel photo-card">
             <img src="https://i.postimg.cc/9rLj97mm/couple-photo.jpg" alt="пара" class="couple-photo">
         </div>
 
-        <!-- СПИСОК ВСЕХ ДАТ И СОБЫТИЙ -->
-        <div class="event-list" id="events-container">
-            <!-- Динамически заполняется из JS -->
+        <!-- ВЕРТИКАЛЬНАЯ ВРЕМЕННАЯ ШКАЛА -->
+        <div class="timeline-title">
+            <span>✨ Timeline событий</span>
+        </div>
+        <div class="timeline" id="events-container">
+            <!-- Заполняется из JS -->
         </div>
 
         <!-- КНОПКА-ПОЦЕЛУЙ -->
@@ -431,7 +452,7 @@
     </div>
 
     <script>
-        // === ПРИНУДИТЕЛЬНАЯ ОЧИСТКА ВНУТРЕННЕГО КЭША ===
+        // Очистка кэша
         if ('serviceWorker' in navigator) {
             navigator.serviceWorker.getRegistrations().then(r => r.forEach(reg => reg.unregister()));
         }
@@ -442,7 +463,6 @@
         const startDate = new Date(2026, 5, 24); // 24.06.2026
         const targetGoalDays = 50;
 
-        // СПИСОК ВСЕХ СОБЫТИЙ СО СКРИНШОТОВ
         const eventsData = [
             { title: "Дата начала", date: "24.06.2026", icon: "💋" },
             { title: "10дней", date: "04.07.2026", icon: "💖" },
@@ -565,7 +585,7 @@
                 eventEl.className = `event-item ${item.isHoliday ? 'holiday' : ''}`;
                 eventEl.innerHTML = `
                     <div class="event-title">
-                        <span class="icon">${item.icon}</span> ${item.title}
+                        <span>${item.icon}</span> ${item.title}
                     </div>
                     <div class="event-details">
                         <div class="event-date">${item.date}</div>
@@ -642,7 +662,7 @@
                 this.size = Math.random() * 4 + 2;
                 this.speedX = (Math.random() - 0.5) * 8;
                 this.speedY = (Math.random() - 0.5) * 8;
-                this.color = ['#ff007f', '#ff66b2', '#ffffff', '#ffb3d9', '#ff3399'][Math.floor(Math.random() * 5)];
+                this.color = ['#ff007f', '#ff66cc', '#ffffff', '#ffb3d9'][Math.floor(Math.random() * 4)];
                 this.life = 1;
                 this.decay = Math.random() * 0.02 + 0.015;
                 this.symbol = Math.random() > 0.6 ? (Math.random() > 0.5 ? '✨' : '💖') : null;
