@@ -9,17 +9,18 @@
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
     
-    <title>Love Chronicle Edition</title>
+    <title>Наша Нежная История 💕</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Montserrat:wght@300;400;500;600&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Comfortaa:wght@400;600;700&family=Marck+Script&display=swap');
 
         :root {
-            --bg-editorial: #0d0b0e;
-            --cream-gold: #f3e5ab;
-            --rose-muted: #d88398;
-            --line-color: rgba(243, 229, 171, 0.2);
-            --text-main: #fcf8f2;
-            --text-sub: #a89f91;
+            --bg-soft: #fff0f5;
+            --card-bg: rgba(255, 255, 255, 0.75);
+            --pink-main: #ff758c;
+            --pink-accent: #ff7eb3;
+            --text-dark: #6c4f5a;
+            --text-muted: #a07a8b;
+            --shadow-soft: 0 10px 30px rgba(255, 117, 140, 0.15);
         }
 
         * {
@@ -29,17 +30,40 @@
         }
 
         body {
-            background-color: var(--bg-editorial);
-            color: var(--text-main);
-            font-family: 'Montserrat', sans-serif;
+            background: linear-gradient(135deg, #ffe6e8 0%, #fff0f3 50%, #f3e8ff 100%);
+            color: var(--text-dark);
+            font-family: 'Comfortaa', cursive, sans-serif;
             min-height: 100vh;
-            padding: 30px 18px 100px 18px;
+            padding: 20px 16px 80px 16px;
             overflow-x: hidden;
             user-select: none;
             -webkit-tap-highlight-color: transparent;
         }
 
-        #sparks-canvas {
+        /* --- ПАРЯЩИЕ СЕРДЕЧКИ НА ФОНЕ --- */
+        .bg-hearts {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .bg-heart {
+            position: absolute;
+            color: rgba(255, 117, 140, 0.25);
+            font-size: 20px;
+            animation: floatUp 8s infinite linear;
+        }
+
+        @keyframes floatUp {
+            0% { transform: translateY(105vh) scale(0.8) rotate(0deg); opacity: 0; }
+            20% { opacity: 0.8; }
+            100% { transform: translateY(-10vh) scale(1.2) rotate(360deg); opacity: 0; }
+        }
+
+        #hearts-canvas {
             position: fixed;
             top: 0; left: 0;
             width: 100%; height: 100%;
@@ -47,297 +71,296 @@
             z-index: 99;
         }
 
-        .magazine-wrapper {
-            max-width: 440px;
+        .wrapper {
+            position: relative;
+            z-index: 1;
+            max-width: 400px;
             margin: 0 auto;
             display: flex;
             flex-direction: column;
-            gap: 28px;
+            gap: 20px;
         }
 
-        /* --- ШАПКА ЖУРНАЛА --- */
-        .editorial-header {
+        /* --- СТАТУС --- */
+        .title-badge {
             text-align: center;
-            border-bottom: 1px solid var(--line-color);
-            padding-bottom: 16px;
+            margin-top: 10px;
         }
 
-        .edition-tag {
-            font-family: 'Cinzel', serif;
-            font-size: 10px;
-            letter-spacing: 4px;
-            color: var(--rose-muted);
-            text-transform: uppercase;
-            margin-bottom: 6px;
-        }
-
-        /* РЕДАКТИРУЕМЫЙ СТАТУС В СТИЛЕ ЗАГОЛОВКА */
-        .status-heading {
-            font-family: 'Cinzel', serif;
-            font-size: 20px;
-            letter-spacing: 2px;
-            color: var(--cream-gold);
+        .status-pill {
             display: inline-flex;
             align-items: center;
             gap: 8px;
+            padding: 10px 22px;
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
+            border: 2px solid #ffffff;
+            border-radius: 30px;
+            color: var(--pink-main);
+            font-weight: 700;
+            font-size: 15px;
+            box-shadow: var(--shadow-soft);
             cursor: pointer;
-            padding: 4px 10px;
-            transition: opacity 0.2s;
+            transition: transform 0.2s, background 0.2s;
         }
 
-        .status-heading:hover { opacity: 0.8; }
-
-        /* --- ГЛАВНЫЙ ВИЗУАЛЬНЫЙ БЛОК (ОБЛОЖКА) --- */
-        .cover-frame {
-            position: relative;
-            padding: 10px;
-            border: 1px solid var(--line-color);
+        .status-pill:active {
+            transform: scale(0.96);
         }
 
-        .cover-photo-container {
-            position: relative;
-            overflow: hidden;
-            aspect-ratio: 4 / 5;
+        /* --- ПРЯМОУГОЛЬНАЯ РАМКА ДЛЯ ФОТО --- */
+        .photo-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(12px);
+            border: 3px solid #ffffff;
+            border-radius: 28px;
+            padding: 16px;
+            box-shadow: var(--shadow-soft);
         }
 
-        .cover-photo-container img {
+        /* Прямоугольное фото */
+        .photo-rectangular {
             width: 100%;
-            height: 100%;
+            height: 280px;
+            border-radius: 18px;
             object-fit: cover;
-            filter: contrast(1.05) brightness(0.95);
             display: block;
+            box-shadow: 0 8px 20px rgba(108, 79, 90, 0.1);
         }
 
-        /* Вшитые профили в стиле авторов */
-        .authors-bar {
-            position: absolute;
-            bottom: 0;
-            left: 0; right: 0;
-            background: linear-gradient(to top, rgba(13, 11, 14, 0.95), transparent);
-            padding: 20px 16px 12px 16px;
+        /* Блок с аватарками под фото */
+        .profiles-row {
             display: flex;
-            justify-content: space-between;
+            justify-content: space-around;
             align-items: center;
+            margin-top: 16px;
+            padding: 8px 10px;
+            background: rgba(255, 255, 255, 0.6);
+            border-radius: 20px;
         }
 
-        .author-person {
+        .profile-item {
             display: flex;
             align-items: center;
-            gap: 10px;
-        }
-
-        .author-person img {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 1px solid var(--cream-gold);
-        }
-
-        .author-name {
-            font-family: 'Cinzel', serif;
-            font-size: 12px;
-            letter-spacing: 1.5px;
-            color: var(--text-main);
-            text-transform: lowercase;
-        }
-
-        .author-divider {
-            font-family: 'Cinzel', serif;
-            color: var(--rose-muted);
-            font-size: 16px;
-        }
-
-        /* --- ТИНКЕР / ШКАЛА ЦЕЛИ --- */
-        .goal-filament-section {
-            display: flex;
-            flex-direction: column;
             gap: 8px;
         }
 
-        .filament-labels {
+        .profile-item img {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid var(--pink-main);
+            box-shadow: 0 4px 10px rgba(255, 117, 140, 0.2);
+        }
+
+        .profile-item span {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--text-dark);
+        }
+
+        .heart-beat {
+            font-size: 18px;
+            color: var(--pink-main);
+            animation: heartPulse 1.2s infinite ease-in-out;
+        }
+
+        @keyframes heartPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.3); }
+        }
+
+        /* --- ПРОГРЕСС ЦЕЛИ --- */
+        .goal-box {
+            background: var(--card-bg);
+            backdrop-filter: blur(12px);
+            border: 2px solid #ffffff;
+            border-radius: 22px;
+            padding: 16px 20px;
+            box-shadow: var(--shadow-soft);
+        }
+
+        .goal-header {
             display: flex;
             justify-content: space-between;
-            font-size: 11px;
-            letter-spacing: 1px;
-            color: var(--text-sub);
-            text-transform: uppercase;
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--text-muted);
+            margin-bottom: 10px;
         }
 
-        .filament-line {
-            height: 2px;
-            background: rgba(243, 229, 171, 0.15);
+        .goal-track {
+            height: 14px;
+            background: #ffe3e8;
+            border-radius: 20px;
             position: relative;
+            overflow: hidden;
+            padding: 2px;
         }
 
-        .filament-progress {
+        .goal-fill {
             height: 100%;
             width: 0%;
-            background: linear-gradient(90deg, var(--rose-muted), var(--cream-gold));
+            background: linear-gradient(90deg, var(--pink-accent), var(--pink-main));
+            border-radius: 20px;
             transition: width 0.8s ease;
-            position: relative;
         }
 
-        .filament-progress::after {
-            content: '';
-            position: absolute;
-            right: -4px;
-            top: -3px;
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background: var(--cream-gold);
-            box-shadow: 0 0 8px var(--cream-gold);
-        }
-
-        /* --- ЭЛЕГАНТНЫЙ ТАЙМЕР --- */
-        .chronicle-counter {
+        /* --- ТАЙМЕР-ОБЛАЧКА --- */
+        .timer-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+        }
+
+        .timer-cloud {
+            background: var(--card-bg);
+            backdrop-filter: blur(12px);
+            border: 2px solid #ffffff;
+            border-radius: 22px;
+            padding: 14px 8px;
             text-align: center;
-            border-top: 1px solid var(--line-color);
-            border-bottom: 1px solid var(--line-color);
-            padding: 16px 0;
+            box-shadow: var(--shadow-soft);
         }
 
-        .counter-unit {
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
+        .timer-num {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--pink-main);
         }
 
-        .unit-value {
-            font-family: 'Cinzel', serif;
-            font-size: 26px;
-            color: var(--cream-gold);
+        .timer-text {
+            font-size: 11px;
+            color: var(--text-muted);
+            margin-top: 2px;
             font-weight: 600;
         }
 
-        .unit-label {
-            font-size: 9px;
-            letter-spacing: 2px;
-            color: var(--text-sub);
-            text-transform: uppercase;
-        }
-
-        /* --- ПЕЧАТЬ ЛЮБВИ (ИНТЕРАКТИВНЫЙ ШТАМП) --- */
-        .stamp-section {
+        /* --- БОЛЬШАЯ КНОПКА-СЕРДЦЕ --- */
+        .heart-button-wrapper {
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 10px;
+            gap: 8px;
+            margin: 6px 0;
         }
 
-        .wax-seal {
-            width: 68px;
-            height: 68px;
+        .big-heart-btn {
+            width: 76px;
+            height: 76px;
             border-radius: 50%;
-            border: 1px solid var(--cream-gold);
-            background: radial-gradient(circle, #3d1520 0%, #17070c 100%);
+            background: linear-gradient(135deg, #ff7eb3 0%, #ff758c 100%);
+            border: 4px solid #ffffff;
+            box-shadow: 0 10px 25px rgba(255, 117, 140, 0.4);
             display: flex;
             justify-content: center;
             align-items: center;
+            font-size: 34px;
             cursor: pointer;
-            box-shadow: 0 0 20px rgba(216, 131, 152, 0.2);
-            transition: transform 0.2s;
+            transition: transform 0.2s ease;
         }
 
-        .wax-seal:active { transform: scale(0.92); }
-
-        .seal-symbol {
-            font-family: 'Cinzel', serif;
-            font-size: 22px;
-            color: var(--cream-gold);
+        .big-heart-btn:active {
+            transform: scale(0.88);
         }
 
-        .seal-caption {
-            font-size: 10px;
-            letter-spacing: 1.5px;
-            color: var(--text-sub);
-            text-transform: uppercase;
+        .heart-btn-label {
+            font-size: 12px;
+            color: var(--text-muted);
+            font-weight: 600;
         }
 
         /* --- СПИСОК СОБЫТИЙ --- */
-        .chronology-section {
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
+        .events-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(12px);
+            border: 2px solid #ffffff;
+            border-radius: 28px;
+            padding: 20px;
+            box-shadow: var(--shadow-soft);
         }
 
-        .chronology-title {
-            font-family: 'Cinzel', serif;
-            font-size: 12px;
-            letter-spacing: 3px;
-            color: var(--cream-gold);
-            text-transform: uppercase;
+        .events-title {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--pink-main);
             text-align: center;
+            margin-bottom: 14px;
         }
 
-        .chronology-list {
+        .events-scroll {
             display: flex;
             flex-direction: column;
-            gap: 12px;
-            max-height: 280px;
+            gap: 10px;
+            max-height: 260px;
             overflow-y: auto;
-            padding-right: 6px;
+            padding-right: 4px;
         }
 
-        .chronology-list::-webkit-scrollbar { width: 2px; }
-        .chronology-list::-webkit-scrollbar-thumb { background: var(--cream-gold); }
+        .events-scroll::-webkit-scrollbar { width: 4px; }
+        .events-scroll::-webkit-scrollbar-thumb {
+            background: var(--pink-accent);
+            border-radius: 10px;
+        }
 
-        .chronology-item {
+        .event-row {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 10px 0;
-            border-bottom: 1px dashed rgba(243, 229, 171, 0.12);
+            padding: 10px 14px;
+            background: rgba(255, 255, 255, 0.7);
+            border-radius: 16px;
+            border: 1px solid #ffeef1;
         }
 
-        .item-info {
+        .event-info {
             display: flex;
             flex-direction: column;
             gap: 2px;
         }
 
-        .item-title {
-            font-size: 13px;
-            font-weight: 500;
-            color: var(--text-main);
+        .event-name {
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--text-dark);
         }
 
-        .item-date {
+        .event-date {
             font-size: 10px;
-            color: var(--text-sub);
+            color: var(--text-muted);
         }
 
-        .item-status {
-            font-family: 'Cinzel', serif;
+        .event-badge {
             font-size: 11px;
-            color: var(--rose-muted);
-            letter-spacing: 1px;
+            font-weight: 700;
+            color: var(--pink-main);
+            background: #ffe6eb;
+            padding: 4px 10px;
+            border-radius: 12px;
         }
 
-        /* ТОАСТ УВЕДОМЛЕНИЯ */
-        .toast-notification {
+        /* ТОАСТ */
+        .toast-bubble {
             position: fixed;
-            bottom: 30px;
+            top: 20px;
             left: 50%;
-            transform: translateX(-50%) translateY(40px);
-            background: var(--cream-gold);
-            color: var(--bg-editorial);
-            font-family: 'Cinzel', serif;
-            font-size: 11px;
-            letter-spacing: 1px;
-            padding: 10px 20px;
-            border-radius: 20px;
+            transform: translateX(-50%) translateY(-60px);
+            background: #ffffff;
+            color: var(--pink-main);
+            padding: 12px 24px;
+            border-radius: 30px;
+            font-size: 13px;
+            font-weight: 700;
+            box-shadow: 0 10px 30px rgba(255, 117, 140, 0.3);
+            border: 2px solid var(--pink-accent);
             opacity: 0;
             transition: all 0.3s ease;
             z-index: 1000;
             pointer-events: none;
-            white-space: nowrap;
         }
 
-        .toast-notification.active {
+        .toast-bubble.show {
             opacity: 1;
             transform: translateX(-50%) translateY(0);
         }
@@ -345,109 +368,122 @@
 </head>
 <body>
 
-    <canvas id="sparks-canvas"></canvas>
-    <div class="toast-notification" id="toast">Символ любви запечатан</div>
+    <!-- ПАРЯЩИЕ ФОНОВЫЕ СЕРДЕЧКИ -->
+    <div class="bg-hearts" id="bg-hearts"></div>
 
-    <div class="magazine-wrapper">
+    <canvas id="hearts-canvas"></canvas>
+    <div class="toast-bubble" id="toast-pop">Поцелуй отправлен! 💖</div>
 
-        <!-- ШАПКА -->
-        <div class="editorial-header">
-            <div class="edition-tag">Love Chronicle — Vol. I</div>
-            <div class="status-heading" onclick="editTitle()" title="Изменить статус">
-                <span id="title-display">РОМА ПЁС</span>
-                <span style="font-size: 11px; opacity: 0.5;">✎</span>
+    <div class="wrapper">
+
+        <!-- СТАТУС -->
+        <div class="title-badge">
+            <div class="status-pill" onclick="editStatus()" title="Нажмите, чтобы изменить">
+                <span>🎀</span>
+                <span id="status-text">РОМА ПЁС</span>
+                <span style="font-size: 10px; opacity: 0.6;">✏️</span>
             </div>
         </div>
 
-        <!-- ОБЛОЖКА C ФОТО И АВТОРАМИ -->
-        <div class="cover-frame">
-            <div class="cover-photo-container">
-                <img src="https://i.postimg.cc/9rLj97mm/couple-photo.jpg" alt="Обложка">
-                
-                <div class="authors-bar">
-                    <div class="author-person">
-                        <img src="https://i.postimg.cc/phMNvQZB/maryasha-avatar.png" alt="Марьяша">
-                        <span class="author-name">марьяша</span>
-                    </div>
+        <!-- КАРТОЧКА С ПРЯМОУГОЛЬНЫМ ФОТО -->
+        <div class="photo-card">
+            <!-- Прямоугольное фото -->
+            <img class="photo-rectangular" src="https://i.postimg.cc/9rLj97mm/couple-photo.jpg" alt="Наше Фото">
 
-                    <div class="author-divider">✦</div>
+            <!-- Аватарки под фото -->
+            <div class="profiles-row">
+                <div class="profile-item">
+                    <img src="https://i.postimg.cc/phMNvQZB/maryasha-avatar.png" alt="Марьяша">
+                    <span>марьяша</span>
+                </div>
 
-                    <div class="author-person">
-                        <img src="https://i.postimg.cc/CZWPDFnS/roma-avatar.png" alt="Рома">
-                        <span class="author-name">рома</span>
-                    </div>
+                <div class="heart-beat">💖</div>
+
+                <div class="profile-item">
+                    <img src="https://i.postimg.cc/CZWPDFnS/roma-avatar.png" alt="Рома">
+                    <span>рома</span>
                 </div>
             </div>
         </div>
 
-        <!-- НИТЬ ПРОГРЕССА (ЦЕЛЬ 50 ДНЕЙ) -->
-        <div class="goal-filament-section">
-            <div class="filament-labels">
-                <span>Цель: 50 Дней</span>
-                <span id="goal-status-text">--</span>
+        <!-- ПРОГРЕСС ЦЕЛИ (50 ДНЕЙ) -->
+        <div class="goal-box">
+            <div class="goal-header">
+                <span>Цель: 50 дней любви</span>
+                <span id="goal-counter">--</span>
             </div>
-            <div class="filament-line">
-                <div class="filament-progress" id="filament-bar"></div>
-            </div>
-        </div>
-
-        <!-- СЧЕТЧИК ХРОНИКИ -->
-        <div class="chronicle-counter">
-            <div class="counter-unit">
-                <span class="unit-value" id="year-num">0</span>
-                <span class="unit-label">Лет</span>
-            </div>
-            <div class="counter-unit">
-                <span class="unit-value" id="month-num">0</span>
-                <span class="unit-label">Месяцев</span>
-            </div>
-            <div class="counter-unit">
-                <span class="unit-value" id="day-num">0</span>
-                <span class="unit-label">Дней</span>
+            <div class="goal-track">
+                <div class="goal-fill" id="goal-fill-bar"></div>
             </div>
         </div>
 
-        <!-- ШТАМП-ПЕЧАТЬ -->
-        <div class="stamp-section">
-            <div class="wax-seal" id="seal-btn">
-                <span class="seal-symbol">♥</span>
+        <!-- ТАЙМЕР-ОБЛАЧКА -->
+        <div class="timer-grid">
+            <div class="timer-cloud">
+                <div class="timer-num" id="years-val">0</div>
+                <div class="timer-text">лет</div>
             </div>
-            <div class="seal-caption">Прикоснись к печати</div>
+            <div class="timer-cloud">
+                <div class="timer-num" id="months-val">0</div>
+                <div class="timer-text">месяцев</div>
+            </div>
+            <div class="timer-cloud">
+                <div class="timer-num" id="days-val">0</div>
+                <div class="timer-text">дней</div>
+            </div>
         </div>
 
-        <!-- ХРОНОЛОГИЯ -->
-        <div class="chronology-section">
-            <div class="chronology-title">Календарные Вехи</div>
-            <div class="chronology-list" id="events-timeline">
-                <!-- Заполняется JS -->
+        <!-- КНОПКА-СЕРДЦЕ -->
+        <div class="heart-button-wrapper">
+            <div class="big-heart-btn" id="kiss-btn">💖</div>
+            <div class="heart-btn-label">Нажми, чтобы обнять</div>
+        </div>
+
+        <!-- СПИСОК СОБЫТИЙ -->
+        <div class="events-card">
+            <div class="events-title">🌸 Наш Календарь Счастья</div>
+            <div class="events-scroll" id="events-container">
+                <!-- Заполняется динамически -->
             </div>
         </div>
 
     </div>
 
     <script>
-        // СТАТУС
-        function loadTitle() {
-            const saved = localStorage.getItem('editorial_love_title');
-            if (saved) document.getElementById('title-display').textContent = saved;
+        // ФОНОВЫЕ СЕРДЕЧКИ
+        const heartsContainer = document.getElementById('bg-hearts');
+        for (let i = 0; i < 12; i++) {
+            const h = document.createElement('div');
+            h.className = 'bg-heart';
+            h.textContent = ['🌸', '💖', '✨', '💕', '🌷'][Math.floor(Math.random() * 5)];
+            h.style.left = Math.random() * 100 + '%';
+            h.style.animationDelay = Math.random() * 6 + 's';
+            h.style.animationDuration = (Math.random() * 4 + 6) + 's';
+            heartsContainer.appendChild(h);
         }
 
-        function editTitle() {
-            const current = document.getElementById('title-display').textContent;
-            const val = prompt("Введите новое имя / статус:", current);
-            if (val && val.trim() !== "") {
-                const text = val.trim();
-                document.getElementById('title-display').textContent = text;
-                localStorage.setItem('editorial_love_title', text);
+        // СТАТУС
+        function loadStatus() {
+            const saved = localStorage.getItem('sweet_love_status');
+            if (saved) document.getElementById('status-text').textContent = saved;
+        }
+
+        function editStatus() {
+            const current = document.getElementById('status-text').textContent;
+            const updated = prompt("Введите новое имя или статус:", current);
+            if (updated && updated.trim() !== "") {
+                const val = updated.trim();
+                document.getElementById('status-text').textContent = val;
+                localStorage.setItem('sweet_love_status', val);
             }
         }
-        loadTitle();
+        loadStatus();
 
-        // РАСЧЕТ ДАТ
+        // РАСЧЕТ ВРЕМЕНИ И ЦЕЛИ
         const startDate = new Date(2026, 5, 24); // 24.06.2026
-        const goalDaysTarget = 50;
+        const goalTarget = 50;
 
-        function calculateTime() {
+        function updateTimer() {
             const now = new Date();
             const diffMs = now - startDate;
             if (diffMs < 0) return;
@@ -468,38 +504,38 @@
                 m += 12;
             }
 
-            document.getElementById('year-num').textContent = y;
-            document.getElementById('month-num').textContent = m;
-            document.getElementById('day-num').textContent = d;
+            document.getElementById('years-val').textContent = y;
+            document.getElementById('months-val').textContent = m;
+            document.getElementById('days-val').textContent = d;
 
-            // Шкала
-            let prog = totalDays >= goalDaysTarget ? goalDaysTarget : totalDays;
-            let percent = Math.floor((prog / goalDaysTarget) * 100);
-            document.getElementById('filament-bar').style.width = percent + '%';
+            // Шкала прогресса
+            let currentProg = totalDays >= goalTarget ? goalTarget : totalDays;
+            let pct = Math.floor((currentProg / goalTarget) * 100);
+            document.getElementById('goal-fill-bar').style.width = pct + '%';
 
-            let left = goalDaysTarget - totalDays;
-            document.getElementById('goal-status-text').textContent = left > 0 ? `Осталось ${left}д` : `Достигнуто`;
+            let leftDays = goalTarget - totalDays;
+            document.getElementById('goal-counter').textContent = leftDays > 0 ? `Осталось: ${leftDays}д` : `Цель достигнута! 💕`;
         }
 
         // СОБЫТИЯ
         const eventsData = [
-            { title: "Дата начала", date: "24.06.2026" },
-            { title: "10 дней истории", date: "04.07.2026" },
-            { title: "30 дней истории", date: "24.07.2026" },
-            { title: "50 дней истории", date: "13.08.2026" },
-            { title: "100 дней истории", date: "02.10.2026" },
-            { title: "Новогодняя ночь", date: "31.12.2026" },
-            { title: "Рождество", date: "07.01.2027" },
-            { title: "200 дней", date: "10.01.2027" },
-            { title: "День Святого Валентина", date: "14.02.2027" },
-            { title: "1 Годовщина", date: "24.06.2027" },
-            { title: "5 Лет Вместе", date: "24.06.2031" },
-            { title: "10 Лет Вместе", date: "24.06.2036" }
+            { title: "Начало истории", date: "24.06.2026", icon: "💋" },
+            { title: "10 дней вместе", date: "04.07.2026", icon: "🌸" },
+            { title: "30 дней вместе", date: "24.07.2026", icon: "🌸" },
+            { title: "50 дней вместе", date: "13.08.2026", icon: "🌺" },
+            { title: "100 дней вместе", date: "02.10.2026", icon: "💖" },
+            { title: "Новый Год", date: "31.12.2026", icon: "🎄" },
+            { title: "Рождество", date: "07.01.2027", icon: "✨" },
+            { title: "200 дней вместе", date: "10.01.2027", icon: "💖" },
+            { title: "День Святого Валентина", date: "14.02.2027", icon: "🎁" },
+            { title: "1 Год Любви", date: "24.06.2027", icon: "👑" },
+            { title: "5 Лет Счастья", date: "24.06.2031", icon: "💎" },
+            { title: "10 Лет Вместе", date: "24.06.2036", icon: "💍" }
         ];
 
-        function renderChronology() {
-            const list = document.getElementById('events-timeline');
-            list.innerHTML = '';
+        function renderEvents() {
+            const container = document.getElementById('events-container');
+            container.innerHTML = '';
             const now = new Date();
 
             eventsData.forEach(ev => {
@@ -507,44 +543,44 @@
                 const evDate = new Date(parts[2], parts[1] - 1, parts[0]);
                 const diffDays = Math.ceil((evDate - now) / (1000 * 60 * 60 * 24));
 
-                let status = diffDays > 0 ? `${diffDays} дн` : (diffDays === 0 ? `Сегодня` : `Пройдено`);
+                let tag = diffDays > 0 ? `Через ${diffDays}д` : (diffDays === 0 ? `Сегодня! 🎉` : `Пройдено ✨`);
 
-                const item = document.createElement('div');
-                item.className = 'chronology-item';
-                item.innerHTML = `
-                    <div class="item-info">
-                        <span class="item-title">${ev.title}</span>
-                        <span class="item-date">${ev.date}</span>
+                const row = document.createElement('div');
+                row.className = 'event-row';
+                row.innerHTML = `
+                    <div class="event-info">
+                        <span class="event-name">${ev.icon} ${ev.title}</span>
+                        <span class="event-date">${ev.date}</span>
                     </div>
-                    <span class="item-status">${status}</span>
+                    <span class="event-badge">${tag}</span>
                 `;
-                list.appendChild(item);
+                container.appendChild(row);
             });
         }
 
-        calculateTime();
-        renderChronology();
-        setInterval(calculateTime, 60000);
+        updateTimer();
+        renderEvents();
+        setInterval(updateTimer, 60000);
 
-        // УВЕДОМЛЕНИЯ
-        const messages = [
-            "Любовь запечатлена ✦",
-            "Поцелуй отправлен адресату 💋",
-            "Бесконечность вместе ✨",
-            "Момент сохранен в хронике 💖"
+        // УВЕДОМЛЕНИЯИ САЛЮТ ИЗ СЕРДЕЧЕК
+        const phrases = [
+            "Крепко обнимаю! 💖",
+            "Ты моё самое большое счастье! 🌸",
+            "Самая милая пара на свете! ✨",
+            "Один нежный поцелуй отправлен! 💋"
         ];
 
         function showToast() {
-            const t = document.getElementById('toast');
-            t.textContent = messages[Math.floor(Math.random() * messages.length)];
-            t.classList.add('active');
-            setTimeout(() => t.classList.remove('active'), 2200);
+            const t = document.getElementById('toast-pop');
+            t.textContent = phrases[Math.floor(Math.random() * phrases.length)];
+            t.classList.add('show');
+            setTimeout(() => t.classList.remove('show'), 2400);
         }
 
-        // АНИМАЦИЯ ЗОЛОТЫХ ИСКР
-        const canvas = document.getElementById('sparks-canvas');
+        // АНИМАЦИЯ СЕРДЕЧЕК ПРИ КЛИКЕ
+        const canvas = document.getElementById('hearts-canvas');
         const ctx = canvas.getContext('2d');
-        let sparks = [];
+        let particles = [];
 
         function resizeCanvas() {
             canvas.width = window.innerWidth;
@@ -553,57 +589,56 @@
         window.addEventListener('resize', resizeCanvas);
         resizeCanvas();
 
-        class Spark {
+        class HeartParticle {
             constructor(x, y) {
                 this.x = x; this.y = y;
-                this.size = Math.random() * 3 + 1;
-                this.vx = (Math.random() - 0.5) * 5;
-                this.vy = (Math.random() - 0.5) * 5;
-                this.color = ['#f3e5ab', '#d88398', '#ffffff'][Math.floor(Math.random() * 3)];
+                this.size = Math.random() * 16 + 10;
+                this.vx = (Math.random() - 0.5) * 6;
+                this.vy = (Math.random() - 0.5) * 6 - 2;
+                this.color = ['#ff758c', '#ff7eb3', '#ffaaa5', '#ffd3b6'][Math.floor(Math.random() * 4)];
                 this.life = 1;
                 this.decay = Math.random() * 0.02 + 0.015;
             }
             update() {
                 this.x += this.vx;
                 this.y += this.vy;
-                this.vy += 0.03;
+                this.vy += 0.05;
                 this.life -= this.decay;
             }
             draw() {
                 ctx.save();
                 ctx.globalAlpha = this.life;
                 ctx.fillStyle = this.color;
-                ctx.beginPath();
-                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-                ctx.fill();
+                ctx.font = `${this.size}px serif`;
+                ctx.fillText('♥', this.x, this.y);
                 ctx.restore();
             }
         }
 
-        function createBurst(x, y) {
-            for (let i = 0; i < 30; i++) sparks.push(new Spark(x, y));
+        function burstHearts(x, y) {
+            for (let i = 0; i < 25; i++) particles.push(new HeartParticle(x, y));
         }
 
-        function animateSparks() {
+        function renderParticles() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
-            for (let i = sparks.length - 1; i >= 0; i--) {
-                sparks[i].update();
-                sparks[i].draw();
-                if (sparks[i].life <= 0) sparks.splice(i, 1);
+            for (let i = particles.length - 1; i >= 0; i--) {
+                particles[i].update();
+                particles[i].draw();
+                if (particles[i].life <= 0) particles.splice(i, 1);
             }
-            requestAnimationFrame(animateSparks);
+            requestAnimationFrame(renderParticles);
         }
-        animateSparks();
+        renderParticles();
 
-        document.getElementById('seal-btn').addEventListener('click', (e) => {
+        document.getElementById('kiss-btn').addEventListener('click', (e) => {
             const rect = e.target.getBoundingClientRect();
-            createBurst(rect.left + rect.width / 2, rect.top + rect.height / 2);
+            burstHearts(rect.left + rect.width / 2, rect.top + rect.height / 2);
             showToast();
         });
 
         window.addEventListener('pointerdown', (e) => {
-            if (!e.target.closest('.status-heading') && !e.target.closest('.wax-seal')) {
-                createBurst(e.clientX, e.clientY);
+            if (!e.target.closest('.status-pill') && !e.target.closest('.big-heart-btn')) {
+                burstHearts(e.clientX, e.clientY);
             }
         });
     </script>
