@@ -161,7 +161,6 @@
             color: var(--text-dark);
         }
 
-        /* Сердечко между профилями */
         .heart-beat {
             font-size: 22px;
             color: var(--pink-main);
@@ -247,7 +246,7 @@
             font-weight: 600;
         }
 
-        /* --- ТАЙМЕР-ОБЛАЧКА (ЛЕТ / МЕСЯЦЕВ / ДНЕЙ) --- */
+        /* --- ТАЙМЕР-ОБЛАЧКА --- */
         .timer-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -302,7 +301,7 @@
             background: #ffffff;
         }
 
-        /* --- БОЛЬШАЯ КНОПКА-СЕРДЦЕ И ОКОШКО ФРАЗЫ --- */
+        /* --- БОЛЬШАЯ КНОПКА-СЕРДЦЕ --- */
         .heart-button-wrapper {
             display: flex;
             flex-direction: column;
@@ -459,7 +458,6 @@
             transform: scale(1);
         }
 
-        /* Эффект вылета для окна галереи */
         #gallery-modal .modal-content {
             transform: scale(0.7) translateY(50px);
             opacity: 0;
@@ -525,8 +523,6 @@
             object-fit: cover;
             border-radius: 14px;
             display: block;
-            image-rendering: -webkit-optimize-contrast;
-            image-rendering: crisp-edges;
         }
 
         .memory-desc {
@@ -537,7 +533,6 @@
             text-align: center;
         }
 
-        /* Окно для фотографии по сердечку */
         .photo-modal-body {
             padding: 16px;
             display: flex;
@@ -556,7 +551,6 @@
             box-shadow: 0 8px 20px rgba(108, 79, 90, 0.15);
         }
 
-        /* ВСПЛЫВАЮЩИЙ ТОАСТ */
         .toast-bubble {
             position: fixed;
             top: 20px;
@@ -623,27 +617,14 @@
 <body>
 
     <!-- АУДИО ТРЕКИ -->
-    <audio id="bg-music" loop preload="auto">
-        <source src="https://tmpfiles.org/dl/19639567/-lovesong.mp3" type="audio/mpeg">
-    </audio>
+    <audio id="bg-music" loop preload="auto" src="https://tmpfiles.org/dl/19639567/-lovesong.mp3"></audio>
+    <audio id="special-music" loop preload="auto" src="https://tmpfiles.org/dl/19641470/voicy_romanticsax.mp3"></audio>
+    <audio id="gallery-music" loop preload="auto" src="https://tmpfiles.org/dl/19875955/-shapeofmyheart.mp3"></audio>
 
-    <!-- ОСОБАЯ МУЗЫКА ДЛЯ СЕРДЕЧКА МЕЖДУ ИМЕНАМИ -->
-    <audio id="special-music" loop preload="auto">
-        <source src="https://tmpfiles.org/dl/19641470/voicy_romanticsax.mp3" type="audio/mpeg">
-    </audio>
-
-    <!-- МУЗЫКА ДЛЯ ВКЛАДКИ С ВОСПОМИНАНИЯМИ (SHAPE OF MY HEART) -->
-    <audio id="gallery-music" loop preload="auto">
-        <source src="https://tmpfiles.org/dl/19875955/-shapeofmyheart.mp3" type="audio/mpeg">
-    </audio>
-
-    <!-- ПАРЯЩИЕ ФОНОВЫЕ СЕРДЕЧКИ -->
     <div class="bg-hearts" id="bg-hearts"></div>
-
     <canvas id="hearts-canvas"></canvas>
     <div class="toast-bubble" id="toast-pop">Нажми на сердечко! 💕</div>
 
-    <!-- КНОПКА МУЗЫКИ -->
     <div class="music-pill" id="music-btn" onclick="toggleMusic()">
         <span id="music-icon">🎵</span>
         <span id="music-text">Музыка</span>
@@ -651,7 +632,6 @@
 
     <div class="wrapper">
 
-        <!-- СТАТУС -->
         <div class="title-badge">
             <div class="status-pill" onclick="editStatus()" title="Нажмите, чтобы изменить">
                 <span>🎀</span>
@@ -660,7 +640,6 @@
             </div>
         </div>
 
-        <!-- КАРТОЧКА С ГЛАВНЫМ ПРЯМОУГОЛЬНЫМ ФОТО -->
         <div class="photo-card">
             <img class="photo-rectangular" src="https://i.postimg.cc/9rLj97mm/image.jpeg" alt="Наше Фото">
 
@@ -670,7 +649,6 @@
                     <span>марьяша</span>
                 </div>
 
-                <!-- КЛИКАБЕЛЬНОЕ СЕРДЕЧКО МЕЖДУ ФОТОГРАФИЯМИ -->
                 <div class="heart-beat" id="heart-photo-btn" title="Нажми на сердечко!">💖</div>
 
                 <div class="profile-item">
@@ -680,7 +658,6 @@
             </div>
         </div>
 
-        <!-- ПРОГРЕСС ЦЕЛИ (50 ДНЕЙ) -->
         <div class="goal-box">
             <div class="goal-header">
                 <span>Цель: 50 дней любви</span>
@@ -691,14 +668,12 @@
             </div>
         </div>
 
-        <!-- КАРТОЧКА: ОБЩИЙ СЧЁТЧИК ДНЕЙ -->
         <div class="total-days-card">
             <div class="total-days-title">МЫ ВМЕСТЕ УЖЕ</div>
             <div class="total-days-count" id="total-days-val">0</div>
             <div class="total-days-sub" id="total-days-text">дней</div>
         </div>
 
-        <!-- ТАЙМЕР-ОБЛАЧКА (ЛЕТ / МЕСЯЦЕВ / ДНЕЙ) -->
         <div class="timer-grid">
             <div class="timer-cloud">
                 <div class="timer-num" id="years-val">0</div>
@@ -714,12 +689,10 @@
             </div>
         </div>
 
-        <!-- КНОПКА ГАЛЕРЕИ ВОСПОМИНАНИЙ -->
         <div class="gallery-btn" id="open-gallery-btn">
             <span>📸</span> Галерея наших воспоминаний <span>💕</span>
         </div>
 
-        <!-- КНОПКА-СЕРДЦЕ + КАРТОЧКА ФРАЗЫ -->
         <div class="heart-button-wrapper">
             <div class="big-heart-btn" id="kiss-btn">💖</div>
             <div class="love-quote-card" id="quote-display">
@@ -727,17 +700,13 @@
             </div>
         </div>
 
-        <!-- СПИСОК СОБЫТИЙ -->
         <div class="events-card">
             <div class="events-title">🌸 Наш Календарь Счастья</div>
-            <div class="events-scroll" id="events-container">
-                <!-- Динамически заполняется -->
-            </div>
+            <div class="events-scroll" id="events-container"></div>
         </div>
 
     </div>
 
-    <!-- МОДАЛЬНОЕ ОКНО ФОТОГРАФИИ ПО СЕРДЕЧКУ -->
     <div class="modal-overlay" id="photo-modal">
         <div class="modal-content">
             <div class="modal-header">
@@ -750,21 +719,17 @@
         </div>
     </div>
 
-    <!-- МОДАЛЬНОЕ ОКНО ГАЛЕРЕИ ВОСПОМИНАНИЙ -->
     <div class="modal-overlay" id="gallery-modal">
         <div class="modal-content">
             <div class="modal-header">
                 <div class="modal-title">🖼️ Альбом воспоминаний</div>
                 <button class="close-btn" id="close-gallery-btn">✕</button>
             </div>
-            <div class="gallery-grid" id="gallery-container">
-                <!-- Заполняется из JavaScript -->
-            </div>
+            <div class="gallery-grid" id="gallery-container"></div>
         </div>
     </div>
 
     <script>
-        // СПИСОК ВОСПОМИНАНИЙ В ПОЛНОМ РАЗРЕШЕНИИ
         const memoriesData = [
             { img: "https://i.postimg.cc/SXYXyQDP/image.jpeg", desc: "Наш первый день🤭" },
             { img: "https://i.postimg.cc/XXkgMxZx/image.jpeg", desc: "Тут нам неделя😚" },
@@ -779,7 +744,6 @@
             { img: "https://i.postimg.cc/pymP4c1t/image.jpeg", desc: "Ну а это концерт газана 6️⃣7️⃣" }
         ];
 
-        // РЕНДЕР ГАЛЕРЕИ
         function renderGallery() {
             const container = document.getElementById('gallery-container');
             container.innerHTML = '';
@@ -795,7 +759,7 @@
         }
         renderGallery();
 
-        // УПРАВЛЕНИЕ МУЗЫКОЙ
+        // --- ИСПРАВЛЕННЫЙ БЛОК УПРАВЛЕНИЯ ЗВУКОМ ---
         const bgMusic = document.getElementById('bg-music');
         const specialMusic = document.getElementById('special-music');
         const galleryMusic = document.getElementById('gallery-music');
@@ -804,31 +768,42 @@
 
         let currentTrack = null;
 
+        // Вспомогательная функция для форматирования ссылок tmpfiles.org в прямую скачиваемую
+        function fixDirectLink(audioEl) {
+            if (audioEl.src && audioEl.src.includes('tmpfiles.org/') && !audioEl.src.includes('tmpfiles.org/dl/')) {
+                audioEl.src = audioEl.src.replace('tmpfiles.org/', 'tmpfiles.org/dl/');
+            }
+        }
+
         function playTrack(track) {
+            fixDirectLink(track);
+
             if (currentTrack && currentTrack !== track) {
                 currentTrack.pause();
+                currentTrack.currentTime = 0;
             }
 
+            track.currentTime = 0;
             track.play().then(() => {
                 currentTrack = track;
                 if (musicIcon) musicIcon.textContent = '🎶';
                 if (musicBtn) musicBtn.classList.add('playing');
             }).catch(err => {
-                console.log("Браузер заблокировал звук:", err);
+                console.warn("Браузер заблокировал автовоспроизведение или ссылка устарела:", err);
             });
         }
 
         function pauseAllMusic() {
-            if (currentTrack) {
-                currentTrack.pause();
-                currentTrack = null;
-            }
+            [bgMusic, specialMusic, galleryMusic].forEach(t => {
+                t.pause();
+            });
+            currentTrack = null;
             if (musicIcon) musicIcon.textContent = '🔇';
             if (musicBtn) musicBtn.classList.remove('playing');
         }
 
         function toggleMusic() {
-            if (currentTrack) {
+            if (currentTrack && !currentTrack.paused) {
                 pauseAllMusic();
             } else {
                 playTrack(bgMusic);
@@ -857,7 +832,7 @@
             document.body.style.overflow = '';
         }
 
-        // 1. Окно фотографии по сердечку + Особая музыка (Романтический Саксофон)
+        // 1. Окно фотографии по сердечку + Саксофон
         const photoModal = document.getElementById('photo-modal');
         document.getElementById('heart-photo-btn').addEventListener('click', () => {
             openModal(photoModal);
@@ -874,7 +849,7 @@
             }
         });
 
-        // 2. Окно галереи воспоминаний + Салют + Музыка галереи (Shape of My Heart)
+        // 2. Окно воспоминаний + Shape of My Heart
         const galleryModal = document.getElementById('gallery-modal');
         document.getElementById('open-gallery-btn').addEventListener('click', () => {
             openModal(galleryModal);
@@ -1025,7 +1000,6 @@
         }
         loadStatus();
 
-        // СКЛОНЕНИЕ СЛОВА "ДЕНЬ"
         function getDaysWord(num) {
             let n = Math.abs(num) % 100;
             let n1 = n % 10;
@@ -1036,7 +1010,7 @@
         }
 
         // РАСЧЕТ ВРЕМЕНИ И ЦЕЛИ
-        const startDate = new Date(2026, 5, 24); // 24.06.2026
+        const startDate = new Date(2026, 5, 24);
         const goalTarget = 50;
 
         function updateTimer() {
@@ -1075,7 +1049,6 @@
             document.getElementById('goal-counter').textContent = leftDays > 0 ? `Осталось: ${leftDays}д` : `Цель достигнута! 💕`;
         }
 
-        // СОБЫТИЯ
         const eventsData = [
             { title: "Начало истории", date: "24.06.2026", icon: "💋" },
             { title: "10 дней вместе", date: "04.07.2026", icon: "🌸" },
@@ -1120,7 +1093,6 @@
         renderEvents();
         setInterval(updateTimer, 60000);
 
-        // ВЫВЕДЕНИЕ СЛУЧАЙНОЙ ФРАЗЫ ПРИ КЛИКЕ
         function getRandomPhrase() {
             return lovePhrases[Math.floor(Math.random() * lovePhrases.length)];
         }
@@ -1141,7 +1113,6 @@
             }, 150);
         }
 
-        // АНИМАЦИЯ СЕРДЕЧЕК В БРАУЗЕРЕ
         const canvas = document.getElementById('hearts-canvas');
         const ctx = canvas.getContext('2d');
         let particles = [];
