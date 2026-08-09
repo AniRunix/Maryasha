@@ -11,7 +11,7 @@
     
     <title>Наша Нежная История 💕</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Comfortaa:wght@400;600;700&family=Marck+Script&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Comfortaa:wght@400;600;700&display=swap');
 
         :root {
             --bg-soft: #fff0f5;
@@ -118,7 +118,6 @@
             box-shadow: var(--shadow-soft);
         }
 
-        /* Прямоугольное фото */
         .photo-rectangular {
             width: 100%;
             height: 280px;
@@ -128,7 +127,6 @@
             box-shadow: 0 8px 20px rgba(108, 79, 90, 0.1);
         }
 
-        /* Блок с аватарками под фото */
         .profiles-row {
             display: flex;
             justify-content: space-around;
@@ -237,18 +235,18 @@
             font-weight: 600;
         }
 
-        /* --- БОЛЬШАЯ КНОПКА-СЕРДЦЕ --- */
+        /* --- БОЛЬШАЯ КНОПКА-СЕРДЦЕ И ОКОШКО ФРАЗЫ --- */
         .heart-button-wrapper {
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 8px;
+            gap: 10px;
             margin: 6px 0;
         }
 
         .big-heart-btn {
-            width: 76px;
-            height: 76px;
+            width: 80px;
+            height: 80px;
             border-radius: 50%;
             background: linear-gradient(135deg, #ff7eb3 0%, #ff758c 100%);
             border: 4px solid #ffffff;
@@ -256,7 +254,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            font-size: 34px;
+            font-size: 36px;
             cursor: pointer;
             transition: transform 0.2s ease;
         }
@@ -265,10 +263,24 @@
             transform: scale(0.88);
         }
 
-        .heart-btn-label {
-            font-size: 12px;
-            color: var(--text-muted);
+        /* Карточка с фразой под сердечком */
+        .love-quote-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(12px);
+            border: 2px solid #ffffff;
+            border-radius: 20px;
+            padding: 12px 18px;
+            text-align: center;
+            font-size: 13px;
             font-weight: 600;
+            color: var(--text-dark);
+            box-shadow: var(--shadow-soft);
+            width: 100%;
+            min-height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
         }
 
         /* --- СПИСОК СОБЫТИЙ --- */
@@ -340,17 +352,17 @@
             border-radius: 12px;
         }
 
-        /* ТОАСТ */
+        /* ВСПЛЫВАЮЩИЙ ТОАСТ */
         .toast-bubble {
             position: fixed;
             top: 20px;
             left: 50%;
-            transform: translateX(-50%) translateY(-60px);
+            transform: translateX(-50%) translateY(-70px);
             background: #ffffff;
             color: var(--pink-main);
-            padding: 12px 24px;
+            padding: 12px 20px;
             border-radius: 30px;
-            font-size: 13px;
+            font-size: 12px;
             font-weight: 700;
             box-shadow: 0 10px 30px rgba(255, 117, 140, 0.3);
             border: 2px solid var(--pink-accent);
@@ -358,6 +370,8 @@
             transition: all 0.3s ease;
             z-index: 1000;
             pointer-events: none;
+            max-width: 90%;
+            text-align: center;
         }
 
         .toast-bubble.show {
@@ -372,7 +386,7 @@
     <div class="bg-hearts" id="bg-hearts"></div>
 
     <canvas id="hearts-canvas"></canvas>
-    <div class="toast-bubble" id="toast-pop">Поцелуй отправлен! 💖</div>
+    <div class="toast-bubble" id="toast-pop">Нажми на сердечко! 💕</div>
 
     <div class="wrapper">
 
@@ -387,10 +401,8 @@
 
         <!-- КАРТОЧКА С ПРЯМОУГОЛЬНЫМ ФОТО -->
         <div class="photo-card">
-            <!-- Прямоугольное фото -->
             <img class="photo-rectangular" src="https://i.postimg.cc/9rLj97mm/couple-photo.jpg" alt="Наше Фото">
 
-            <!-- Аватарки под фото -->
             <div class="profiles-row">
                 <div class="profile-item">
                     <img src="https://i.postimg.cc/phMNvQZB/maryasha-avatar.png" alt="Марьяша">
@@ -433,23 +445,129 @@
             </div>
         </div>
 
-        <!-- КНОПКА-СЕРДЦЕ -->
+        <!-- КНОПКА-СЕРДЦЕ + КАРТОЧКА ФРАЗЫ -->
         <div class="heart-button-wrapper">
             <div class="big-heart-btn" id="kiss-btn">💖</div>
-            <div class="heart-btn-label">Нажми, чтобы обнять</div>
+            <div class="love-quote-card" id="quote-display">
+                Коснись сердечка, чтобы получить послание... ✨
+            </div>
         </div>
 
         <!-- СПИСОК СОБЫТИЙ -->
         <div class="events-card">
             <div class="events-title">🌸 Наш Календарь Счастья</div>
             <div class="events-scroll" id="events-container">
-                <!-- Заполняется динамически -->
+                <!-- Динамически заполняется -->
             </div>
         </div>
 
     </div>
 
     <script>
+        // 100 ЛЮБОВНЫХ ФРАЗ
+        const lovePhrases = [
+            "Ты — моё самое любимое мгновение каждого дня 💖",
+            "С тобой даже самый обычный день превращается в праздник 🌸",
+            "Моё сердце улыбается, когда я думаю о тебе ☺️",
+            "Ты — мой уютный дом, где бы мы ни были 🏠💕",
+            "Люблю тебя с каждым днём всё сильнее и сильнее ✨",
+            "Твоя улыбка — моё самое любимое зрелище на свете ☀️",
+            "Ты делаешь мою жизнь бесконечно счастливой 💖",
+            "Крепкий поцелуй отправлен прямо тебе в щёчку! 💋",
+            "С тобой мне ничего не страшно 🤍",
+            "Ты — моё самое настоящее чудо ✨",
+            "Я скучаю по тебе, даже когда мы расстаёмся на час 🥺",
+            "Твои обнимашки — лучшее лекарство от любой усталости 🫂",
+            "Вместе мы сможем всё на свете 💫",
+            "Ты — мой лучший друг и любимый человек в одном лице 🥰",
+            "Я обожаю твой голос и твой смех ✨",
+            "Спасибо тебе за всю любовь, которую ты мне даришь 💝",
+            "Моё счастье имеет твоё имя 💕",
+            "Рядом с тобой я становлюсь лучше 🌷",
+            "Ты — моя самая главная и любимая мечта 🎉",
+            "Один крепкий виртуальный поцелуй прямо сейчас! 💋",
+            "Я засыпаю с мыслями о тебе и просыпаюсь с улыбкой 😴✨",
+            "Каждая секунда с тобой — на вес золота 💎",
+            "Ты — моё солнышко, которое светит даже в пасмурный день ☀️",
+            "Ты наполняешь мою жизнь смыслом и теплом 🔥",
+            "Моё любимое место во Вселенной — твои объятия 🫂",
+            "С тобой приятно даже просто молчать 🤍",
+            "Ты заставляешь моё сердце биться чаще 💓",
+            "Люблю каждую твою родинку и каждую черту 🥰",
+            "Ты — лучшая часть моего дня 🌸",
+            "Отправляю тебе нежное облако из поцелуев ☁️💋",
+            "Наш союз — это лучшее, что случилось в моей жизни ✨",
+            "Ты делаешь всё вокруг чуточку добрее и светлее 🌷",
+            "С тобой даже домашний вечер становится волшебным 🌙",
+            "Ты — моё вдохновение во всём 🎨",
+            "Я так горжусь тобой и твоими успехами 🌟",
+            "Никогда не забывай, как сильно я тебя люблю 💕",
+            "Твоя забота согревает меня лучше любого пледа ☕",
+            "Ты — мой самый родной человек на свете 🤍",
+            "Мечтаю разделить с тобой тысячу новых моментов 🚀",
+            "Целую тебя тысячу раз подряд! 💋",
+            "Ты — моё нежное сладкое счастье 🍬",
+            "Рядом с тобой время летит незаметно ⏳💖",
+            "Ты подарил(а) мне веру в настоящие чувства ✨",
+            "Обожаю, когда мы просто дурачимся вместе 🤪💓",
+            "Ты — моё самое любимое из всех совпадений 🍀",
+            "Любить тебя — это самое естественное чувство на свете 💕",
+            "Ты приносишь покой в мою душу 🕊️",
+            "Хочу держать тебя за руку всегда-всегда 🤝💖",
+            "Ты удивительный человек, помни об этом 💫",
+            "Летит горячий поцелуйчик! Лови! 💋💥",
+            "Ты — мой личный источник радости ☀️",
+            "Ты пахнешь домом и уютом 🌸",
+            "Мне так повезло встречаться с тобой 🍀✨",
+            "Я всегда на твоей стороне, что бы ни случилось 🛡️🤍",
+            "Твои глаза — это целый космос 🌌",
+            "Ты умеешь поднять мне настроение за секунду 🥳",
+            "Каждый день с тобой — новая красивая глава 📖💖",
+            "Люблю тебя от Земли до самой Луны и обратно 🌙✨",
+            "Ты — моя сладкая радость 🍰",
+            "Обнимаю тебя крепко-крепко сквозь любые расстояния 🫂💗",
+            "Твоё прикосновение вызывает мурашки по коже ⚡🥰",
+            "С тобой жизнь заиграла яркими красками 🌈",
+            "Ты — моя тихая гавань ⚓💜",
+            "Я готов(а) пересматривать твои фото бесконечно 📸😍",
+            "Ты делаешь этот мир намного прекраснее ✨",
+            "Спасибо за каждый день, прожитый вместе 🗓️❤️",
+            "Ты — моё самое любимое маленькое чудо 🐥",
+            "С тобой я чувствую себя на своем месте 🧩💕",
+            "Лови нежную обнимашку и сладкий поцелуй! 💋✨",
+            "Ты — моя главная награда 🏆💖",
+            "Ты умеешь дарить веру в себя ✨",
+            "Твоя доброта меня восхищает 🌷",
+            "Хочу делать тебя счастливым(ой) каждый день 🎁",
+            "Ты — моё любимое 'доброе утро' и 'спокойной ночи' 🌅🌃",
+            "Рядом с тобой сердце поёт 🎶❤️",
+            "Ты — мой сладкий зайчик 🐰💖",
+            "Люблю твой голос больше любой музыки 🎧🥰",
+            "Ты превращаешь будни в сказку 🪄✨",
+            "Ты — самое ценное, что у меня есть 💎",
+            "Согреваешь моё сердце даже издалека 🔥💋",
+            "Ты — моё любимое 'навсегда' ♾️💗",
+            "Жду не дождусь нашей следующей встречи ⏳🥰",
+            "Ты даришь мне крылья 🕊️✨",
+            "С тобой я могу быть настоящим(ей) 🤍",
+            "Твоя улыбка освещает весь мой день 💡💓",
+            "Ты — моё маленькое солнышко ☀️",
+            "Люблю тебя просто за то, что ты есть 🌸",
+            "Ты — мой идеальный выбор каждый день 🎯💖",
+            "Чмок прямо в носик! 👃💋",
+            "Твоё добро согревает всё вокруг ☀️🌷",
+            "Ты — моё главное вдохновение и мотивация 🚀",
+            "Хочу дарить тебе улыбку каждый день 😃💕",
+            "Ты делаешь мою душу богаче ✨",
+            "Какое счастье быть рядом с тобой 🥰",
+            "Ты — моё любимое 'вместе' 👫❤️",
+            "Твои руки — самые теплые на свете 🤲🔥",
+            "Ты невероятный человек, я обожаю тебя 🌟",
+            "Лови миллион теплых сердечек! 💖💖💖",
+            "Ты — моё самое любимое чувство 💓",
+            "Я бесконечно люблю тебя! ✨💋"
+        ];
+
         // ФОНОВЫЕ СЕРДЕЧКИ
         const heartsContainer = document.getElementById('bg-hearts');
         for (let i = 0; i < 12; i++) {
@@ -508,7 +626,6 @@
             document.getElementById('months-val').textContent = m;
             document.getElementById('days-val').textContent = d;
 
-            // Шкала прогресса
             let currentProg = totalDays >= goalTarget ? goalTarget : totalDays;
             let pct = Math.floor((currentProg / goalTarget) * 100);
             document.getElementById('goal-fill-bar').style.width = pct + '%';
@@ -562,22 +679,30 @@
         renderEvents();
         setInterval(updateTimer, 60000);
 
-        // УВЕДОМЛЕНИЯИ САЛЮТ ИЗ СЕРДЕЧЕК
-        const phrases = [
-            "Крепко обнимаю! 💖",
-            "Ты моё самое большое счастье! 🌸",
-            "Самая милая пара на свете! ✨",
-            "Один нежный поцелуй отправлен! 💋"
-        ];
-
-        function showToast() {
-            const t = document.getElementById('toast-pop');
-            t.textContent = phrases[Math.floor(Math.random() * phrases.length)];
-            t.classList.add('show');
-            setTimeout(() => t.classList.remove('show'), 2400);
+        // ВЫВЕДЕНИЕ СЛУЧАЙНОЙ ФРАЗЫ ПРИ КЛИКЕ
+        function getRandomPhrase() {
+            return lovePhrases[Math.floor(Math.random() * lovePhrases.length)];
         }
 
-        // АНИМАЦИЯ СЕРДЕЧЕК ПРИ КЛИКЕ
+        function triggerLoveAction() {
+            const phrase = getRandomPhrase();
+            
+            // Всплывающая плашка сверху
+            const t = document.getElementById('toast-pop');
+            t.textContent = phrase;
+            t.classList.add('show');
+            setTimeout(() => t.classList.remove('show'), 2800);
+
+            // Карточка под кнопкой
+            const q = document.getElementById('quote-display');
+            q.style.opacity = '0.3';
+            setTimeout(() => {
+                q.textContent = phrase;
+                q.style.opacity = '1';
+            }, 150);
+        }
+
+        // АНИМАЦИЯ СЕРДЕЧЕК В БРАУЗЕРЕ
         const canvas = document.getElementById('hearts-canvas');
         const ctx = canvas.getContext('2d');
         let particles = [];
@@ -633,7 +758,7 @@
         document.getElementById('kiss-btn').addEventListener('click', (e) => {
             const rect = e.target.getBoundingClientRect();
             burstHearts(rect.left + rect.width / 2, rect.top + rect.height / 2);
-            showToast();
+            triggerLoveAction();
         });
 
         window.addEventListener('pointerdown', (e) => {
