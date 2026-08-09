@@ -459,6 +459,18 @@
             transform: scale(1);
         }
 
+        /* Эффект вылета для окна галереи */
+        #gallery-modal .modal-content {
+            transform: scale(0.7) translateY(50px);
+            opacity: 0;
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.4s ease;
+        }
+
+        #gallery-modal.active .modal-content {
+            transform: scale(1) translateY(0);
+            opacity: 1;
+        }
+
         .modal-header {
             padding: 18px 20px;
             display: flex;
@@ -494,6 +506,7 @@
             display: flex;
             flex-direction: column;
             gap: 16px;
+            flex: 1;
             overflow-y: auto;
         }
 
@@ -530,6 +543,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
+            flex: 1;
             overflow-y: auto;
         }
 
@@ -568,15 +582,72 @@
             opacity: 1;
             transform: translateX(-50%) translateY(0);
         }
+
+        /* --- КНОПКА МУЗЫКИ --- */
+        .music-pill {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 900;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 16px;
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
+            border: 2px solid #ffffff;
+            border-radius: 30px;
+            color: var(--pink-main);
+            font-weight: 700;
+            font-size: 13px;
+            box-shadow: var(--shadow-soft);
+            cursor: pointer;
+            transition: transform 0.2s, background 0.2s;
+        }
+
+        .music-pill:active {
+            transform: scale(0.92);
+        }
+
+        .music-pill.playing {
+            border-color: var(--pink-accent);
+            animation: musicPulse 2s infinite ease-in-out;
+        }
+
+        @keyframes musicPulse {
+            0%, 100% { box-shadow: 0 0 10px rgba(255, 117, 140, 0.3); }
+            50% { box-shadow: 0 0 20px rgba(255, 117, 140, 0.7); }
+        }
     </style>
 </head>
 <body>
+
+    <!-- АУДИО ТРЕКИ -->
+    <audio id="bg-music" loop preload="auto">
+        <source src="https://tmpfiles.org/dl/19639567/-lovesong.mp3" type="audio/mpeg">
+    </audio>
+
+    <!-- ОСОБАЯ МУЗЫКА ДЛЯ СЕРДЕЧКА МЕЖДУ ИМЕНАМИ -->
+    <audio id="special-music" loop preload="auto">
+        <source src="https://tmpfiles.org/dl/19641470/voicy_romanticsax.mp3" type="audio/mpeg">
+    </audio>
+
+    <!-- МУЗЫКА ДЛЯ ВКЛАДКИ С ВОСПОМИНАНИЯМИ (SHAPE OF MY HEART) -->
+    <audio id="gallery-music" loop preload="auto">
+        <source src="https://tmpfiles.org/dl/19875955/-shapeofmyheart.mp3" type="audio/mpeg">
+    </audio>
 
     <!-- ПАРЯЩИЕ ФОНОВЫЕ СЕРДЕЧКИ -->
     <div class="bg-hearts" id="bg-hearts"></div>
 
     <canvas id="hearts-canvas"></canvas>
     <div class="toast-bubble" id="toast-pop">Нажми на сердечко! 💕</div>
+
+    <!-- КНОПКА МУЗЫКИ -->
+    <div class="music-pill" id="music-btn" onclick="toggleMusic()">
+        <span id="music-icon">🎵</span>
+        <span id="music-text">Музыка</span>
+    </div>
 
     <div class="wrapper">
 
@@ -695,50 +766,17 @@
     <script>
         // СПИСОК ВОСПОМИНАНИЙ В ПОЛНОМ РАЗРЕШЕНИИ
         const memoriesData = [
-            {
-                img: "https://i.postimg.cc/SXYXyQDP/image.jpeg",
-                desc: "Наш первый день🤭"
-            },
-            {
-                img: "https://i.postimg.cc/XXkgMxZx/image.jpeg",
-                desc: "Тут нам неделя😚"
-            },
-            {
-                img: "https://i.postimg.cc/47Tpqhsj/image.jpeg",
-                desc: "А тут нам уже 3 недели (фоток со второй нету((( )😌"
-            },
-            {
-                img: "https://i.postimg.cc/hzrQYyCS/image.jpeg",
-                desc: "Тут нам уже ровно месяц 😍😍"
-            },
-            {
-                img: "https://i.postimg.cc/nsfshbgc/image.jpeg",
-                desc: "Это поездка к родителям Алисы😛"
-            },
-            {
-                img: "https://i.postimg.cc/ZWpRgsRM/image.jpeg",
-                desc: "А тут мы с тобой делали ручки🫶🫶"
-            },
-            {
-                img: "https://i.postimg.cc/Q94x5R4m/image.jpeg",
-                desc: "Первая ночевка у тебя дома🏠"
-            },
-            {
-                img: "https://i.postimg.cc/pmbVDQZj/image.jpeg",
-                desc: "Это ты меня накрасила💅"
-            },
-            {
-                img: "https://i.postimg.cc/jDHxvW3C/image.jpeg",
-                desc: "Это мы водили никиту в движение первых🐒🐒"
-            },
-            {
-                img: "https://i.postimg.cc/VrVm5Xv9/image.jpeg",
-                desc: "А это уже наш первый раз🤪🤪🔞"
-            },
-            {
-                img: "https://i.postimg.cc/pymP4c1t/image.jpeg",
-                desc: "Ну а это концерт газана 6️⃣7️⃣"
-            }
+            { img: "https://i.postimg.cc/SXYXyQDP/image.jpeg", desc: "Наш первый день🤭" },
+            { img: "https://i.postimg.cc/XXkgMxZx/image.jpeg", desc: "Тут нам неделя😚" },
+            { img: "https://i.postimg.cc/47Tpqhsj/image.jpeg", desc: "А тут нам уже 3 недели (фоток со второй нету((( )😌" },
+            { img: "https://i.postimg.cc/hzrQYyCS/image.jpeg", desc: "Тут нам уже ровно месяц 😍😍" },
+            { img: "https://i.postimg.cc/nsfshbgc/image.jpeg", desc: "Это поездка к родителям Алисы😛" },
+            { img: "https://i.postimg.cc/ZWpRgsRM/image.jpeg", desc: "А тут мы с тобой делали ручки🫶🫶" },
+            { img: "https://i.postimg.cc/Q94x5R4m/image.jpeg", desc: "Первая ночевка у тебя дома🏠" },
+            { img: "https://i.postimg.cc/pmbVDQZj/image.jpeg", desc: "Это ты меня накрасила💅" },
+            { img: "https://i.postimg.cc/jDHxvW3C/image.jpeg", desc: "Это мы водили никиту в движение первых🐒🐒" },
+            { img: "https://i.postimg.cc/VrVm5Xv9/image.jpeg", desc: "А это уже наш первый раз🤪🤪🔞" },
+            { img: "https://i.postimg.cc/pymP4c1t/image.jpeg", desc: "Ну а это концерт газана 6️⃣7️⃣" }
         ];
 
         // РЕНДЕР ГАЛЕРЕИ
@@ -757,7 +795,58 @@
         }
         renderGallery();
 
-        // УПРАВЛЕНИЕ МОДАЛЬНЫМИ ОКНАМИ И БЛОКИРОВКА СКРОЛЛА
+        // УПРАВЛЕНИЕ МУЗЫКОЙ
+        const bgMusic = document.getElementById('bg-music');
+        const specialMusic = document.getElementById('special-music');
+        const galleryMusic = document.getElementById('gallery-music');
+        const musicBtn = document.getElementById('music-btn');
+        const musicIcon = document.getElementById('music-icon');
+
+        let currentTrack = null;
+
+        function playTrack(track) {
+            if (currentTrack && currentTrack !== track) {
+                currentTrack.pause();
+            }
+
+            track.play().then(() => {
+                currentTrack = track;
+                if (musicIcon) musicIcon.textContent = '🎶';
+                if (musicBtn) musicBtn.classList.add('playing');
+            }).catch(err => {
+                console.log("Браузер заблокировал звук:", err);
+            });
+        }
+
+        function pauseAllMusic() {
+            if (currentTrack) {
+                currentTrack.pause();
+                currentTrack = null;
+            }
+            if (musicIcon) musicIcon.textContent = '🔇';
+            if (musicBtn) musicBtn.classList.remove('playing');
+        }
+
+        function toggleMusic() {
+            if (currentTrack) {
+                pauseAllMusic();
+            } else {
+                playTrack(bgMusic);
+            }
+        }
+
+        function startMusicOnFirstInteraction() {
+            if (!currentTrack) {
+                playTrack(bgMusic);
+            }
+            window.removeEventListener('pointerdown', startMusicOnFirstInteraction);
+            window.removeEventListener('keydown', startMusicOnFirstInteraction);
+        }
+
+        window.addEventListener('pointerdown', startMusicOnFirstInteraction);
+        window.addEventListener('keydown', startMusicOnFirstInteraction);
+
+        // УПРАВЛЕНИЕ МОДАЛЬНЫМИ ОКНАМИ
         function openModal(modalElement) {
             modalElement.classList.add('active');
             document.body.style.overflow = 'hidden';
@@ -768,28 +857,39 @@
             document.body.style.overflow = '';
         }
 
-        // 1. Окно фотографии по сердечку
+        // 1. Окно фотографии по сердечку + Особая музыка (Романтический Саксофон)
         const photoModal = document.getElementById('photo-modal');
         document.getElementById('heart-photo-btn').addEventListener('click', () => {
             openModal(photoModal);
+            playTrack(specialMusic);
         });
         document.getElementById('close-photo-btn').addEventListener('click', () => {
             closeModal(photoModal);
+            playTrack(bgMusic);
         });
         photoModal.addEventListener('click', (e) => {
-            if (e.target === photoModal) closeModal(photoModal);
+            if (e.target === photoModal) {
+                closeModal(photoModal);
+                playTrack(bgMusic);
+            }
         });
 
-        // 2. Окно галереи воспоминаний
+        // 2. Окно галереи воспоминаний + Салют + Музыка галереи (Shape of My Heart)
         const galleryModal = document.getElementById('gallery-modal');
         document.getElementById('open-gallery-btn').addEventListener('click', () => {
             openModal(galleryModal);
+            playTrack(galleryMusic);
+            heartFireworks();
         });
         document.getElementById('close-gallery-btn').addEventListener('click', () => {
             closeModal(galleryModal);
+            playTrack(bgMusic);
         });
         galleryModal.addEventListener('click', (e) => {
-            if (e.target === galleryModal) closeModal(galleryModal);
+            if (e.target === galleryModal) {
+                closeModal(galleryModal);
+                playTrack(bgMusic);
+            }
         });
 
         // 100 ЛЮБОВНЫХ ФРАЗ
@@ -925,7 +1025,7 @@
         }
         loadStatus();
 
-        // СКОЛНЕНИЕ СЛОВА "ДЕНЬ"
+        // СКЛОНЕНИЕ СЛОВА "ДЕНЬ"
         function getDaysWord(num) {
             let n = Math.abs(num) % 100;
             let n1 = n % 10;
@@ -946,7 +1046,6 @@
 
             const totalDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
 
-            // Обновляем главный счётчик дней
             document.getElementById('total-days-val').textContent = totalDays;
             document.getElementById('total-days-text').textContent = getDaysWord(totalDays);
 
@@ -1084,6 +1183,22 @@
             for (let i = 0; i < 25; i++) particles.push(new HeartParticle(x, y));
         }
 
+        function heartFireworks() {
+            const points = [
+                { x: window.innerWidth * 0.2, y: window.innerHeight * 0.3 },
+                { x: window.innerWidth * 0.8, y: window.innerHeight * 0.3 },
+                { x: window.innerWidth * 0.5, y: window.innerHeight * 0.5 },
+                { x: window.innerWidth * 0.3, y: window.innerHeight * 0.7 },
+                { x: window.innerWidth * 0.7, y: window.innerHeight * 0.7 }
+            ];
+
+            points.forEach((pt, index) => {
+                setTimeout(() => {
+                    burstHearts(pt.x, pt.y);
+                }, index * 150);
+            });
+        }
+
         function renderParticles() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             for (let i = particles.length - 1; i >= 0; i--) {
@@ -1106,7 +1221,8 @@
                 !e.target.closest('.big-heart-btn') && 
                 !e.target.closest('.modal-content') && 
                 !e.target.closest('.gallery-btn') &&
-                !e.target.closest('#heart-photo-btn')) {
+                !e.target.closest('#heart-photo-btn') &&
+                !e.target.closest('.music-pill')) {
                 burstHearts(e.clientX, e.clientY);
             }
         });
