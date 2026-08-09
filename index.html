@@ -161,10 +161,17 @@
             color: var(--text-dark);
         }
 
+        /* Сердечко между профилями */
         .heart-beat {
-            font-size: 18px;
+            font-size: 22px;
             color: var(--pink-main);
+            cursor: pointer;
             animation: heartPulse 1.2s infinite ease-in-out;
+            transition: transform 0.2s ease;
+        }
+
+        .heart-beat:hover {
+            transform: scale(1.4);
         }
 
         @keyframes heartPulse {
@@ -379,7 +386,7 @@
             border-radius: 12px;
         }
 
-        /* --- МОДАЛЬНОЕ ОКНО ГАЛЕРЕИ --- */
+        /* --- МОДАЛЬНЫЕ ОКНА --- */
         .modal-overlay {
             position: fixed;
             top: 0; left: 0;
@@ -485,6 +492,24 @@
             text-align: center;
         }
 
+        /* Окно для фотографии по сердечку */
+        .photo-modal-body {
+            padding: 16px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow-y: auto;
+        }
+
+        .popup-img {
+            width: 100%;
+            height: auto;
+            max-height: 70vh;
+            object-fit: contain;
+            border-radius: 18px;
+            box-shadow: 0 8px 20px rgba(108, 79, 90, 0.15);
+        }
+
         /* ВСПЛЫВАЮЩИЙ ТОАСТ */
         .toast-bubble {
             position: fixed;
@@ -542,7 +567,8 @@
                     <span>марьяша</span>
                 </div>
 
-                <div class="heart-beat">💖</div>
+                <!-- КЛИКАБЕЛЬНОЕ СЕРДЕЧКО МЕЖДУ ФОТОГРАФИЯМИ -->
+                <div class="heart-beat" id="heart-photo-btn" title="Нажми на сердечко!">💖</div>
 
                 <div class="profile-item">
                     <img src="https://i.postimg.cc/CZWPDFnS/roma-avatar.png" alt="Рома">
@@ -599,6 +625,19 @@
             </div>
         </div>
 
+    </div>
+
+    <!-- МОДАЛЬНОЕ ОКНО ФОТОГРАФИИ ПО СЕРДЕЧКУ -->
+    <div class="modal-overlay" id="photo-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title">💖 Наше Особое Фото</div>
+                <button class="close-btn" id="close-photo-btn">✕</button>
+            </div>
+            <div class="photo-modal-body">
+                <img class="popup-img" src="https://i.postimg.cc/w1Rpb1Wk/image.jpg" alt="Особое фото">
+            </div>
+        </div>
     </div>
 
     <!-- МОДАЛЬНОЕ ОКНО ГАЛЕРЕИ ВОСПОМИНАНИЙ -->
@@ -679,16 +718,39 @@
         }
         renderGallery();
 
-        // УПРАВЛЕНИЕ ОКНОМ ГАЛЕРЕИ
-        const modal = document.getElementById('gallery-modal');
+        // УПРАВЛЕНИЕ МОДАЛЬНЫМИ ОКНАМИ И БЛОКИРОВКА СКРОЛЛА
+        function openModal(modalElement) {
+            modalElement.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal(modalElement) {
+            modalElement.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        // 1. Окно фотографии по сердечку
+        const photoModal = document.getElementById('photo-modal');
+        document.getElementById('heart-photo-btn').addEventListener('click', () => {
+            openModal(photoModal);
+        });
+        document.getElementById('close-photo-btn').addEventListener('click', () => {
+            closeModal(photoModal);
+        });
+        photoModal.addEventListener('click', (e) => {
+            if (e.target === photoModal) closeModal(photoModal);
+        });
+
+        // 2. Окно галереи воспоминаний
+        const galleryModal = document.getElementById('gallery-modal');
         document.getElementById('open-gallery-btn').addEventListener('click', () => {
-            modal.classList.add('active');
+            openModal(galleryModal);
         });
         document.getElementById('close-gallery-btn').addEventListener('click', () => {
-            modal.classList.remove('active');
+            closeModal(galleryModal);
         });
-        modal.addEventListener('click', (e) => {
-            if (e.target === modal) modal.classList.remove('active');
+        galleryModal.addEventListener('click', (e) => {
+            if (e.target === galleryModal) closeModal(galleryModal);
         });
 
         // 100 ЛЮБОВНЫХ ФРАЗ
@@ -987,7 +1049,11 @@
         });
 
         window.addEventListener('pointerdown', (e) => {
-            if (!e.target.closest('.status-pill') && !e.target.closest('.big-heart-btn') && !e.target.closest('.modal-content') && !e.target.closest('.gallery-btn')) {
+            if (!e.target.closest('.status-pill') && 
+                !e.target.closest('.big-heart-btn') && 
+                !e.target.closest('.modal-content') && 
+                !e.target.closest('.gallery-btn') &&
+                !e.target.closest('#heart-photo-btn')) {
                 burstHearts(e.clientX, e.clientY);
             }
         });
