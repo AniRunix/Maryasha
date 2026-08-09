@@ -9,448 +9,445 @@
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
     
-    <title>Our Universe of Love</title>
+    <title>Love Chronicle Edition</title>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Montserrat:wght@300;400;500;600&display=swap');
+
         :root {
-            --bg-universe: radial-gradient(circle at 50% 30%, #2e0e29 0%, #120412 70%, #080109 100%);
-            --glass-card: rgba(255, 255, 255, 0.05);
-            --glass-border: rgba(255, 192, 203, 0.18);
-            --accent-pink: #ff3366;
-            --soft-gold: #fce38a;
-            --rose-glow: #eaffd0;
-            --text-light: #fff5f8;
-            --text-dim: #c8a2c8;
+            --bg-editorial: #0d0b0e;
+            --cream-gold: #f3e5ab;
+            --rose-muted: #d88398;
+            --line-color: rgba(243, 229, 171, 0.2);
+            --text-main: #fcf8f2;
+            --text-sub: #a89f91;
         }
 
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
         }
 
         body {
-            background: var(--bg-universe);
-            color: var(--text-light);
+            background-color: var(--bg-editorial);
+            color: var(--text-main);
+            font-family: 'Montserrat', sans-serif;
             min-height: 100vh;
-            padding: 20px 16px 100px 16px;
+            padding: 30px 18px 100px 18px;
             overflow-x: hidden;
             user-select: none;
             -webkit-tap-highlight-color: transparent;
         }
 
-        /* --- ФОНОВЫЙ ЗВЕЗДОПАД И ЧАСТИЦЫ --- */
-        #stars-canvas, #fireworks-canvas {
+        #sparks-canvas {
             position: fixed;
             top: 0; left: 0;
             width: 100%; height: 100%;
             pointer-events: none;
+            z-index: 99;
         }
-        #stars-canvas { z-index: 0; }
-        #fireworks-canvas { z-index: 99; }
 
-        .app-wrapper {
-            position: relative;
-            z-index: 1;
+        .magazine-wrapper {
             max-width: 440px;
             margin: 0 auto;
             display: flex;
             flex-direction: column;
-            gap: 20px;
+            gap: 28px;
         }
 
-        /* --- УНИКАЛЬНАЯ ЦЕНТРАЛЬНАЯ КАРТОЧКА С ФОТО И ШКАЛОЙ --- */
-        .hero-section {
-            position: relative;
-            background: rgba(255, 240, 245, 0.03);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid var(--glass-border);
-            border-radius: 40px;
-            padding: 24px 20px;
+        /* --- ШАПКА ЖУРНАЛА --- */
+        .editorial-header {
             text-align: center;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+            border-bottom: 1px solid var(--line-color);
+            padding-bottom: 16px;
         }
 
-        /* Дуговая шкала прогресса над фото */
-        .progress-header-custom {
-            display: flex;
-            justify-content: space-between;
-            font-size: 13px;
-            color: var(--soft-gold);
-            font-weight: 600;
-            margin-bottom: 12px;
-            padding: 0 10px;
+        .edition-tag {
+            font-family: 'Cinzel', serif;
+            font-size: 10px;
+            letter-spacing: 4px;
+            color: var(--rose-muted);
+            text-transform: uppercase;
+            margin-bottom: 6px;
         }
 
-        .arc-bar-container {
+        /* РЕДАКТИРУЕМЫЙ СТАТУС В СТИЛЕ ЗАГОЛОВКА */
+        .status-heading {
+            font-family: 'Cinzel', serif;
+            font-size: 20px;
+            letter-spacing: 2px;
+            color: var(--cream-gold);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            padding: 4px 10px;
+            transition: opacity 0.2s;
+        }
+
+        .status-heading:hover { opacity: 0.8; }
+
+        /* --- ГЛАВНЫЙ ВИЗУАЛЬНЫЙ БЛОК (ОБЛОЖКА) --- */
+        .cover-frame {
             position: relative;
-            width: 100%;
-            height: 10px;
-            background: rgba(255, 255, 255, 0.08);
-            border-radius: 10px;
-            overflow: hidden;
-            margin-bottom: 20px;
-            border: 1px solid rgba(255,255,255,0.1);
+            padding: 10px;
+            border: 1px solid var(--line-color);
         }
 
-        .arc-bar-fill {
+        .cover-photo-container {
+            position: relative;
+            overflow: hidden;
+            aspect-ratio: 4 / 5;
+        }
+
+        .cover-photo-container img {
+            width: 100%;
             height: 100%;
-            width: 0%;
-            background: linear-gradient(90deg, #ff3366, #fce38a);
-            border-radius: 10px;
-            box-shadow: 0 0 12px #ff3366;
-            transition: width 1s ease-in-out;
-        }
-
-        /* Блок с фото и вшитыми аватарами */
-        .photo-stage {
-            position: relative;
-            margin: 0 auto;
-            border-radius: 28px;
-            overflow: hidden;
-            border: 2px solid rgba(255, 255, 255, 0.2);
-            box-shadow: 0 15px 35px rgba(255, 51, 102, 0.2);
-        }
-
-        .main-photo {
-            width: 100%;
-            height: 260px;
             object-fit: cover;
+            filter: contrast(1.05) brightness(0.95);
             display: block;
         }
 
-        /* Перекрывающие аватары поверх фото */
-        .profiles-overlay {
+        /* Вшитые профили в стиле авторов */
+        .authors-bar {
             position: absolute;
-            bottom: 12px;
+            bottom: 0;
             left: 0; right: 0;
+            background: linear-gradient(to top, rgba(13, 11, 14, 0.95), transparent);
+            padding: 20px 16px 12px 16px;
             display: flex;
             justify-content: space-between;
-            padding: 0 16px;
+            align-items: center;
         }
 
-        .mini-profile {
+        .author-person {
             display: flex;
             align-items: center;
-            gap: 8px;
-            background: rgba(18, 4, 18, 0.75);
-            backdrop-filter: blur(8px);
-            padding: 6px 12px 6px 6px;
-            border-radius: 30px;
-            border: 1px solid rgba(255,255,255,0.2);
+            gap: 10px;
         }
 
-        .mini-avatar {
-            width: 36px;
-            height: 36px;
+        .author-person img {
+            width: 40px;
+            height: 40px;
             border-radius: 50%;
             object-fit: cover;
-            border: 1px solid var(--soft-gold);
+            border: 1px solid var(--cream-gold);
         }
 
-        .mini-name {
+        .author-name {
+            font-family: 'Cinzel', serif;
             font-size: 12px;
-            font-weight: 600;
-            color: #fff;
-            text-transform: capitalize;
-        }
-
-        /* --- ТИТУЛ И СТА ТУС --- */
-        .status-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            margin-top: 18px;
-            background: rgba(255, 51, 102, 0.15);
-            border: 1px dashed var(--accent-pink);
-            padding: 8px 18px;
-            border-radius: 20px;
-            cursor: pointer;
-            transition: transform 0.2s, background 0.2s;
-        }
-
-        .status-badge:active { transform: scale(0.96); }
-
-        .status-text {
-            font-size: 13px;
-            font-weight: 700;
             letter-spacing: 1.5px;
-            color: var(--soft-gold);
+            color: var(--text-main);
+            text-transform: lowercase;
         }
 
-        /* --- СЧЕТЧИК КАПСУЛЫ --- */
-        .time-capsules {
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-            margin-top: 16px;
+        .author-divider {
+            font-family: 'Cinzel', serif;
+            color: var(--rose-muted);
+            font-size: 16px;
         }
 
-        .capsule-item {
-            background: var(--glass-card);
-            border: 1px solid var(--glass-border);
-            padding: 10px 14px;
-            border-radius: 18px;
-            min-width: 80px;
-        }
-
-        .capsule-num {
-            font-size: 20px;
-            font-weight: 800;
-            color: #fff;
-        }
-
-        .capsule-lbl {
-            font-size: 10px;
-            color: var(--text-dim);
-            text-transform: uppercase;
-            margin-top: 2px;
-        }
-
-        /* --- ИНТЕРАКТИВНЫЙ ТАЛИСМАН (ВМЕСТО КНОПКИ) --- */
-        .love-talisman-wrap {
-            text-align: center;
-            margin: 5px 0;
-        }
-
-        .love-talisman {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            width: 70px;
-            height: 70px;
-            background: linear-gradient(135deg, #ff3366, #7928ca);
-            border-radius: 50%;
-            font-size: 30px;
-            box-shadow: 0 0 30px rgba(255, 51, 102, 0.6);
-            cursor: pointer;
-            border: 3px solid rgba(255,255,255,0.3);
-            animation: pulseGlow 2s infinite alternate;
-        }
-
-        @keyframes pulseGlow {
-            0% { transform: scale(1); box-shadow: 0 0 20px rgba(255, 51, 102, 0.5); }
-            100% { transform: scale(1.08); box-shadow: 0 0 40px rgba(255, 51, 102, 0.9); }
-        }
-
-        .talisman-hint {
-            font-size: 11px;
-            color: var(--text-dim);
-            margin-top: 8px;
-            letter-spacing: 0.5px;
-        }
-
-        /* --- ВСПЫХИВАЮЩЕЕ СООБЩЕНИЕ --- */
-        .toast-msg {
-            position: fixed;
-            top: 20px;
-            left: 50%;
-            transform: translateX(-50%) translateY(-50px);
-            background: rgba(255, 51, 102, 0.9);
-            color: white;
-            padding: 10px 20px;
-            border-radius: 25px;
-            font-size: 13px;
-            font-weight: 600;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.4);
-            opacity: 0;
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            z-index: 1000;
-            pointer-events: none;
-        }
-
-        .toast-msg.show {
-            opacity: 1;
-            transform: translateX(-50%) translateY(0);
-        }
-
-        /* --- СПИСОК СОБЫТИЙ С НОВОЙ СТИЛИСТИКОЙ --- */
-        .events-block {
-            background: var(--glass-card);
-            backdrop-filter: blur(16px);
-            border: 1px solid var(--glass-border);
-            border-radius: 32px;
-            padding: 20px;
-        }
-
-        .events-title {
-            font-size: 14px;
-            font-weight: 700;
-            color: var(--soft-gold);
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-            margin-bottom: 14px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .events-timeline {
+        /* --- ТИНКЕР / ШКАЛА ЦЕЛИ --- */
+        .goal-filament-section {
             display: flex;
             flex-direction: column;
+            gap: 8px;
+        }
+
+        .filament-labels {
+            display: flex;
+            justify-content: space-between;
+            font-size: 11px;
+            letter-spacing: 1px;
+            color: var(--text-sub);
+            text-transform: uppercase;
+        }
+
+        .filament-line {
+            height: 2px;
+            background: rgba(243, 229, 171, 0.15);
+            position: relative;
+        }
+
+        .filament-progress {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, var(--rose-muted), var(--cream-gold));
+            transition: width 0.8s ease;
+            position: relative;
+        }
+
+        .filament-progress::after {
+            content: '';
+            position: absolute;
+            right: -4px;
+            top: -3px;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--cream-gold);
+            box-shadow: 0 0 8px var(--cream-gold);
+        }
+
+        /* --- ЭЛЕГАНТНЫЙ ТАЙМЕР --- */
+        .chronicle-counter {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            text-align: center;
+            border-top: 1px solid var(--line-color);
+            border-bottom: 1px solid var(--line-color);
+            padding: 16px 0;
+        }
+
+        .counter-unit {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .unit-value {
+            font-family: 'Cinzel', serif;
+            font-size: 26px;
+            color: var(--cream-gold);
+            font-weight: 600;
+        }
+
+        .unit-label {
+            font-size: 9px;
+            letter-spacing: 2px;
+            color: var(--text-sub);
+            text-transform: uppercase;
+        }
+
+        /* --- ПЕЧАТЬ ЛЮБВИ (ИНТЕРАКТИВНЫЙ ШТАМП) --- */
+        .stamp-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
             gap: 10px;
-            max-height: 320px;
+        }
+
+        .wax-seal {
+            width: 68px;
+            height: 68px;
+            border-radius: 50%;
+            border: 1px solid var(--cream-gold);
+            background: radial-gradient(circle, #3d1520 0%, #17070c 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            box-shadow: 0 0 20px rgba(216, 131, 152, 0.2);
+            transition: transform 0.2s;
+        }
+
+        .wax-seal:active { transform: scale(0.92); }
+
+        .seal-symbol {
+            font-family: 'Cinzel', serif;
+            font-size: 22px;
+            color: var(--cream-gold);
+        }
+
+        .seal-caption {
+            font-size: 10px;
+            letter-spacing: 1.5px;
+            color: var(--text-sub);
+            text-transform: uppercase;
+        }
+
+        /* --- СПИСОК СОБЫТИЙ --- */
+        .chronology-section {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .chronology-title {
+            font-family: 'Cinzel', serif;
+            font-size: 12px;
+            letter-spacing: 3px;
+            color: var(--cream-gold);
+            text-transform: uppercase;
+            text-align: center;
+        }
+
+        .chronology-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            max-height: 280px;
             overflow-y: auto;
             padding-right: 6px;
         }
 
-        .events-timeline::-webkit-scrollbar { width: 4px; }
-        .events-timeline::-webkit-scrollbar-thumb {
-            background: rgba(255, 51, 102, 0.5);
-            border-radius: 10px;
-        }
+        .chronology-list::-webkit-scrollbar { width: 2px; }
+        .chronology-list::-webkit-scrollbar-thumb { background: var(--cream-gold); }
 
-        .timeline-card {
+        .chronology-item {
             display: flex;
-            align-items: center;
             justify-content: space-between;
-            padding: 12px 16px;
-            border-radius: 20px;
-            background: rgba(255, 255, 255, 0.02);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-        }
-
-        .timeline-card.special {
-            background: linear-gradient(90deg, rgba(255, 51, 102, 0.15), rgba(121, 40, 202, 0.15));
-            border-color: rgba(255, 51, 102, 0.3);
-        }
-
-        .timeline-info {
-            display: flex;
             align-items: center;
-            gap: 12px;
+            padding: 10px 0;
+            border-bottom: 1px dashed rgba(243, 229, 171, 0.12);
         }
 
-        .timeline-icon {
-            font-size: 18px;
+        .item-info {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
         }
 
-        .timeline-name {
+        .item-title {
             font-size: 13px;
-            font-weight: 600;
+            font-weight: 500;
+            color: var(--text-main);
         }
 
-        .timeline-date-sub {
+        .item-date {
             font-size: 10px;
-            color: var(--text-dim);
-            margin-top: 2px;
+            color: var(--text-sub);
         }
 
-        .timeline-badge {
+        .item-status {
+            font-family: 'Cinzel', serif;
             font-size: 11px;
-            font-weight: 700;
-            padding: 4px 10px;
-            border-radius: 12px;
-            background: rgba(255,255,255,0.06);
-            color: var(--soft-gold);
+            color: var(--rose-muted);
+            letter-spacing: 1px;
+        }
+
+        /* ТОАСТ УВЕДОМЛЕНИЯ */
+        .toast-notification {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%) translateY(40px);
+            background: var(--cream-gold);
+            color: var(--bg-editorial);
+            font-family: 'Cinzel', serif;
+            font-size: 11px;
+            letter-spacing: 1px;
+            padding: 10px 20px;
+            border-radius: 20px;
+            opacity: 0;
+            transition: all 0.3s ease;
+            z-index: 1000;
+            pointer-events: none;
+            white-space: nowrap;
+        }
+
+        .toast-notification.active {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
         }
     </style>
 </head>
 <body>
 
-    <canvas id="stars-canvas"></canvas>
-    <canvas id="fireworks-canvas"></canvas>
+    <canvas id="sparks-canvas"></canvas>
+    <div class="toast-notification" id="toast">Символ любви запечатан</div>
 
-    <div class="toast-msg" id="toast">Поцелуй отправлен! 💖</div>
+    <div class="magazine-wrapper">
 
-    <div class="app-wrapper">
-
-        <!-- ЦЕНТРАЛЬНАЯ КАРТОЧКА С ФОТО И ПРОГРЕССОМ -->
-        <div class="hero-section">
-            
-            <!-- Шкала прогресса цели -->
-            <div class="progress-header-custom">
-                <span>Цель: 50 дней</span>
-                <span id="goal-days-left">--</span>
+        <!-- ШАПКА -->
+        <div class="editorial-header">
+            <div class="edition-tag">Love Chronicle — Vol. I</div>
+            <div class="status-heading" onclick="editTitle()" title="Изменить статус">
+                <span id="title-display">РОМА ПЁС</span>
+                <span style="font-size: 11px; opacity: 0.5;">✎</span>
             </div>
-            <div class="arc-bar-container">
-                <div class="arc-bar-fill" id="goal-bar-fill"></div>
-            </div>
+        </div>
 
-            <!-- Главное фото с встроенными аватарками парней/девушек -->
-            <div class="photo-stage">
-                <img src="https://i.postimg.cc/9rLj97mm/couple-photo.jpg" alt="Наше Фото" class="main-photo">
+        <!-- ОБЛОЖКА C ФОТО И АВТОРАМИ -->
+        <div class="cover-frame">
+            <div class="cover-photo-container">
+                <img src="https://i.postimg.cc/9rLj97mm/couple-photo.jpg" alt="Обложка">
                 
-                <div class="profiles-overlay">
-                    <div class="mini-profile">
-                        <img src="https://i.postimg.cc/phMNvQZB/maryasha-avatar.png" alt="Марьяша" class="mini-avatar">
-                        <span class="mini-name">марьяша</span>
+                <div class="authors-bar">
+                    <div class="author-person">
+                        <img src="https://i.postimg.cc/phMNvQZB/maryasha-avatar.png" alt="Марьяша">
+                        <span class="author-name">марьяша</span>
                     </div>
 
-                    <div class="mini-profile">
-                        <img src="https://i.postimg.cc/CZWPDFnS/roma-avatar.png" alt="Рома" class="mini-avatar">
-                        <span class="mini-name">рома</span>
+                    <div class="author-divider">✦</div>
+
+                    <div class="author-person">
+                        <img src="https://i.postimg.cc/CZWPDFnS/roma-avatar.png" alt="Рома">
+                        <span class="author-name">рома</span>
                     </div>
                 </div>
             </div>
-
-            <!-- Редактируемый статус -->
-            <div class="status-badge" onclick="changeStatus()" title="Нажмите, чтобы изменить статус">
-                <span style="font-size: 12px;">✨</span>
-                <span class="status-text" id="status-display">РОМА ПЁС</span>
-                <span style="font-size: 10px; opacity: 0.6;">✏️</span>
-            </div>
-
-            <!-- Раздельный таймер (Капсулы времени) -->
-            <div class="time-capsules">
-                <div class="capsule-item">
-                    <div class="capsule-num" id="capsule-years">0</div>
-                    <div class="capsule-lbl">лет</div>
-                </div>
-                <div class="capsule-item">
-                    <div class="capsule-num" id="capsule-months">0</div>
-                    <div class="capsule-lbl">месяцев</div>
-                </div>
-                <div class="capsule-item">
-                    <div class="capsule-num" id="capsule-days">0</div>
-                    <div class="capsule-lbl">дней</div>
-                </div>
-            </div>
-
         </div>
 
-        <!-- ИНТЕРАКТИВНЫЙ ТАЛИСМАН ВМЕСТО КНОПКИ -->
-        <div class="love-talisman-wrap">
-            <div class="love-talisman" id="talisman-btn">💖</div>
-            <div class="talisman-hint">Прикоснись к талисману любви</div>
+        <!-- НИТЬ ПРОГРЕССА (ЦЕЛЬ 50 ДНЕЙ) -->
+        <div class="goal-filament-section">
+            <div class="filament-labels">
+                <span>Цель: 50 Дней</span>
+                <span id="goal-status-text">--</span>
+            </div>
+            <div class="filament-line">
+                <div class="filament-progress" id="filament-bar"></div>
+            </div>
         </div>
 
-        <!-- СПИСОК СОБЫТИЙ -->
-        <div class="events-block">
-            <div class="events-title">
-                <span>🗓️</span> Календарь истории
+        <!-- СЧЕТЧИК ХРОНИКИ -->
+        <div class="chronicle-counter">
+            <div class="counter-unit">
+                <span class="unit-value" id="year-num">0</span>
+                <span class="unit-label">Лет</span>
             </div>
-            <div class="events-timeline" id="events-list">
-                <!-- Заполняется динамически -->
+            <div class="counter-unit">
+                <span class="unit-value" id="month-num">0</span>
+                <span class="unit-label">Месяцев</span>
+            </div>
+            <div class="counter-unit">
+                <span class="unit-value" id="day-num">0</span>
+                <span class="unit-label">Дней</span>
+            </div>
+        </div>
+
+        <!-- ШТАМП-ПЕЧАТЬ -->
+        <div class="stamp-section">
+            <div class="wax-seal" id="seal-btn">
+                <span class="seal-symbol">♥</span>
+            </div>
+            <div class="seal-caption">Прикоснись к печати</div>
+        </div>
+
+        <!-- ХРОНОЛОГИЯ -->
+        <div class="chronology-section">
+            <div class="chronology-title">Календарные Вехи</div>
+            <div class="chronology-list" id="events-timeline">
+                <!-- Заполняется JS -->
             </div>
         </div>
 
     </div>
 
     <script>
-        // --- 1. РЕДАКТИРОВАНИЕ СТАТУСА ---
-        function loadStatus() {
-            const saved = localStorage.getItem('unique_love_status');
-            if (saved) document.getElementById('status-display').textContent = saved;
+        // СТАТУС
+        function loadTitle() {
+            const saved = localStorage.getItem('editorial_love_title');
+            if (saved) document.getElementById('title-display').textContent = saved;
         }
 
-        function changeStatus() {
-            const current = document.getElementById('status-display').textContent;
-            const next = prompt("Введите новое имя или статус:", current);
-            if (next && next.trim() !== "") {
-                const val = next.trim();
-                document.getElementById('status-display').textContent = val;
-                localStorage.setItem('unique_love_status', val);
+        function editTitle() {
+            const current = document.getElementById('title-display').textContent;
+            const val = prompt("Введите новое имя / статус:", current);
+            if (val && val.trim() !== "") {
+                const text = val.trim();
+                document.getElementById('title-display').textContent = text;
+                localStorage.setItem('editorial_love_title', text);
             }
         }
-        loadStatus();
+        loadTitle();
 
-        // --- 2. РАСЧЕТ ВРЕМЕНИ И ЦЕЛЕЙ ---
+        // РАСЧЕТ ДАТ
         const startDate = new Date(2026, 5, 24); // 24.06.2026
         const goalDaysTarget = 50;
 
-        function updateTime() {
+        function calculateTime() {
             const now = new Date();
             const diffMs = now - startDate;
             if (diffMs < 0) return;
@@ -471,39 +468,37 @@
                 m += 12;
             }
 
-            document.getElementById('capsule-years').textContent = y;
-            document.getElementById('capsule-months').textContent = m;
-            document.getElementById('capsule-days').textContent = d;
+            document.getElementById('year-num').textContent = y;
+            document.getElementById('month-num').textContent = m;
+            document.getElementById('day-num').textContent = d;
 
-            // Шкала прогресса
+            // Шкала
             let prog = totalDays >= goalDaysTarget ? goalDaysTarget : totalDays;
             let percent = Math.floor((prog / goalDaysTarget) * 100);
-            document.getElementById('goal-bar-fill').style.width = percent + '%';
+            document.getElementById('filament-bar').style.width = percent + '%';
 
             let left = goalDaysTarget - totalDays;
-            document.getElementById('goal-days-left').textContent = left > 0 ? `Осталось: ${left}д` : `Достигнуто! 💕`;
+            document.getElementById('goal-status-text').textContent = left > 0 ? `Осталось ${left}д` : `Достигнуто`;
         }
 
-        // --- 3. КАЛЕНДАРЬ СОБЫТИЙ ---
+        // СОБЫТИЯ
         const eventsData = [
-            { title: "Дата начала", date: "24.06.2026", icon: "💋" },
-            { title: "10 дней", date: "04.07.2026", icon: "💖" },
-            { title: "30 дней", date: "24.07.2026", icon: "💖" },
-            { title: "50 дней", date: "13.08.2026", icon: "💖" },
-            { title: "100 дней", date: "02.10.2026", icon: "💖" },
-            { title: "Новогодняя ночь", date: "31.12.2026", icon: "🎄", isHoliday: true },
-            { title: "Рождество", date: "07.01.2027", icon: "🏠", isHoliday: true },
-            { title: "200 дней", date: "10.01.2027", icon: "💖" },
-            { title: "День Валентина", date: "14.02.2027", icon: "🛍️", isHoliday: true },
-            { title: "Мужской день", date: "23.02.2027", icon: "⭐", isHoliday: true },
-            { title: "Женский день", date: "08.03.2027", icon: "💐", isHoliday: true },
-            { title: "1 год", date: "24.06.2027", icon: "🎉", isHoliday: true },
-            { title: "5 лет", date: "24.06.2031", icon: "👑", isHoliday: true },
-            { title: "10 лет", date: "24.06.2036", icon: "💎", isHoliday: true }
+            { title: "Дата начала", date: "24.06.2026" },
+            { title: "10 дней истории", date: "04.07.2026" },
+            { title: "30 дней истории", date: "24.07.2026" },
+            { title: "50 дней истории", date: "13.08.2026" },
+            { title: "100 дней истории", date: "02.10.2026" },
+            { title: "Новогодняя ночь", date: "31.12.2026" },
+            { title: "Рождество", date: "07.01.2027" },
+            { title: "200 дней", date: "10.01.2027" },
+            { title: "День Святого Валентина", date: "14.02.2027" },
+            { title: "1 Годовщина", date: "24.06.2027" },
+            { title: "5 Лет Вместе", date: "24.06.2031" },
+            { title: "10 Лет Вместе", date: "24.06.2036" }
         ];
 
-        function renderEvents() {
-            const list = document.getElementById('events-list');
+        function renderChronology() {
+            const list = document.getElementById('events-timeline');
             list.innerHTML = '';
             const now = new Date();
 
@@ -512,141 +507,103 @@
                 const evDate = new Date(parts[2], parts[1] - 1, parts[0]);
                 const diffDays = Math.ceil((evDate - now) / (1000 * 60 * 60 * 24));
 
-                let badgeText = diffDays > 0 ? `Через ${diffDays} дн` : (diffDays === 0 ? `Сегодня!` : `Пройдено`);
+                let status = diffDays > 0 ? `${diffDays} дн` : (diffDays === 0 ? `Сегодня` : `Пройдено`);
 
-                const card = document.createElement('div');
-                card.className = `timeline-card ${ev.isHoliday ? 'special' : ''}`;
-                card.innerHTML = `
-                    <div class="timeline-info">
-                        <div class="timeline-icon">${ev.icon}</div>
-                        <div>
-                            <div class="timeline-name">${ev.title}</div>
-                            <div class="timeline-date-sub">${ev.date}</div>
-                        </div>
+                const item = document.createElement('div');
+                item.className = 'chronology-item';
+                item.innerHTML = `
+                    <div class="item-info">
+                        <span class="item-title">${ev.title}</span>
+                        <span class="item-date">${ev.date}</span>
                     </div>
-                    <div class="timeline-badge">${badgeText}</div>
+                    <span class="item-status">${status}</span>
                 `;
-                list.appendChild(card);
+                list.appendChild(item);
             });
         }
 
-        updateTime();
-        renderEvents();
-        setInterval(updateTime, 60000);
+        calculateTime();
+        renderChronology();
+        setInterval(calculateTime, 60000);
 
-        // --- 4. ВСПОМОГАТЕЛЬНЫЕ ЭФФЕКТЫ И ВСПЛЫВАЮЩИЕ ФРАЗЫ ---
-        const romanticQuotes = [
-            "Ты — лучшее, что случилось со мной! 💖",
-            "Моё сердце бьётся ради тебя! 💓",
-            "Отправлен крепкий поцелуй! 💋",
-            "Люблю тебя с каждым днём всё сильнее! ✨",
-            "Ты моё счастье! 🌸"
+        // УВЕДОМЛЕНИЯ
+        const messages = [
+            "Любовь запечатлена ✦",
+            "Поцелуй отправлен адресату 💋",
+            "Бесконечность вместе ✨",
+            "Момент сохранен в хронике 💖"
         ];
 
         function showToast() {
-            const toast = document.getElementById('toast');
-            const randomQuote = romanticQuotes[Math.floor(Math.random() * romanticQuotes.length)];
-            toast.textContent = randomQuote;
-            toast.classList.add('show');
-            setTimeout(() => toast.classList.remove('show'), 2500);
+            const t = document.getElementById('toast');
+            t.textContent = messages[Math.floor(Math.random() * messages.length)];
+            t.classList.add('active');
+            setTimeout(() => t.classList.remove('active'), 2200);
         }
 
-        // --- 5. АНИМАЦИЯ ЗВЕЗДНОГО ФОНА И САЛЮТОВ ---
-        const starsCanvas = document.getElementById('stars-canvas');
-        const starsCtx = starsCanvas.getContext('2d');
-        const fwCanvas = document.getElementById('fireworks-canvas');
-        const fwCtx = fwCanvas.getContext('2d');
+        // АНИМАЦИЯ ЗОЛОТЫХ ИСКР
+        const canvas = document.getElementById('sparks-canvas');
+        const ctx = canvas.getContext('2d');
+        let sparks = [];
 
-        let stars = [];
-        let particles = [];
-
-        function resizeCanvases() {
-            starsCanvas.width = fwCanvas.width = window.innerWidth;
-            starsCanvas.height = fwCanvas.height = window.innerHeight;
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
         }
-        window.addEventListener('resize', resizeCanvases);
-        resizeCanvases();
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
 
-        // Создаем звездное небо
-        for(let i = 0; i < 60; i++) {
-            stars.push({
-                x: Math.random() * window.innerWidth,
-                y: Math.random() * window.innerHeight,
-                size: Math.random() * 2,
-                alpha: Math.random()
-            });
-        }
-
-        function drawStars() {
-            starsCtx.clearRect(0, 0, starsCanvas.width, starsCanvas.height);
-            starsCtx.fillStyle = "#ffffff";
-            stars.forEach(s => {
-                s.alpha += (Math.random() - 0.5) * 0.02;
-                if(s.alpha < 0.1) s.alpha = 0.1;
-                if(s.alpha > 0.9) s.alpha = 0.9;
-                starsCtx.globalAlpha = s.alpha;
-                starsCtx.beginPath();
-                starsCtx.arc(s.x, s.y, s.size, 0, Math.PI * 2);
-                starsCtx.fill();
-            });
-            requestAnimationFrame(drawStars);
-        }
-        drawStars();
-
-        // Частицы салютов
         class Spark {
             constructor(x, y) {
                 this.x = x; this.y = y;
-                this.size = Math.random() * 5 + 2;
-                this.speedX = (Math.random() - 0.5) * 8;
-                this.speedY = (Math.random() - 0.5) * 8;
-                this.color = ['#ff3366', '#fce38a', '#ffffff', '#eaffd0'][Math.floor(Math.random() * 4)];
+                this.size = Math.random() * 3 + 1;
+                this.vx = (Math.random() - 0.5) * 5;
+                this.vy = (Math.random() - 0.5) * 5;
+                this.color = ['#f3e5ab', '#d88398', '#ffffff'][Math.floor(Math.random() * 3)];
                 this.life = 1;
                 this.decay = Math.random() * 0.02 + 0.015;
             }
             update() {
-                this.x += this.speedX;
-                this.y += this.speedY;
-                this.speedY += 0.08;
+                this.x += this.vx;
+                this.y += this.vy;
+                this.vy += 0.03;
                 this.life -= this.decay;
             }
             draw() {
-                fwCtx.save();
-                fwCtx.globalAlpha = this.life;
-                fwCtx.fillStyle = this.color;
-                fwCtx.beginPath();
-                fwCtx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-                fwCtx.fill();
-                fwCtx.restore();
+                ctx.save();
+                ctx.globalAlpha = this.life;
+                ctx.fillStyle = this.color;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.restore();
             }
         }
 
-        function triggerLoveBurst(x, y) {
-            for(let i = 0; i < 40; i++) particles.push(new Spark(x, y));
+        function createBurst(x, y) {
+            for (let i = 0; i < 30; i++) sparks.push(new Spark(x, y));
         }
 
         function animateSparks() {
-            fwCtx.clearRect(0, 0, fwCanvas.width, fwCanvas.height);
-            for(let i = particles.length - 1; i >= 0; i--) {
-                particles[i].update();
-                particles[i].draw();
-                if(particles[i].life <= 0) particles.splice(i, 1);
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            for (let i = sparks.length - 1; i >= 0; i--) {
+                sparks[i].update();
+                sparks[i].draw();
+                if (sparks[i].life <= 0) sparks.splice(i, 1);
             }
             requestAnimationFrame(animateSparks);
         }
         animateSparks();
 
-        // Клик по талисману
-        document.getElementById('talisman-btn').addEventListener('click', (e) => {
+        document.getElementById('seal-btn').addEventListener('click', (e) => {
             const rect = e.target.getBoundingClientRect();
-            triggerLoveBurst(rect.left + rect.width / 2, rect.top + rect.height / 2);
+            createBurst(rect.left + rect.width / 2, rect.top + rect.height / 2);
             showToast();
         });
 
-        // Клик в любом месте
         window.addEventListener('pointerdown', (e) => {
-            if(e.target.tagName !== 'BUTTON' && !e.target.classList.contains('status-badge')) {
-                triggerLoveBurst(e.clientX, e.clientY);
+            if (!e.target.closest('.status-heading') && !e.target.closest('.wax-seal')) {
+                createBurst(e.clientX, e.clientY);
             }
         });
     </script>
