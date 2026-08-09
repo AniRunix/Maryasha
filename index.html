@@ -465,10 +465,12 @@
 
         .memory-img {
             width: 100%;
-            height: 240px;
+            height: auto;
+            max-height: 380px;
             object-fit: cover;
             border-radius: 14px;
             display: block;
+            image-rendering: -webkit-optimize-contrast;
         }
 
         .memory-desc {
@@ -528,7 +530,7 @@
 
         <!-- КАРТОЧКА С ПРЯМОУГОЛЬНЫМ ФОТО -->
         <div class="photo-card">
-            <img class="photo-rectangular" src="https://i.postimg.cc/9rLj97mm/couple-photo.jpg" alt="Наше Фото">
+            <img class="photo-rectangular" src="https://i.postimg.cc/SXYXyQDP/image.jpg" alt="Наше Фото">
 
             <div class="profiles-row">
                 <div class="profile-item">
@@ -609,50 +611,50 @@
     </div>
 
     <script>
-        // СПИСОК ВОСПОМИНАНИЙ С ВАШИМИ ССЫЛКАМИ И НАЗВАНИЯМИ
+        // СПИСОК ВОСПОМИНАНИЙ С ПОЛНОРАЗМЕРНЫМИ ОРИГИНАЛАМИ ИЗОБРАЖЕНИЙ
         const memoriesData = [
             {
-                img: "https://i.postimg.cc/SXYXyQDP/photo.jpg",
+                img: "https://i.postimg.cc/SXYXyQDP/image.jpg",
                 desc: "Наш первый день🤭"
             },
             {
-                img: "https://i.postimg.cc/XXkgMxZx/photo.jpg",
+                img: "https://i.postimg.cc/XXkgMxZx/image.jpg",
                 desc: "Тут нам неделя😚"
             },
             {
-                img: "https://i.postimg.cc/47Tpqhsj/photo.jpg",
+                img: "https://i.postimg.cc/47Tpqhsj/image.jpg",
                 desc: "А тут нам уже 3 недели (фоток со второй нету((( )😌"
             },
             {
-                img: "https://i.postimg.cc/hzrQYyCS/photo.jpg",
+                img: "https://i.postimg.cc/hzrQYyCS/image.jpg",
                 desc: "Тут нам уже ровно месяц 😍😍"
             },
             {
-                img: "https://i.postimg.cc/nsfshbgc/photo.jpg",
+                img: "https://i.postimg.cc/nsfshbgc/image.jpg",
                 desc: "Это поездка к родителям Алисы😛"
             },
             {
-                img: "https://i.postimg.cc/ZWpRgsRM/photo.jpg",
+                img: "https://i.postimg.cc/ZWpRgsRM/image.jpg",
                 desc: "А тут мы с тобой делали ручки🫶🫶"
             },
             {
-                img: "https://i.postimg.cc/Q94x5R4m/photo.jpg",
+                img: "https://i.postimg.cc/Q94x5R4m/image.jpg",
                 desc: "Первая ночевка у тебя дома🏠"
             },
             {
-                img: "https://i.postimg.cc/pmbVDQZj/photo.jpg",
+                img: "https://i.postimg.cc/pmbVDQZj/image.jpg",
                 desc: "Это ты меня накрасила💅"
             },
             {
-                img: "https://i.postimg.cc/jDHxvW3C/photo.jpg",
+                img: "https://i.postimg.cc/jDHxvW3C/image.jpg",
                 desc: "Это мы водили никиту в движение первых🐒🐒"
             },
             {
-                img: "https://i.postimg.cc/VrVm5Xv9/photo.jpg",
+                img: "https://i.postimg.cc/VrVm5Xv9/image.jpg",
                 desc: "А это уже наш первый раз🤪🤪🔞"
             },
             {
-                img: "https://i.postimg.cc/pymP4c1t/photo.jpg",
+                img: "https://i.postimg.cc/pymP4c1t/image.jpg",
                 desc: "Ну а это концерт газана 6️⃣7️⃣"
             }
         ];
@@ -665,7 +667,7 @@
                 const card = document.createElement('div');
                 card.className = 'memory-card';
                 card.innerHTML = `
-                    <img class="memory-img" src="${item.img}" alt="${item.desc}">
+                    <img class="memory-img" src="${item.img}" alt="${item.desc}" loading="lazy">
                     <div class="memory-desc">${item.desc}</div>
                 `;
                 container.appendChild(card);
