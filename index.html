@@ -120,11 +120,13 @@
 
         .photo-rectangular {
             width: 100%;
-            height: 280px;
+            height: 320px;
             border-radius: 18px;
             object-fit: cover;
             display: block;
             box-shadow: 0 8px 20px rgba(108, 79, 90, 0.1);
+            image-rendering: -webkit-optimize-contrast;
+            image-rendering: crisp-edges;
         }
 
         .profiles-row {
@@ -144,12 +146,13 @@
         }
 
         .profile-item img {
-            width: 42px;
-            height: 42px;
+            width: 44px;
+            height: 44px;
             border-radius: 50%;
             object-fit: cover;
             border: 2px solid var(--pink-main);
             box-shadow: 0 4px 10px rgba(255, 117, 140, 0.2);
+            image-rendering: -webkit-optimize-contrast;
         }
 
         .profile-item span {
@@ -466,11 +469,12 @@
         .memory-img {
             width: 100%;
             height: auto;
-            max-height: 380px;
+            max-height: 450px;
             object-fit: cover;
             border-radius: 14px;
             display: block;
             image-rendering: -webkit-optimize-contrast;
+            image-rendering: crisp-edges;
         }
 
         .memory-desc {
@@ -528,9 +532,9 @@
             </div>
         </div>
 
-        <!-- КАРТОЧКА С ПРЯМОУГОЛЬНЫМ ФОТО -->
+        <!-- КАРТОЧКА С ГЛАВНЫМ ПРЯМОУГОЛЬНЫМ ФОТО -->
         <div class="photo-card">
-            <img class="photo-rectangular" src="https://i.postimg.cc/SXYXyQDP/image.jpg" alt="Наше Фото">
+            <img class="photo-rectangular" src="https://i.postimg.cc/SXYXyQDP/image.jpeg" alt="Наше Фото">
 
             <div class="profiles-row">
                 <div class="profile-item">
@@ -611,50 +615,50 @@
     </div>
 
     <script>
-        // СПИСОК ВОСПОМИНАНИЙ С ПОЛНОРАЗМЕРНЫМИ ОРИГИНАЛАМИ ИЗОБРАЖЕНИЙ
+        // СПИСОК ВОСПОМИНАНИЙ - ПРЯМЫЕ ССЫЛКИ НА ВЫСОКОЕ РАЗРЕШЕНИЕ
         const memoriesData = [
             {
-                img: "https://i.postimg.cc/SXYXyQDP/image.jpg",
+                img: "https://i.postimg.cc/SXYXyQDP/image.jpeg",
                 desc: "Наш первый день🤭"
             },
             {
-                img: "https://i.postimg.cc/XXkgMxZx/image.jpg",
+                img: "https://i.postimg.cc/XXkgMxZx/image.jpeg",
                 desc: "Тут нам неделя😚"
             },
             {
-                img: "https://i.postimg.cc/47Tpqhsj/image.jpg",
+                img: "https://i.postimg.cc/47Tpqhsj/image.jpeg",
                 desc: "А тут нам уже 3 недели (фоток со второй нету((( )😌"
             },
             {
-                img: "https://i.postimg.cc/hzrQYyCS/image.jpg",
+                img: "https://i.postimg.cc/hzrQYyCS/image.jpeg",
                 desc: "Тут нам уже ровно месяц 😍😍"
             },
             {
-                img: "https://i.postimg.cc/nsfshbgc/image.jpg",
+                img: "https://i.postimg.cc/nsfshbgc/image.jpeg",
                 desc: "Это поездка к родителям Алисы😛"
             },
             {
-                img: "https://i.postimg.cc/ZWpRgsRM/image.jpg",
+                img: "https://i.postimg.cc/ZWpRgsRM/image.jpeg",
                 desc: "А тут мы с тобой делали ручки🫶🫶"
             },
             {
-                img: "https://i.postimg.cc/Q94x5R4m/image.jpg",
+                img: "https://i.postimg.cc/Q94x5R4m/image.jpeg",
                 desc: "Первая ночевка у тебя дома🏠"
             },
             {
-                img: "https://i.postimg.cc/pmbVDQZj/image.jpg",
+                img: "https://i.postimg.cc/pmbVDQZj/image.jpeg",
                 desc: "Это ты меня накрасила💅"
             },
             {
-                img: "https://i.postimg.cc/jDHxvW3C/image.jpg",
+                img: "https://i.postimg.cc/jDHxvW3C/image.jpeg",
                 desc: "Это мы водили никиту в движение первых🐒🐒"
             },
             {
-                img: "https://i.postimg.cc/VrVm5Xv9/image.jpg",
+                img: "https://i.postimg.cc/VrVm5Xv9/image.jpeg",
                 desc: "А это уже наш первый раз🤪🤪🔞"
             },
             {
-                img: "https://i.postimg.cc/pymP4c1t/image.jpg",
+                img: "https://i.postimg.cc/pymP4c1t/image.jpeg",
                 desc: "Ну а это концерт газана 6️⃣7️⃣"
             }
         ];
