@@ -215,7 +215,39 @@
             transition: width 0.8s ease;
         }
 
-        /* --- ТАЙМЕР-ОБЛАЧКА --- */
+        /* --- ГЛАВНЫЙ СЧЁТЧИК ДНЕЙ --- */
+        .total-days-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(12px);
+            border: 2px solid #ffffff;
+            border-radius: 22px;
+            padding: 16px;
+            text-align: center;
+            box-shadow: var(--shadow-soft);
+        }
+
+        .total-days-title {
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--text-muted);
+            margin-bottom: 4px;
+        }
+
+        .total-days-count {
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--pink-main);
+            line-height: 1.2;
+        }
+
+        .total-days-sub {
+            font-size: 11px;
+            color: var(--text-muted);
+            margin-top: 2px;
+            font-weight: 600;
+        }
+
+        /* --- ТАЙМЕР-ОБЛАЧКА (ЛЕТ / МЕСЯЦЕВ / ДНЕЙ) --- */
         .timer-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -588,7 +620,14 @@
             </div>
         </div>
 
-        <!-- ТАЙМЕР-ОБЛАЧКА -->
+        <!-- КАРТОЧКА: ОБЩИЙ СЧЁТЧИК ДНЕЙ -->
+        <div class="total-days-card">
+            <div class="total-days-title">МЫ ВМЕСТЕ УЖЕ</div>
+            <div class="total-days-count" id="total-days-val">0</div>
+            <div class="total-days-sub" id="total-days-text">дней</div>
+        </div>
+
+        <!-- ТАЙМЕР-ОБЛАЧКА (ЛЕТ / МЕСЯЦЕВ / ДНЕЙ) -->
         <div class="timer-grid">
             <div class="timer-cloud">
                 <div class="timer-num" id="years-val">0</div>
@@ -827,7 +866,7 @@
             "Ты — моя главная награда 🏆💖",
             "Ты умеешь дарить веру в себя ✨",
             "Твоя доброта меня восхищает 🌷",
-            "Хочу делать тебя счастливым(ой) каждый день 🎁",
+            "Хочу дарить тебе улыбку каждый день 🎁",
             "Ты — моё любимое 'доброе утро' и 'спокойной ночи' 🌅🌃",
             "Рядом с тобой сердце поёт 🎶❤️",
             "Ты — мой сладкий зайчик 🐰💖",
@@ -886,6 +925,16 @@
         }
         loadStatus();
 
+        // СКОЛНЕНИЕ СЛОВА "ДЕНЬ"
+        function getDaysWord(num) {
+            let n = Math.abs(num) % 100;
+            let n1 = n % 10;
+            if (n > 10 && n < 20) return 'дней';
+            if (n1 > 1 && n1 < 5) return 'дня';
+            if (n1 === 1) return 'день';
+            return 'дней';
+        }
+
         // РАСЧЕТ ВРЕМЕНИ И ЦЕЛИ
         const startDate = new Date(2026, 5, 24); // 24.06.2026
         const goalTarget = 50;
@@ -896,6 +945,10 @@
             if (diffMs < 0) return;
 
             const totalDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+
+            // Обновляем главный счётчик дней
+            document.getElementById('total-days-val').textContent = totalDays;
+            document.getElementById('total-days-text').textContent = getDaysWord(totalDays);
 
             let y = now.getFullYear() - startDate.getFullYear();
             let m = now.getMonth() - startDate.getMonth();
